@@ -1,0 +1,1 @@
+Principal Component Analysis (PCA) diagnostics plots(Scree-plot and cumulative explained variance-plot) of all and top 10% Principal Components of {{snakemake.wildcards["sample"]}}.

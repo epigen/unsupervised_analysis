@@ -1,0 +1,1 @@
+Uniform Manifold Approximation and Projection (UMAP) diagnostics plots for {{snakemake.wildcards["sample"]}} with parameters {{snakemake.wildcards["parameters"]}}.

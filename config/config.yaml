@@ -1,0 +1,47 @@
+# always use absolute paths
+# provide at least one parameter per option (no empty parameters allowed)
+
+##### RESOURCES #####
+# memory in MB
+mem: '32000'
+mem_small: '16000'
+threads: 2
+partition: 'shortq'
+
+##### GENERAL #####
+annotation: /research/home/sreichl/projects/macroIC/config/AKsmall_unsupervised_analysis_annotation.csv
+result_path: /nobackup/lab_bock/projects/macroIC/results/AKsmall/
+project_name: AKsmall
+
+# boolean indicating if data matrix is samples (rows) x features (columns) -> (0==no, 1==yes)
+samples_by_features: 0
+
+##### PCA #####
+# (no configuration necessary)
+
+##### UMAP #####
+# information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
+# umap knn-graph will be generated for each metric once with the max(n_neighbors)
+# knn-graph parameters: metric  (default: euclidean), n_neighbors (default: 15)
+# embedding parameters: min_dist  (default: 0.1), n_components (default: 2)
+# connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
+umap:
+    metrics: ['euclidean','correlation']
+    n_neighbors: [100]
+    min_dist: [0.1]
+    n_components: [2]
+    connectivity: 0
+    diagnostics: 0
+    
+##### VISUALIZATION #####
+# 2D visualization with ggplot2
+scatterplot2d:
+    size: 0.5
+    alpha: 1
+
+# interactive (2D/3D) visualization with ???
+
+##### LEIDEN CLUSTERING #####
+
+
+##### HDBSCAN CLUSTERING #####

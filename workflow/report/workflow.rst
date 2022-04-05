@@ -1,0 +1,1 @@
+A `Snakemake workflow for automated unsupervised analyses <https://github.com/epigen/unsupervised_analysis>`_.

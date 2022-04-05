@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - umap-learn>=0.5
+  - pandas
+  - python=3.9
+  - pip
+  - pip:
+    - umap-learn[plot]

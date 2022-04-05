@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - scikit-learn>=1.0.2
+  - pandas

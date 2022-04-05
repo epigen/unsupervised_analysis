@@ -1,0 +1,1 @@
+Visualization of {{snakemake.wildcards["sample"]}} after dimensionality reduction to two components using {{snakemake.wildcards["method"]}} with parameters {{snakemake.wildcards["parameters"]}} colored by metadata.

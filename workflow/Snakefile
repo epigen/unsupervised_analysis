@@ -1,0 +1,75 @@
+##### libraries #####
+import os
+import sys
+import pandas as pd
+from snakemake.utils import min_version
+
+min_version("6.0.3")
+
+SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
+shell.prefix(f"set -eo pipefail;")
+
+##### container image #####
+# containerized: "docker://sreichl/..."
+
+##### setup report #####
+report: os.path.join("report", "workflow.rst")
+
+##### load config and sample annotation sheets #####
+configfile: os.path.join("config", "config.yaml")
+
+annot = pd.read_csv(config['annotation'], index_col='name')
+
+# apply UMAP sepcific visualization flags
+umap_content = ['metadata']
+if config["umap"]["connectivity"]==1:
+    umap_content.append('connectivity')
+if config["umap"]["diagnostics"]==1:
+    umap_content.append('diagnostics')
+
+rule all:
+    input:
+        PCA_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_object.pickle'),
+                                sample=list(annot.index),
+                               ),
+        PCA_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_{content}.png'),
+                            sample=list(annot.index),
+                            content=['metadata','diagnostics']
+                          ),
+        UMAP_graphs = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),
+                              sample=list(annot.index),
+                              metric=config["umap"]["metrics"],
+                              n_neighbors=max(config["umap"]["n_neighbors"])
+                               ),
+        UMAP_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_object.pickle'),
+                            sample=list(annot.index),
+                            metric=config["umap"]["metrics"],
+                            n_neighbors=config["umap"]["n_neighbors"],
+                            min_dist=config["umap"]["min_dist"],
+                            n_components=config["umap"]["n_components"]
+                               ),
+        UMAP_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','plots','UMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_{content}.png'),
+                            sample=list(annot.index),
+                            metric=config["umap"]["metrics"],
+                            n_neighbors=config["umap"]["n_neighbors"],
+                            min_dist=config["umap"]["min_dist"],
+                            n_components=2,
+                            content=umap_content
+                               ),
+        envs = report(expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap']), caption="report/software.rst", category="0_Software", subcategory="{}_unsupervised_analysis".format(config["project_name"])),
+        configs = report([os.path.join("config", "config.yaml"),config["annotation"]], caption="report/configs.rst", category="0_Configuration", subcategory="{}_unsupervised_analysis".format(config["project_name"])),
+    resources:
+        mem_mb=config.get("mem_small", "8000"),
+    threads: config.get("threads", 1)
+    log:
+        os.path.join("logs","rules","all.log"),
+    params:
+        partition=config.get("partition"),
+
+        
+##### load rules #####
+include: os.path.join("rules", "common.smk")
+include: os.path.join("rules", "dimred.smk")
+include: os.path.join("rules", "visualization.smk")
+# include: os.path.join("rules", "cluster.smk")
+include: os.path.join("rules", "envs_export.smk")
