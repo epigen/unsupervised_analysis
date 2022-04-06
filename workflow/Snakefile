@@ -56,8 +56,8 @@ rule all:
                             n_components=2,
                             content=umap_content
                                ),
-        envs = report(expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap']), caption="report/software.rst", category="0_Software", subcategory="{}_unsupervised_analysis".format(config["project_name"])),
-        configs = report([os.path.join("config", "config.yaml"),config["annotation"]], caption="report/configs.rst", category="0_Configuration", subcategory="{}_unsupervised_analysis".format(config["project_name"])),
+        envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap']),
+        configs = [os.path.join("config", "config.yaml"),config["annotation"]],
     resources:
         mem_mb=config.get("mem_small", "8000"),
     threads: config.get("threads", 1)
