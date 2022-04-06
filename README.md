@@ -1,5 +1,5 @@
 # Unsupervised Analysis Worfklow
-A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform selected unsupervised analyses and visualizations of high dimensional (normalized) data.
+A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform selected unsupervised analyses and visualizations of high-dimensional (normalized) data.
 
 **If you use this workflow in a publication, don't forget to give credits to the authors by citing the URL of this (original) repository (and its DOI, see Zenodo badge above -> coming soon).**
 
