@@ -30,8 +30,8 @@ umap:
     n_neighbors: [100]
     min_dist: [0.1]
     n_components: [2]
-    connectivity: 0
-    diagnostics: 0
+    connectivity: 1
+    diagnostics: 1
     
 ##### VISUALIZATION #####
 # 2D visualization with ggplot2
