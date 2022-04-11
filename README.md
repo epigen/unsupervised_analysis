@@ -14,6 +14,7 @@ Table of contents
   * [Usage](#usage)
   * [Configuration](#configuration)
   * [Examples](#examples)
+  * [Links](#links)
 
 # Authors
 - [Stephan Reichl](https://github.com/sreichl)
@@ -72,3 +73,9 @@ Detailed specifications can be found here [./config/README.md](./config/README.m
 
 # Examples
 --- COMING SOON ---
+
+# Links
+- [GitHub Repository](https://github.com/epigen/unsupervised_analysis/)
+- [GitHub Page](https://epigen.github.io/unsupervised_analysis/)
+- [Zenodo Repository (coming soon)]()
+- [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/unsupervised_analysis)
