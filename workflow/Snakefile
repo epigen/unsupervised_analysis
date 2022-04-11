@@ -2,6 +2,7 @@
 import os
 import sys
 import pandas as pd
+import yaml
 from snakemake.utils import min_version
 
 min_version("6.0.3")
@@ -57,7 +58,8 @@ rule all:
                             content=umap_content
                                ),
         envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap']),
-        configs = [os.path.join("config", "config.yaml"),config["annotation"]],
+        configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),
+        annotations = config["annotation"],
     resources:
         mem_mb=config.get("mem_small", "8000"),
     threads: config.get("threads", 1)
