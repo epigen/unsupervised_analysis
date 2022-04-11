@@ -51,6 +51,6 @@ rule annot_export:
         mem_mb=config.get("mem_small", "16000"),
     threads: config.get("threads", 1)
     log:
-        os.path.join("logs","rules","config_export.log"),
+        os.path.join("logs","rules","annot_export.log"),
     params:
         partition=config.get("partition"),
