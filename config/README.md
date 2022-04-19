@@ -7,3 +7,4 @@ You need one configuration file for the analyses and one annotation file for the
     -  name: name of the data set (tip: keep it short)
     -  data: absolute path to the tabular data as CSV
     -  metadata: absolute path to the metadata as CSV with the first column being the index/identifier of each sample/observation and every other coloumn metadata for the respective sample
+    -  samples_by_features: 0 or 1 as boolean indicator if data matrix is samples (rows) x features (columns) -> (0==no, 1==yes)

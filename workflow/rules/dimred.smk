@@ -15,8 +15,8 @@ rule pca:
     log:
         os.path.join("logs","rules","pca_{sample}.log"),
     params:
-        partition=config.get("partition"),
-        samples_by_features = config["samples_by_features"],
+        partition = config.get("partition"),
+        samples_by_features = get_data_orientation,
     script:
         "../scripts/pca.py"
         
@@ -38,7 +38,7 @@ rule umap_graph:
         os.path.join("logs","rules","umap_{sample}_{metric}_{n_neighbors}.log"),
     params:
         partition=config.get("partition"),
-        samples_by_features = config["samples_by_features"],
+        samples_by_features = get_data_orientation,
         metric = lambda w: "{}".format(w.metric),
         n_neighbors = lambda w: "{}".format(w.n_neighbors),
     script:
@@ -63,7 +63,7 @@ rule umap_embed:
         os.path.join("logs","rules","umap_{sample}_{metric}_{n_neighbors}_{min_dist}_{n_components}.log"),
     params:
         partition=config.get("partition"),
-        samples_by_features = config["samples_by_features"],
+        samples_by_features = get_data_orientation,
         metric = lambda w: "{}".format(w.metric),
         n_neighbors = lambda w: "{}".format(w.n_neighbors),
         min_dist = lambda w: "{}".format(w.min_dist),

@@ -19,7 +19,7 @@ result_object_path = snakemake.output["result_object"] #"/nobackup/lab_bock/proj
 result_dir = os.path.dirname(result_object_path)
 
 # parameters
-samples_by_features = snakemake.params['samples_by_features'] #0
+samples_by_features = int(snakemake.params['samples_by_features']) #0
 metric = snakemake.params['metric'] # "correlation"
 n_neighbors = int(snakemake.params['n_neighbors']) #100
 

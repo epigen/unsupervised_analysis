@@ -13,9 +13,6 @@ annotation: /research/home/sreichl/projects/macroIC/config/AKsmall_unsupervised_
 result_path: /nobackup/lab_bock/projects/macroIC/results/AKsmall/
 project_name: AKsmall
 
-# boolean indicating if data matrix is samples (rows) x features (columns) -> (0==no, 1==yes)
-samples_by_features: 0
-
 ##### PCA #####
 # (no configuration necessary)
 
@@ -27,7 +24,7 @@ samples_by_features: 0
 # connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
 umap:
     metrics: ['euclidean','correlation']
-    n_neighbors: [100]
+    n_neighbors: [10]
     min_dist: [0.1]
     n_components: [2]
     connectivity: 0

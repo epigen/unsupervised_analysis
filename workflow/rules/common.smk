@@ -13,9 +13,11 @@ def get_pca_paths(wildcards):
             'metadata': annot.loc[wildcards.sample,"metadata"]
            }
 
-
 def get_dimred_paths(wildcards):
     return {'dimred_data': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,wildcards.method,'{wildcards.method}_{wildcards.parameters}_data.csv'.format(wildcards=wildcards)),
             'dimred_axes': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,wildcards.method,'{wildcards.method}_{wildcards.parameters}_axes.csv'.format(wildcards=wildcards)),
             'metadata': annot.loc[wildcards.sample,"metadata"]
        }
+
+def get_data_orientation(wildcards):
+    return int(annot.loc[wildcards.sample,'samples_by_features'])

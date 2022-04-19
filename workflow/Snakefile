@@ -19,6 +19,7 @@ report: os.path.join("report", "workflow.rst")
 ##### load config and sample annotation sheets #####
 configfile: os.path.join("config", "config.yaml")
 
+# load annotations
 annot = pd.read_csv(config['annotation'], index_col='name')
 
 # apply UMAP sepcific visualization flags

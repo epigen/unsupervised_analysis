@@ -22,7 +22,7 @@ result_axes_path = snakemake.output["result_axes"] #"/nobackup/lab_bock/projects
 result_dir = os.path.dirname(result_object_path)
 
 # parameters
-samples_by_features = snakemake.params['samples_by_features'] #0
+samples_by_features = int(snakemake.params['samples_by_features']) #0
 
 # make directory if not existing
 if not os.path.exists(result_dir):

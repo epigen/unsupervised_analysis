@@ -13,6 +13,6 @@
 #         os.path.join("logs","rules","pca_{sample}.log"),
 #     params:
 #         partition=config.get("partition"),
-#         samples_by_features = config["samples_by_features"],
+#         samples_by_features = get_data_orientation,
 #     script:
 #         "../scripts/pca.py"
