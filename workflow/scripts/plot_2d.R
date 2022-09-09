@@ -53,6 +53,12 @@ height_panel <- ceiling(ncol(metadata)/n_col) * height
 scatter_plots <- list()
 
 for (col in colnames(metadata)){
+    
+    # check if metadata column is only NA
+    if(all(is.na(metadata[col]))){
+        next
+    }
+    
     tmp_data <- cbind(data, metadata[col])
     tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
         geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
