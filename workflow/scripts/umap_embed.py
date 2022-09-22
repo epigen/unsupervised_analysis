@@ -39,14 +39,18 @@ if samples_by_features == 1:
 else:
     data = pd.read_csv(data_path, index_col=0).T
 
+# if less than 11 datapoints there is no pre-computed KNN graph
+if data.shape[0]<11:
+    print("no pre-computed KNN graph will be used")
+    knn = (None, None, None)
+else:
+    # load pre-computed KNN graph
+    with open(graph_object_path, 'rb') as f:
+        # The protocol version used is detected automatically, so we do not
+        # have to specify it.
+        knn = pickle.load(f)
 
-with open(graph_object_path, 'rb') as f:
-    # The protocol version used is detected automatically, so we do not
-    # have to specify it.
-    knn = pickle.load(f)
-    
 ### embed data in low dimensions
-
 umap_obj=umap.umap_.UMAP(n_neighbors=n_neighbors, 
                          n_components=n_components, 
                          metric=metric, 

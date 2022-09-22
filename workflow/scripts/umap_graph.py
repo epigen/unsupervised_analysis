@@ -12,9 +12,9 @@ from umap.umap_ import nearest_neighbors
 #### configurations
 
 # ipnuts
-data_path = snakemake.input[0] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/KOcall_NonTargeting/counts/CORRECTED_RNA.csv"
+data_path = snakemake.input[0] #"/nobackup/lab_bock/projects/macroIC/results/CC001/counts/mdm_normCQN.csv"
 # outputs
-result_object_path = snakemake.output["result_object"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/UMAP_correlation_100_object.pickle"
+result_object_path = snakemake.output["result_object"] # "/nobackup/lab_bock/projects/macroIC/results/CC001/unsupervised_analysis/mdm_normCQN/UMAP/UMAP_correlation_5_0.1_2_object.pickle"
 
 result_dir = os.path.dirname(result_object_path)
 
@@ -34,6 +34,13 @@ if samples_by_features == 1:
     data = pd.read_csv(data_path, index_col=0)
 else:
     data = pd.read_csv(data_path, index_col=0).T
+
+# if less than 11 datapoints the KNN graph object can not be serialized (PyNNdescent issue: https://github.com/Teichlab/bbknn/issues/48)
+if data.shape[0]<11:
+    from pathlib import Path
+    Path(result_object_path).touch()
+    import sys
+    sys.exit()
     
 ### get knn-graph
 knn = nearest_neighbors(data,
