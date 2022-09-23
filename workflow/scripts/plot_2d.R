@@ -39,7 +39,7 @@ axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)[1:2,]
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 
 # plot specifications
-n_col <- 5
+n_col <- min(10, ncol(metadata))
 width <- 5
 height <- 3
 
@@ -53,22 +53,32 @@ height_panel <- ceiling(ncol(metadata)/n_col) * height
 scatter_plots <- list()
 
 for (col in colnames(metadata)){
+    print(col)
     
     # check if metadata column is only NA
     if(all(is.na(metadata[col]))){
         next
     }
     
+    # convert to categorical if less than 25 unique values
+    if (is.numeric(metadata[[col]]) & length(unique(metadata[[col]]))<=25){
+        metadata[col] <- as.factor(metadata[[col]])
+    }
+    
+    # prepare data for plotting
     tmp_data <- cbind(data, metadata[col])
-    tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
+    
+    # make 2D scatter plots
+    if (!is.numeric(metadata[[col]])){
+        # plot categorical data
+        tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
         geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
+        coord_fixed() +
         xlab(axes[1]) +    
         ylab(axes[2]) +
-    ggtitle(col) +
-    theme_linedraw() + 
-    theme(plot.title = element_text(size = 10), legend.title = element_blank())
-    
-    if (!is.numeric(metadata[[col]])){
+        ggtitle(col) +
+        theme_linedraw() + 
+        theme(plot.title = element_text(size = 10), legend.title = element_blank())
         
         if (length(unique(metadata[[col]]))>25){
             tmp_plot <- tmp_plot + theme(legend.position="none") #addSmallLegend(myPlot = tmp_plot, pointSize = 0, textSize = 0)
@@ -77,8 +87,19 @@ for (col in colnames(metadata)){
         }else{
             tmp_plot <- addSmallLegend(myPlot = tmp_plot, textSize = 10)
         }
+    }else{
+        # plot numerical data
+        tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
+        geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
+        coord_fixed() +
+        scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab") +
+        xlab(axes[1]) +    
+        ylab(axes[2]) +
+        ggtitle(col) +
+        theme_linedraw() + 
+        theme(plot.title = element_text(size = 10), legend.title = element_blank())
+        
     }
-    
     
     scatter_plots[[col]] <- tmp_plot
 }
@@ -100,4 +121,3 @@ ggsave(basename(plot_path),
        height = height_panel,
        limitsize = FALSE,
       )
-
