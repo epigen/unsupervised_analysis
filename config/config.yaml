@@ -36,6 +36,12 @@ scatterplot2d:
     size: 0.5
     alpha: 1
 
+# specify features of interest, which value from the data will be highlgihted in the 2D plots
+# motivated by bioinformatics highlighting expression levels of marker genes (eg: ['PTPRC'])
+# if not used leave empty []
+features_to_plot: []
+
+
 # interactive (2D/3D) visualization with ???
 
 ##### LEIDEN CLUSTERING #####

@@ -1,9 +1,79 @@
+########## FEATURE PLOTS ##########
+
+# prepare "metadata" for feature plot
+rule prep_feature_plot:
+    input:
+        get_sample_paths,
+    output:
+        os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_features.csv'),
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/sklearn.yaml"
+    log:
+        os.path.join("logs","rules","prep_feature_plot_{sample}.log"),
+    params:
+        partition = config.get("partition"),
+        samples_by_features = get_data_orientation,
+        features_to_plot = config["features_to_plot"],
+    script:
+        "../scripts/subset_data.py"
+
+# PCA scatter plot panel by features
+rule plot_pca_features:
+    input:
+        unpack(get_pca_feature_paths),
+    output:
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_features.png'),
+                               caption="../report/pca_2d_features.rst", 
+                               category="{}_unsupervised_analysis".format(config["project_name"]), 
+                               subcategory="{sample}"),
+    resources:
+        mem_mb=config.get("mem", "32000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/ggplot.yaml"
+    log:
+        os.path.join("logs","rules","plot_features_{sample}_PCA.log"),
+    params:
+        partition=config.get("partition"),
+        size = config["scatterplot2d"]["size"],
+        alpha = config["scatterplot2d"]["alpha"]
+    script:
+        "../scripts/plot_2d.R"
+        
+# dimred scatter plot panel by features
+rule plot_dimred_features:
+    input:
+        unpack(get_dimred_feature_paths),
+    output:
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_features.png'),
+                               caption="../report/dimred_2d_features.rst", 
+                               category="{}_unsupervised_analysis".format(config["project_name"]), 
+                               subcategory="{sample}"),
+    resources:
+        mem_mb=config.get("mem_small", "8000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/ggplot.yaml"
+    log:
+        os.path.join("logs","rules","plot_features_{sample}_{method}_{parameters}.log"),
+    params:
+        partition=config.get("partition"),
+        size = config["scatterplot2d"]["size"],
+        alpha = config["scatterplot2d"]["alpha"]
+    script:
+        "../scripts/plot_2d.R"
+
+########## METADATA PLOTS ##########
+        
 # PCA scatter plot panel by metadata
 rule plot_pca_metadata:
     input:
         unpack(get_pca_paths),
     output:
-        metadata_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_metadata.png'),
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_metadata.png'),
                                caption="../report/pca_2d_metadata.rst", 
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
@@ -19,14 +89,14 @@ rule plot_pca_metadata:
         size = config["scatterplot2d"]["size"],
         alpha = config["scatterplot2d"]["alpha"]
     script:
-        "../scripts/plot_2d.R"
+        "../scripts/plot_2d.R"  
         
 # dimred scatter plot panel by metadata
 rule plot_dimred_metadata:
     input:
         unpack(get_dimred_paths),
     output:
-        metadata_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_metadata.png'),
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_metadata.png'),
                                caption="../report/dimred_2d_metadata.rst", 
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
@@ -44,6 +114,8 @@ rule plot_dimred_metadata:
     script:
         "../scripts/plot_2d.R"
 
+########## DIAGNOSTIC PLOTS ##########
+        
 # PCA scree plot and cumulative variance
 rule plot_pca_diagnostics:
     input:
@@ -65,8 +137,7 @@ rule plot_pca_diagnostics:
     script:
         "../scripts/plot_pca.R"
         
-        
-        
+
 # plot UMAP diagnostic visualizations
 rule plot_umap_diagnostics:
     input:

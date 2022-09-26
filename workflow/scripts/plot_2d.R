@@ -18,7 +18,7 @@ data_path <- snakemake@input[["dimred_data"]] # "/nobackup/lab_bock/projects/mac
 axes_path <- snakemake@input[["dimred_axes"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/PCA_axes.csv"
 metadata_path <- snakemake@input[["metadata"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/KOcall_NonTargeting/counts/CORRECTED_metadata.csv"
 
-plot_path <- snakemake@output[["metadata_plot"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/plots/PCA_metadata.png"
+plot_path <- snakemake@output[["plot"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/plots/PCA_metadata.png"
 
 size <- snakemake@params[["size"]]# 0.5
 alpha <- snakemake@params[["alpha"]]# 1
@@ -60,9 +60,11 @@ for (col in colnames(metadata)){
         next
     }
     
-    # convert to categorical if less than 25 unique values
+    # convert to categorical if less than 25 unique integer values
     if (is.numeric(metadata[[col]]) & length(unique(metadata[[col]]))<=25){
-        metadata[col] <- as.factor(metadata[[col]])
+        if(all(metadata[[col]] == round(metadata[[col]]))){
+            metadata[col] <- as.factor(metadata[[col]])
+        }
     }
     
     # prepare data for plotting

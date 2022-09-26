@@ -10,9 +10,6 @@ min_version("6.0.3")
 SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
 shell.prefix(f"set -eo pipefail;")
 
-##### container image #####
-# containerized: "docker://sreichl/..."
-
 ##### setup report #####
 report: os.path.join("report", "workflow.rst")
 
@@ -22,12 +19,16 @@ configfile: os.path.join("config", "config.yaml")
 # load annotations
 annot = pd.read_csv(config['annotation'], index_col='name')
 
-# apply UMAP sepcific visualization flags
+# apply UMAP and PCA sepcific visualization flags
 umap_content = ['metadata']
+pca_content = ['metadata', 'diagnostics']
 if config["umap"]["connectivity"]==1:
     umap_content.append('connectivity')
 if config["umap"]["diagnostics"]==1:
     umap_content.append('diagnostics')
+if len(config["features_to_plot"]) > 0:
+    umap_content.append('features')
+    pca_content.append('features')
 
 rule all:
     input:
@@ -36,7 +37,7 @@ rule all:
                                ),
         PCA_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_{content}.png'),
                             sample=list(annot.index),
-                            content=['metadata','diagnostics']
+                            content=pca_content
                           ),
         UMAP_graphs = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),
                               sample=list(annot.index),
