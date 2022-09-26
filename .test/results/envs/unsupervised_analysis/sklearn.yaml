@@ -1,0 +1,48 @@
+name: /home/sreichl/projects/unsupervised_analysis/.snakemake/conda/b712ab6899f6388233fa14e662a21e15
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2022.3.18=h06a4308_0
+  - joblib=1.1.0=pyhd8ed1ab_0
+  - ld_impl_linux-64=2.36.1=hea4e1c9_2
+  - libblas=3.9.0=13_linux64_openblas
+  - libcblas=3.9.0=13_linux64_openblas
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=11.2.0=h1d223b6_14
+  - libgfortran-ng=11.2.0=h69a702a_14
+  - libgfortran5=11.2.0=h5c6108e_14
+  - libgomp=11.2.0=h1d223b6_14
+  - liblapack=3.9.0=13_linux64_openblas
+  - libnsl=2.0.0=h7f98852_0
+  - libopenblas=0.3.18=pthreads_h8fe5266_0
+  - libstdcxx-ng=11.2.0=he4da1e4_14
+  - libuuid=2.32.1=h14c3975_1000
+  - libzlib=1.2.11=h166bdaf_1014
+  - ncurses=6.3=h9c3ff4c_0
+  - openssl=3.0.2=h166bdaf_1
+  - pip=22.0.4=pyhd8ed1ab_0
+  - python=3.10.4=h2660328_0_cpython
+  - python-dateutil=2.8.2=pyhd8ed1ab_0
+  - python_abi=3.10=2_cp310
+  - pytz=2022.1=pyhd8ed1ab_0
+  - readline=8.1.2=h7f8727e_1
+  - six=1.16.0=pyh6c4a22f_0
+  - sqlite=3.38.0=hc218d9a_0
+  - threadpoolctl=3.1.0=pyh8a188c0_0
+  - tk=8.6.12=h27826a3_0
+  - tzdata=2022a=h191b570_0
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - xz=5.2.5=h516909a_1
+  - zlib=1.2.11=h166bdaf_1014
+  - pip:
+    - numpy==1.22.3
+    - pandas==1.4.1
+    - scikit-learn==1.0.2
+    - scipy==1.8.0
+    - setuptools==61.2.0
+prefix: /home/sreichl/projects/unsupervised_analysis/.snakemake/conda/b712ab6899f6388233fa14e662a21e15

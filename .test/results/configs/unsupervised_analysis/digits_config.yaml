@@ -1,0 +1,30 @@
+annotation: .test/config/digits_unsupervised_analysis_annotation.csv
+features_to_plot:
+- pixel_0_0
+- pixel_0_1
+- pixel_0_2
+- pixel_0_3
+mem: '32000'
+mem_small: '16000'
+partition: shortq
+project_name: digits
+result_path: .test/results/
+scatterplot2d: !!python/object/apply:collections.OrderedDict
+- - - size
+    - 0.5
+  - - alpha
+    - 1
+threads: 2
+umap: !!python/object/apply:collections.OrderedDict
+- - - metrics
+    - - euclidean
+  - - n_neighbors
+    - - 100
+  - - min_dist
+    - - 0.1
+  - - n_components
+    - - 2
+  - - connectivity
+    - 1
+  - - diagnostics
+    - 1

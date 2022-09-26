@@ -72,7 +72,16 @@ Here are some tips for the usage of this workflow:
 Detailed specifications can be found here [./config/README.md](./config/README.md)
 
 # Examples
---- COMING SOON ---
+We provide a minimal example of the analysis of the [UCI ML hand-written digits datasets](https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits) imported from [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) in the [test folder](./.test/):
+- config
+    - project configuration: digits_unsupervised_analysis_config.yaml
+    - sample annotation: digits_unsupervised_analysis_annotation.csv
+- data
+    - dataset: digits_data.csv
+    - metadata: digits_labels.csv
+- results
+    - containing all results in a dataset oriented structure
+- detailed self-contained HTML [report](./.test/report.html) for distribution and reproducibility
 
 # Links
 - [GitHub Repository](https://github.com/epigen/unsupervised_analysis/)

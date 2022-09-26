@@ -1,0 +1,41 @@
+# always use absolute paths
+# provide at least one parameter per option (no empty parameters allowed)
+
+##### RESOURCES #####
+# memory in MB
+mem: '64000'
+mem_small: '16000'
+threads: 2
+partition: 'shortq'
+
+##### GENERAL #####
+annotation: /research/home/sreichl/projects/macroIC/config/Lee2020NatGenet_unsupervised_analysis_annotation.csv
+result_path: /nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/
+project_name: Lee2020NatGenet
+
+##### PCA #####
+# (no configuration necessary)
+
+##### UMAP #####
+# information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
+# umap knn-graph will be generated for each metric once with the max(n_neighbors)
+# knn-graph parameters: metric  (default: euclidean), n_neighbors (default: 15)
+# embedding parameters: min_dist  (default: 0.1), n_components (default: 2)
+# connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
+umap:
+    metrics: ['correlation','euclidean']
+    n_neighbors: [10, 100]
+    min_dist: [0.1]
+    n_components: [2]
+    connectivity: 1
+    diagnostics: 0
+    
+##### VISUALIZATION #####
+# 2D visualization with ggplot2
+scatterplot2d:
+    size: 0.5
+    alpha: 1
+
+# specify features of interest that will be highlgihted in the 2D plots (motivated by bioinformatics highlighting gene expression levels)
+# if not used leave empty []
+features_to_plot: ['FCN1', 'TGFBR1', 'TGFBR2', 'TNFRSF1A','IL6R', 'IFNGR1', 'IFNGR2', 'IFNAR1', 'IFNG', 'IFNB1', 'IL6', 'TNF', 'TGFB1', 'TGFB2','PTPRC', 'CD2', 'CD3D', 'CD4', 'CD8A', 'AIF1', 'CD68','CD74','CD86','CD14','F3','RAC2','LYZ','CD83','CD163', 'EPCAM', 'KRT19', 'S100A6', 'CD79A', 'MS4A1', 'CD19', 'COL1A1', 'COL1A2', 'VWF', 'CDH5', 'CD274', 'CTLA4', 'TIMD4', 'C1QA', 'C1QB', 'C1QC']

@@ -1,0 +1,41 @@
+# always use absolute paths
+# provide at least one parameter per option (no empty parameters allowed)
+
+##### RESOURCES #####
+# memory in MB
+mem: '32000'
+mem_small: '16000'
+threads: 2
+partition: 'shortq'
+
+##### GENERAL #####
+annotation: .test/config/digits_unsupervised_analysis_annotation.csv
+result_path: .test/results/
+project_name: digits
+
+##### PCA #####
+# (no configuration necessary)
+
+##### UMAP #####
+# information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
+# umap knn-graph will be generated for each metric once with the max(n_neighbors)
+# knn-graph parameters: metric  (default: euclidean), n_neighbors (default: 15)
+# embedding parameters: min_dist  (default: 0.1), n_components (default: 2)
+# connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
+umap:
+    metrics: ['euclidean']
+    n_neighbors: [100]
+    min_dist: [0.1]
+    n_components: [2]
+    connectivity: 1
+    diagnostics: 1
+    
+##### VISUALIZATION #####
+# 2D visualization with ggplot2
+scatterplot2d:
+    size: 0.5
+    alpha: 1
+
+# specify features of interest that will be highlgihted in the 2D plots (motivated by bioinformatics highlighting gene expression levels)
+# if not used leave empty []
+features_to_plot: ['pixel_0_0','pixel_0_1','pixel_0_2','pixel_0_3']
