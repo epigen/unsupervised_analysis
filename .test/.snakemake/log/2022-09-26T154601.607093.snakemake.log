@@ -1,3 +1,0 @@
-FileNotFoundError in line 17 of /home/sreichl/projects/unsupervised_analysis/workflow/Snakefile:
-[Errno 2] No such file or directory: 'config/config.yaml'
-  File "/home/sreichl/projects/unsupervised_analysis/workflow/Snakefile", line 17, in <module>
