@@ -21,6 +21,7 @@ annot = pd.read_csv(config['annotation'], index_col='name')
 
 # apply UMAP and PCA sepcific visualization flags
 umap_content = ['metadata']
+densmap_content = ['metadata']
 pca_content = ['metadata', 'diagnostics']
 if config["umap"]["connectivity"]==1:
     umap_content.append('connectivity')
@@ -28,6 +29,7 @@ if config["umap"]["diagnostics"]==1:
     umap_content.append('diagnostics')
 if len(config["features_to_plot"]) > 0:
     umap_content.append('features')
+    densmap_content.append('features')
     pca_content.append('features')
 
 rule all:
@@ -59,6 +61,23 @@ rule all:
                             n_components=2,
                             content=umap_content
                                ),
+        # densMAP objects
+        densMAP_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','densMAP','densMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_object.pickle'),
+                            sample=list(annot.index),
+                            metric=config["umap"]["metrics"],
+                            n_neighbors=config["umap"]["n_neighbors"],
+                            min_dist=config["umap"]["min_dist"],
+                            n_components=config["umap"]["n_components"]
+                               ) if config["umap"]["densmap"]==1 else [],
+        # densMAP plots
+        densMAP_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','densMAP','plots','densMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_{content}.png'),
+                            sample=list(annot.index),
+                            metric=config["umap"]["metrics"],
+                            n_neighbors=config["umap"]["n_neighbors"],
+                            min_dist=config["umap"]["min_dist"],
+                            n_components=2,
+                            content=densmap_content
+                               ) if config["umap"]["densmap"]==1 else [],
         envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap']),
         configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),
         annotations = config["annotation"],

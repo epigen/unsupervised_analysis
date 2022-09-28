@@ -26,6 +26,7 @@ metric = snakemake.params['metric'] #"correlation"
 n_neighbors = int(snakemake.params['n_neighbors']) #100
 min_dist = float(snakemake.params['min_dist']) #0.1
 n_components = int(snakemake.params['n_components']) #2
+densmap = True if int(snakemake.params['densmap'])==1 else False #False
 
 # make directory if not existing
 if not os.path.exists(result_dir):
@@ -83,7 +84,7 @@ umap_obj=umap.umap_.UMAP(n_neighbors=n_neighbors,
                          verbose=False, 
                          tqdm_kwds=None, 
                          unique=False, 
-                         densmap=False, 
+                         densmap=densmap, 
                          dens_lambda=2.0, 
                          dens_frac=0.3, 
                          dens_var_shift=0.1, 
@@ -96,7 +97,11 @@ umap_obj=umap.umap_.UMAP(n_neighbors=n_neighbors,
 
 data_df = pd.DataFrame(umap_obj.embedding_, index=data.index,)
 data_df = data_df.rename_axis(("sample_name"))
-data_df.columns = ["UMAP_{}".format(str(idx+1)) for idx in data_df.columns]
+
+if densmap:
+    data_df.columns = ["densMAP_{}".format(str(idx+1)) for idx in data_df.columns]
+else:
+    data_df.columns = ["UMAP_{}".format(str(idx+1)) for idx in data_df.columns]
 
 ### save data
 

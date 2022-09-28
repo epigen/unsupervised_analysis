@@ -20,6 +20,7 @@ project_name: digits
 # information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # umap knn-graph will be generated for each metric once with the max(n_neighbors)
 # knn-graph parameters: metric  (default: euclidean), n_neighbors (default: 15)
+# densmap flag: perform densMAP  (0==no, 1==yes) on top of UMAP with all parameter combinations (https://umap-learn.readthedocs.io/en/latest/densmap_demo.html)
 # embedding parameters: min_dist  (default: 0.1), n_components (default: 2)
 # connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
 umap:
@@ -27,6 +28,7 @@ umap:
     n_neighbors: [100]
     min_dist: [0.1]
     n_components: [2]
+    densmap: 1
     connectivity: 1
     diagnostics: 1
     
