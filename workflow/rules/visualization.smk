@@ -23,7 +23,10 @@ rule prep_feature_plot:
 # PCA scatter plot panel by features
 rule plot_pca_features:
     input:
-        unpack(get_pca_feature_paths),
+        dimred_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_data.csv'),
+        dimred_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_axes.csv'),
+        metadata = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_features.csv'),
+#         unpack(get_pca_feature_paths),
     output:
         plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_features.png'),
                                caption="../report/pca_2d_features.rst", 
@@ -46,7 +49,10 @@ rule plot_pca_features:
 # dimred scatter plot panel by features
 rule plot_dimred_features:
     input:
-        unpack(get_dimred_feature_paths),
+        dimred_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{parameters}_data.csv'),
+        dimred_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{parameters}_axes.csv'),
+        metadata = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_features.csv'),
+#         unpack(get_dimred_feature_paths),
     output:
         plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_features.png'),
                                caption="../report/dimred_2d_features.rst", 
@@ -116,12 +122,19 @@ rule plot_dimred_metadata:
 
 ########## DIAGNOSTIC PLOTS ##########
         
-# PCA scree plot and cumulative variance
+# PCA scree plot, cumulative variance and pairs plot
 rule plot_pca_diagnostics:
     input:
-        var_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_var.csv'),
+        unpack(get_pca_paths)
+        #data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_data.csv'),
+        #var_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_var.csv'),
+        #axes_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_axes.csv'),
     output:
         diagnostics_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_diagnostics.png'),
+                               caption="../report/pca_diagnostics.rst", 
+                               category="{}_unsupervised_analysis".format(config["project_name"]), 
+                               subcategory="{sample}"),
+        pairs_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_pairs.png'),
                                caption="../report/pca_diagnostics.rst", 
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),

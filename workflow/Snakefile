@@ -22,7 +22,7 @@ annot = pd.read_csv(config['annotation'], index_col='name')
 # apply UMAP and PCA sepcific visualization flags
 umap_content = ['metadata']
 densmap_content = ['metadata']
-pca_content = ['metadata', 'diagnostics']
+pca_content = ['metadata', 'diagnostics','pairs']
 if config["umap"]["connectivity"]==1:
     umap_content.append('connectivity')
 if config["umap"]["diagnostics"]==1:
@@ -34,6 +34,7 @@ if len(config["features_to_plot"]) > 0:
 
 rule all:
     input:
+        # PCA
         PCA_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_object.pickle'),
                                 sample=list(annot.index),
                                ),
@@ -41,6 +42,7 @@ rule all:
                             sample=list(annot.index),
                             content=pca_content
                           ),
+        # UMAP
         UMAP_graphs = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),
                               sample=list(annot.index),
                               metric=config["umap"]["metrics"],
@@ -61,7 +63,7 @@ rule all:
                             n_components=2,
                             content=umap_content
                                ),
-        # densMAP objects
+        # densMAP
         densMAP_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','densMAP','densMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_object.pickle'),
                             sample=list(annot.index),
                             metric=config["umap"]["metrics"],
@@ -69,7 +71,6 @@ rule all:
                             min_dist=config["umap"]["min_dist"],
                             n_components=config["umap"]["n_components"]
                                ) if config["umap"]["densmap"]==1 else [],
-        # densMAP plots
         densMAP_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','densMAP','plots','densMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_{content}.png'),
                             sample=list(annot.index),
                             metric=config["umap"]["metrics"],
