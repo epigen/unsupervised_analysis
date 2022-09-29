@@ -16,6 +16,7 @@ data_path = snakemake.input[0] #"/nobackup/lab_bock/projects/macroIC/results/AKs
 # outputs
 result_object_path = snakemake.output["result_object"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_object.pickle"
 result_data_path = snakemake.output["result_data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_data.csv"
+result_loadings_path = snakemake.output["result_loadings"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_loadings.csv"
 result_var_path = snakemake.output["result_var"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_var.csv"
 result_axes_path = snakemake.output["result_axes"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_axes.csv"
 
@@ -62,6 +63,10 @@ with open(result_object_path, 'wb') as f:
     
 # save transformed data
 data_df.to_csv(result_data_path)
+
+# save loadings
+loadings = pd.DataFrame(pca_obj.components_.T, columns = data_df.columns, index=data.columns)
+loadings.to_csv(result_loadings_path)
 
 # save explained variance
 axes_info_df = pd.DataFrame(pca_obj.explained_variance_ratio_)

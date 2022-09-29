@@ -5,6 +5,7 @@ rule pca:
     output:
         result_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_object.pickle'),
         result_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_data.csv'),
+        result_loadings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_loadings.csv'),
         result_var = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_var.csv'),
         result_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_axes.csv'),
     resources:
