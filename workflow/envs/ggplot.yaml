@@ -1,7 +1,9 @@
 channels:
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
   - r-ggplot2
   - r-patchwork
   - r-ggally
+  - r-ggrepel

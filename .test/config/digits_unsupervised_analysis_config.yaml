@@ -27,7 +27,7 @@ umap:
     metrics: ['euclidean']
     n_neighbors: [100]
     min_dist: [0.1]
-    n_components: [2]
+    n_components: [2,3]
     densmap: 1
     connectivity: 1
     diagnostics: 1
@@ -35,10 +35,10 @@ umap:
 ##### VISUALIZATION #####
 # 2D visualization with ggplot2
 scatterplot2d:
-    size: 0.5
+    size: 2
     alpha: 1
     
-# EXPLANATION HERE (or empty "", then first column of metadata data frame wil be taken)
+# EXPLANATION HERE (or empty "", then first column of metadata data frame will be taken)
 metadata_of_interest: "target"
 
 # specify features of interest that will be highlgihted in the 2D plots (motivated by bioinformatics highlighting gene expression levels)

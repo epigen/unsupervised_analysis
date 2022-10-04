@@ -2,6 +2,7 @@
 library("ggplot2")
 library("patchwork")
 library("GGally")
+library("ggrepel")
 
 ### configurations
 
@@ -9,10 +10,12 @@ library("GGally")
 data_path <- snakemake@input[["dimred_data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_data.csv"
 var_path <- snakemake@input[["dimred_var"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_var.csv"
 axes_path <- snakemake@input[["dimred_axes"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_axes.csv"
+loadings_path <- snakemake@input[["dimred_loadings"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_loadings.csv"
 metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
 
 diagnostics_path <- snakemake@output[["diagnostics_plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/plots/PCA_diagnostics.png"
 pairs_path <- snakemake@output[["pairs_plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/plots/PCA_pairs.png"
+loadingsplot_path <- snakemake@output[["loadings_plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/plots/PCA_loadings.png"
 
 pairs_size <- snakemake@config[["scatterplot2d"]][["size"]]/10 # 0.5
 pairs_alpha <- snakemake@config[["scatterplot2d"]][["alpha"]]/2 # 1
@@ -27,7 +30,13 @@ if (!dir.exists(result_dir)){
 ### load data
 data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+
+if(metadata_col==""){
+    metadata_col <- colnames(metadata)[1]
+}
+
 data_axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)
+data_loadings <- read.csv(file=file.path(loadings_path), row.names=1, header=TRUE)
 
 data_var <- read.csv(file=file.path(var_path), row.names=1, header=TRUE)
 colnames(data_var) <- c('var')
@@ -159,5 +168,55 @@ ggsave(basename(pairs_path),
        dpi = 300,
        width = n_dim,
        height = n_dim,
+       limitsize = FALSE,
+      )
+
+
+### loadings plot
+
+# plot specifications
+n_col <- min(5,n_dim)
+height_panel <- ceiling(n_dim/n_col)*4
+width_panel <- n_col * 4
+
+loading_plots <- list()
+
+for(i in 1:n_dim){
+    tmp_x <- i
+    tmp_y <- i+1
+    
+    # determine top 10 features per PC combination
+    top_features <- rownames(data_loadings)[order(-(data_loadings[paste0("PC_",tmp_x)]^2 + data_loadings[paste0("PC_",tmp_y)]^2))][1:10]
+    
+    # subset data
+    tmp_loadings <- data_loadings[top_features, c(paste0("PC_",tmp_x), paste0("PC_",tmp_y))]
+    tmp_loadings$features <- rownames(tmp_loadings)
+    text_var <- "features"
+    
+    # plot data
+    loading_plots[[i]] <- ggplot(data=tmp_loadings, aes_string(x=paste0("PC_",tmp_x), y=paste0("PC_",tmp_y), label=text_var))+
+    geom_segment(data=tmp_loadings, aes_string(x=0, y=0, xend=paste0("PC_",tmp_x), yend=paste0("PC_",tmp_y)), arrow=arrow(length=unit(0.2,"cm")), alpha=0.75, color="black") +
+    geom_label_repel()+
+    xlab(paste0("Principal Component ",tmp_x)) +
+    ylab(paste0("Principal Component ",tmp_y)) +
+    theme_linedraw()
+    
+#     print(tmp_plot)
+}
+
+loadings_plot_panel <- wrap_plots(loading_plots, ncol = n_col)
+
+# save diangostics plot
+# options(repr.plot.width=width_panel, repr.plot.height=height_panel)
+# loadings_plot_panel
+
+ggsave(basename(loadingsplot_path),
+       plot = loadings_plot_panel,
+       device = 'png',
+       path = result_dir,
+       scale = 1,
+       dpi = 300,
+       width = width_panel,
+       height = height_panel,
        limitsize = FALSE,
       )
