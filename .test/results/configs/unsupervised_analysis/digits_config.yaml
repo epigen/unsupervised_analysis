@@ -4,14 +4,21 @@ features_to_plot:
 - pixel_0_1
 - pixel_0_2
 - pixel_0_3
+heatmap: !!python/object/apply:collections.OrderedDict
+- - - metrics
+    - - spearman
+  - - hclust_methods
+    - - complete
+      - average
 mem: '32000'
 mem_small: '16000'
+metadata_of_interest: target
 partition: shortq
 project_name: digits
 result_path: .test/results/
 scatterplot2d: !!python/object/apply:collections.OrderedDict
 - - - size
-    - 0.5
+    - 2
   - - alpha
     - 1
 threads: 2
@@ -24,6 +31,9 @@ umap: !!python/object/apply:collections.OrderedDict
     - - 0.1
   - - n_components
     - - 2
+      - 3
+  - - densmap
+    - 1
   - - connectivity
     - 1
   - - diagnostics

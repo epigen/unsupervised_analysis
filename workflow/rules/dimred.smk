@@ -1,20 +1,20 @@
 ####### perform Principal Component Analysis (PCA) #######
 rule pca:
     input:
-        get_sample_paths,
+        unpack(get_sample_paths),
     output:
-        result_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_object.pickle'),
-        result_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_data.csv'),
-        result_loadings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_loadings.csv'),
-        result_var = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_var.csv'),
-        result_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_axes.csv'),
+        result_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_{parameters}_object.pickle'),
+        result_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_{parameters}_data.csv'),
+        result_loadings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_{parameters}_loadings.csv'),
+        result_var = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_{parameters}_var.csv'),
+        result_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_{parameters}_axes.csv'),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/sklearn.yaml"
     log:
-        os.path.join("logs","rules","pca_{sample}.log"),
+        os.path.join("logs","rules","PCA_{sample}_{parameters}.log"),
     params:
         partition = config.get("partition"),
         samples_by_features = get_data_orientation,
@@ -27,7 +27,7 @@ rule pca:
 # generate parametrized knn graphs using the UMAP package
 rule umap_graph:
     input:
-        get_sample_paths,
+        unpack(get_sample_paths),
     output:
         result_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),
     resources:

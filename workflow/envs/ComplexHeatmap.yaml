@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+  - r
+  - defaults
+dependencies:
+  - bioconductor-complexheatmap
+  - r-rcolorbrewer
+#  - r-dendsort

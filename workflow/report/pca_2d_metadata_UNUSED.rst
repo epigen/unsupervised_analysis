@@ -1,0 +1,1 @@
+Visualization of {{snakemake.wildcards["sample"]}} after Principal Component Analysis (PCA) using sklearn of the first two principal components (PC1 and PC2) colored by metadata

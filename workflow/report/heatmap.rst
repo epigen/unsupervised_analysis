@@ -1,0 +1,1 @@
+ComplexHeatmap of {{snakemake.wildcards["sample"]}} scaled by features (z-scores), hierarchically clustered using method {{snakemake.wildcards["method"]}} with distance metric {{snakemake.wildcards["metric"]}}, annotated by metadata {{snakemake.config["metadata_of_interest"]}}, and value-colorscape limited to the top percentiles.

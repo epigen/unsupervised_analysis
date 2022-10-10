@@ -8,7 +8,7 @@ import pandas as pd
 #### configurations
 
 # ipnuts
-data_path = snakemake.input[0] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/condition_24h_cytokines/counts/CORRECTED_RNA.csv"
+data_path = snakemake.input["data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/condition_24h_cytokines/counts/CORRECTED_RNA.csv"
 # outputs
 result_data_path = snakemake.output[0] #"/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/unsupervised_analysis/merged_NORMALIZED/metadata_features.csv"
 

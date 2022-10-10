@@ -12,7 +12,7 @@ from umap.umap_ import nearest_neighbors
 #### configurations
 
 # ipnuts
-data_path = snakemake.input[0] #"/nobackup/lab_bock/projects/macroIC/results/CC001/counts/mdm_normCQN.csv"
+data_path = snakemake.input["data"] #"/nobackup/lab_bock/projects/macroIC/results/CC001/counts/mdm_normCQN.csv"
 # outputs
 result_object_path = snakemake.output["result_object"] # "/nobackup/lab_bock/projects/macroIC/results/CC001/unsupervised_analysis/mdm_normCQN/UMAP/UMAP_correlation_5_0.1_2_object.pickle"
 

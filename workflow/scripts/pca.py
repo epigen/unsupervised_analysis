@@ -12,7 +12,7 @@ from sklearn.decomposition import PCA
 #### configurations
 
 # ipnuts
-data_path = snakemake.input[0] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/condition_24h_cytokines/counts/CORRECTED_RNA.csv"
+data_path = snakemake.input["data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/condition_24h_cytokines/counts/CORRECTED_RNA.csv"
 # outputs
 result_object_path = snakemake.output["result_object"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_object.pickle"
 result_data_path = snakemake.output["result_data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_data.csv"

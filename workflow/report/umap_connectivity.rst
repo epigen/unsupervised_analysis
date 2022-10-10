@@ -1,1 +1,1 @@
-Uniform Manifold Approximation and Projection (UMAP) network-connectivity plot with edge-bundling (`hammer algorithm variant <http://www.cs.rug.nl/svcg/Shapes/KDEEB>`_) for {{snakemake.wildcards["sample"]}} with parameters {{snakemake.wildcards["parameters"]}}.
+{{snakemake.wildcards["method"]}} network-connectivity plot with edge-bundling (`hammer algorithm variant <http://www.cs.rug.nl/svcg/Shapes/KDEEB>`_) for {{snakemake.wildcards["sample"]}} with parameters {{snakemake.wildcards["parameters"]}}.

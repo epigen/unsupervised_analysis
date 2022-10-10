@@ -31,6 +31,7 @@ if (!dir.exists(result_dir)){
 data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 
+# prepare metadata
 if(metadata_col==""){
     metadata_col <- colnames(metadata)[1]
 }
@@ -43,6 +44,7 @@ colnames(data_var) <- c('var')
 data_var$PC <- as.numeric(rownames(data_var))+1
 
 ### diagnostics plot
+print("Diagnostics plot")
 # plot specifications
 n_col <- 2
 width <- 5
@@ -112,6 +114,7 @@ ggsave(basename(diagnostics_path),
       )
 
 ### pairs plot
+print("Pairs plot")
 n_dim <- min(10, ncol(data))
 
 # convert to categorical if less than 25 unique integer values
@@ -119,6 +122,10 @@ if (is.numeric(metadata[[metadata_col]]) & length(unique(metadata[[metadata_col]
     if(all(metadata[[metadata_col]] == round(metadata[[metadata_col]]))){
         metadata[metadata_col] <- as.factor(metadata[[metadata_col]])
     }
+}
+# if a metadata class is empty ("") fill with "unknown"
+if (any(metadata[[metadata_col]]=="")){
+    metadata[metadata[[metadata_col]]=="", metadata_col] <- "unknown"
 }
 
 # legend parameter according to data type
@@ -173,6 +180,7 @@ ggsave(basename(pairs_path),
 
 
 ### loadings plot
+print("Loadings plot")
 
 # plot specifications
 n_col <- min(5,n_dim)

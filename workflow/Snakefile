@@ -22,11 +22,14 @@ annot = pd.read_csv(config['annotation'], index_col='name')
 # apply UMAP and PCA sepcific visualization flags
 umap_content = ['metadata']
 densmap_content = ['metadata']
-pca_content = ['metadata', 'diagnostics','pairs']
+pca_content = ['metadata']
+pca_diagnostics = ['variance','pairs','loadings']
 if config["umap"]["connectivity"]==1:
     umap_content.append('connectivity')
+    densmap_content.append('connectivity')
 if config["umap"]["diagnostics"]==1:
     umap_content.append('diagnostics')
+    densmap_content.append('diagnostics')
 if len(config["features_to_plot"]) > 0:
     umap_content.append('features')
     densmap_content.append('features')
@@ -35,12 +38,16 @@ if len(config["features_to_plot"]) > 0:
 rule all:
     input:
         # PCA
-        PCA_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_object.pickle'),
+        PCA_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_default_object.pickle'),
                                 sample=list(annot.index),
                                ),
-        PCA_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_{content}.png'),
+        PCA_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_default_2_{content}.png'),
                             sample=list(annot.index),
                             content=pca_content
+                          ),
+        PCA_diagnostics = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_default_{content}.png'),
+                            sample=list(annot.index),
+                            content=pca_diagnostics
                           ),
         PCA_interactive = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_default_{n_components}_interactive.html'),
                             sample=list(annot.index),
@@ -89,19 +96,25 @@ rule all:
                             min_dist=config["umap"]["min_dist"],
                             n_components=2,
                             content=densmap_content
-                               ) if config["umap"]["densmap"]==1 else [],
+                               ) if config["umap"]["densmap"]==1 and 2 in config["umap"]["n_components"] else [],
         densMAP_interactive = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','densMAP','plots','densMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_interactive.html'),
                             sample=list(annot.index),
                             metric=config["umap"]["metrics"],
                             n_neighbors=config["umap"]["n_neighbors"],
                             min_dist=config["umap"]["min_dist"],
                             n_components=[dims for dims in config["umap"]["n_components"] if dims in [2,3]]
-                               ) if 2 in config["umap"]["n_components"] or 3 in config["umap"]["n_components"] else [],
-        envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap']),
+                               ) if config["umap"]["densmap"]==1 and (2 in config["umap"]["n_components"] or 3 in config["umap"]["n_components"]) else [],
+        # Heatmap
+        heatmap_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
+                               sample=list(annot.index),
+                               method=config["heatmap"]["hclust_methods"],
+                               metric=config["heatmap"]["metrics"],
+                          ),
+        envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap','plotly','ComplexHeatmap']),
         configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),
-        annotations = config["annotation"],
+#         annotations = config["annotation"],
     resources:
-        mem_mb=config.get("mem_small", "8000"),
+        mem_mb=1000, #config.get("mem_small", "8000"),
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","all.log"),

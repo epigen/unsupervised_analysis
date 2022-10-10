@@ -66,6 +66,10 @@ for (col in colnames(metadata)){
             metadata[col] <- as.factor(metadata[[col]])
         }
     }
+    # if a metadata class is empty ("") fill with "unknown"
+    if (any(metadata[[col]]=="")){
+        metadata[metadata[[col]]=="", col] <- "unknown"
+    }
     
     # prepare data for plotting
     tmp_data <- cbind(data, metadata[col])

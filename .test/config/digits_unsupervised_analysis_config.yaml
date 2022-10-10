@@ -16,7 +16,7 @@ project_name: digits
 ##### PCA #####
 # (no configuration necessary)
 
-##### UMAP #####
+##### UMAP & densMAP #####
 # information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # umap knn-graph will be generated for each metric once with the max(n_neighbors)
 # knn-graph parameters: metric  (default: euclidean), n_neighbors (default: 15)
@@ -32,10 +32,16 @@ umap:
     connectivity: 1
     diagnostics: 1
     
+##### HEATMAP #####
+# EXPLANATION HERE
+heatmap:
+    metrics: ['spearman']
+    hclust_methods: ['complete','average']
+    
 ##### VISUALIZATION #####
 # 2D visualization with ggplot2
 scatterplot2d:
-    size: 2
+    size: 1
     alpha: 1
     
 # EXPLANATION HERE (or empty "", then first column of metadata data frame will be taken)

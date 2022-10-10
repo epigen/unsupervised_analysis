@@ -16,7 +16,7 @@ project_name: AKsmall
 ##### PCA #####
 # (no configuration necessary)
 
-##### UMAP #####
+##### UMAP & densMAP #####
 # information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # umap knn-graph will be generated for each metric once with the max(n_neighbors)
 # knn-graph parameters: metric  (default: euclidean), n_neighbors (default: 15)
@@ -32,13 +32,19 @@ umap:
     connectivity: 0
     diagnostics: 0
     
+##### HEATMAP #####
+# EXPLANATION HERE
+heatmap:
+    metrics: ['spearman']
+    hclust_methods: ['average']
+    
 ##### VISUALIZATION #####
 # 2D visualization with ggplot2
 scatterplot2d:
     size: 0.5
     alpha: 1
     
-# metadata column used for plotting of sequential PCs,... (or empty "", then first column of metadata data frame will be taken)
+# metadata column used for plotting of sequential PCs,... (or empty "", then first column of the metadata dataframe will be taken)
 metadata_of_interest: "target"
 
 # specify features of interest, which value from the data will be highlgihted in the 2D plots

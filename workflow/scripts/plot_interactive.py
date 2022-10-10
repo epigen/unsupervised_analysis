@@ -55,8 +55,8 @@ plot_path = snakemake.output["plot"] #"/nobackup/lab_bock/projects/macroIC/resul
 
 # parameters
 dimensions = int(snakemake.params["n_components"]) #2 #
-point_size = snakemake.params["size"] if dimensions==3 else 2*snakemake.params["size"] #1 if dimensions==3 else 2*1 #
-point_alpha = snakemake.params["alpha"] #1 #
+point_size = 2*snakemake.params["size"] if dimensions==3 else 3*snakemake.params["size"] # 2
+point_alpha = snakemake.params["alpha"] #1
 
 width = 750
 height = 750
@@ -84,10 +84,11 @@ data_all = data_all.fillna('')
 meta_num = list()
 meta_cat = list()
 for variable in data_all.columns[dimensions:]:
-    unique_vals = data_all[variable].unique()
+    unique_vals = list(data_all[variable].unique())
     #unique_vals = unique_vals[~np.isnan(unique_vals)] #unique_vals[pd.notna(unique_vals)]
     
-    if len(unique_vals)<25:
+    # check if integer AND less than 25 unique values -> categorical metadata
+    if all([isinstance(i, (int, np.int64)) for i in unique_vals]) and len(unique_vals)<25:
         #data_all[variable] = data_all[variable].values.astype(str)
         meta_cat.append(variable)
         continue
