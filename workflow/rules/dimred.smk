@@ -50,7 +50,6 @@ rule umap_graph:
 rule umap_embed:
     input:
         get_umap_sample_paths,
-#         graph_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP_{metric}_'+'{}'.format(max(config["umap"]["n_neighbors"]))+'_graph.pickle'),
     output:
         result_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_object.pickle'),
         result_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_{min_dist}_{n_components}_data.csv'),

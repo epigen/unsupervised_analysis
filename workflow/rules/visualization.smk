@@ -19,31 +19,6 @@ rule prep_feature_plot:
         features_to_plot = config["features_to_plot"],
     script:
         "../scripts/subset_data.py"
-
-# # PCA scatter plot panel by features
-# rule plot_pca_features:
-#     input:
-#         dimred_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_data.csv'),
-#         dimred_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_axes.csv'),
-#         metadata = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_features.csv'),
-#     output:
-#         plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_features.png'),
-#                                caption="../report/pca_2d_features.rst", 
-#                                category="{}_unsupervised_analysis".format(config["project_name"]), 
-#                                subcategory="{sample}"),
-#     resources:
-#         mem_mb=config.get("mem", "32000"),
-#     threads: config.get("threads", 1)
-#     conda:
-#         "../envs/ggplot.yaml"
-#     log:
-#         os.path.join("logs","rules","plot_features_{sample}_PCA.log"),
-#     params:
-#         partition=config.get("partition"),
-#         size = config["scatterplot2d"]["size"],
-#         alpha = config["scatterplot2d"]["alpha"]
-#     script:
-#         "../scripts/plot_2d.R"
         
 # dimred scatter plot panel by features
 rule plot_dimred_features:
@@ -72,29 +47,6 @@ rule plot_dimred_features:
         "../scripts/plot_2d.R"
 
 ########## METADATA PLOTS ##########
-        
-# PCA scatter plot panel by metadata
-# rule plot_pca_metadata:
-#     input:
-#         unpack(get_pca_paths),
-#     output:
-#         plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_metadata.png'),
-#                                caption="../report/pca_2d_metadata.rst", 
-#                                category="{}_unsupervised_analysis".format(config["project_name"]), 
-#                                subcategory="{sample}"),
-#     resources:
-#         mem_mb=config.get("mem", "32000"),
-#     threads: config.get("threads", 1)
-#     conda:
-#         "../envs/ggplot.yaml"
-#     log:
-#         os.path.join("logs","rules","plot_metadata_{sample}_PCA.log"),
-#     params:
-#         partition=config.get("partition"),
-#         size = config["scatterplot2d"]["size"],
-#         alpha = config["scatterplot2d"]["alpha"]
-#     script:
-#         "../scripts/plot_2d.R"  
         
 # dimred scatter plot panel by metadata
 rule plot_dimred_metadata:
