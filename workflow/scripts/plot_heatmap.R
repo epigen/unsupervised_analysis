@@ -44,7 +44,7 @@ data <- data[,colSums(is.na(data))<nrow(data)]
 data[is.na(data)] <- 0
 
 # prepare metadata
-if(metadata_col==""){
+if((metadata_col=="")|(all(is.na(metadata[[metadata_col]])))){
     metadata_col <- colnames(metadata)[1]
 }
 if (is.numeric(metadata[[metadata_col]]) & length(unique(metadata[[metadata_col]]))<=25){
@@ -53,8 +53,10 @@ if (is.numeric(metadata[[metadata_col]]) & length(unique(metadata[[metadata_col]
     }
 }
 # if a metadata class is empty ("") fill with "unknown"
-if (any(metadata[[metadata_col]]=="")){
-    metadata[metadata[[metadata_col]]=="", metadata_col] <- "unknown"
+if (!any(is.na(metadata[[metadata_col]]))){
+    if (any(metadata[[metadata_col]]=="")){
+        metadata[metadata[[metadata_col]]=="", metadata_col] <- "unknown"
+    }
 }
 
 

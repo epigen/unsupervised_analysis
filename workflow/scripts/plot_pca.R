@@ -43,8 +43,8 @@ data_var <- read.csv(file=file.path(var_path), row.names=1, header=TRUE)
 colnames(data_var) <- c('var')
 data_var$PC <- as.numeric(rownames(data_var))+1
 
-### diagnostics plot
-print("Diagnostics plot")
+### variance plot
+print("Variance plots")
 # plot specifications
 n_col <- 2
 width <- 5

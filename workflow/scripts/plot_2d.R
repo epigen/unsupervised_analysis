@@ -56,7 +56,7 @@ for (col in colnames(metadata)){
     print(col)
     
     # check if metadata column is only NA
-    if(all(is.na(metadata[col]))){
+    if(all(is.na(metadata[[col]]))){
         next
     }
     
@@ -66,9 +66,12 @@ for (col in colnames(metadata)){
             metadata[col] <- as.factor(metadata[[col]])
         }
     }
+    
     # if a metadata class is empty ("") fill with "unknown"
-    if (any(metadata[[col]]=="")){
-        metadata[metadata[[col]]=="", col] <- "unknown"
+    if (!any(is.na(metadata[[col]]))){
+        if (any(metadata[[col]]=="")){
+            metadata[metadata[[col]]=="", col] <- "unknown"
+        }
     }
     
     # prepare data for plotting
