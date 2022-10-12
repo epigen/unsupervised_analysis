@@ -6,4 +6,6 @@ channels:
 dependencies:
   - bioconductor-complexheatmap
   - r-rcolorbrewer
+  - r-fastcluster
+  - r-magick
 #  - r-dendsort

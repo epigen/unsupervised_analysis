@@ -12,13 +12,15 @@ from sklearn.decomposition import PCA
 #### configurations
 
 # ipnuts
-data_path = snakemake.input["data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/condition_24h_cytokines/counts/CORRECTED_RNA.csv"
+data_path = snakemake.input["data"]
 # outputs
-result_object_path = snakemake.output["result_object"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_object.pickle"
-result_data_path = snakemake.output["result_data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_data.csv"
-result_loadings_path = snakemake.output["result_loadings"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_loadings.csv"
-result_var_path = snakemake.output["result_var"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_var.csv"
-result_axes_path = snakemake.output["result_axes"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_condition_24h_cytokines_CORRECTED/PCA_axes.csv"
+result_object_path = snakemake.output["result_object"]
+result_data_path = snakemake.output["result_data"]
+result_data_small_path = snakemake.output["result_data_small"]
+result_loadings_path = snakemake.output["result_loadings"]
+result_loadings_small_path = snakemake.output["result_loadings_small"]
+result_var_path = snakemake.output["result_var"]
+result_axes_path = snakemake.output["result_axes"]
 
 result_dir = os.path.dirname(result_object_path)
 
@@ -63,10 +65,12 @@ with open(result_object_path, 'wb') as f:
     
 # save transformed data
 data_df.to_csv(result_data_path)
+data_df.iloc[:,:min(10,data_df.shape[1])].to_csv(result_data_small_path)
 
 # save loadings
 loadings = pd.DataFrame(pca_obj.components_.T, columns = data_df.columns, index=data.columns)
 loadings.to_csv(result_loadings_path)
+loadings.iloc[:,:min(10,data_df.shape[1])].to_csv(result_loadings_small_path)
 
 # save explained variance
 axes_info_df = pd.DataFrame(pca_obj.explained_variance_ratio_)

@@ -6,6 +6,7 @@ library("RColorBrewer")
 
 ### configurations
 set.seed(42)
+ht_opt(fast_hclust = TRUE)
 
 # inputs
 data_path <- snakemake@input[["data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"

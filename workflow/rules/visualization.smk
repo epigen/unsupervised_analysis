@@ -23,10 +23,7 @@ rule prep_feature_plot:
 # dimred scatter plot panel by features
 rule plot_dimred_features:
     input:
-        unpack(get_dimred_features_paths)
-#         dimred_data = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{parameters}_data.csv'),
-#         dimred_axes = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{parameters}_axes.csv'),
-#         metadata = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_features.csv'),
+        unpack(get_dimred_features_paths),
     output:
         plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_features.png'),
                                caption="../report/dimred_2d_features.rst", 

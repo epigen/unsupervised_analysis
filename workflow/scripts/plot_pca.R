@@ -7,15 +7,15 @@ library("ggrepel")
 ### configurations
 
 # inputs
-data_path <- snakemake@input[["dimred_data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_data.csv"
-var_path <- snakemake@input[["dimred_var"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_var.csv"
-axes_path <- snakemake@input[["dimred_axes"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_axes.csv"
-loadings_path <- snakemake@input[["dimred_loadings"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_loadings.csv"
-metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
+data_path <- snakemake@input[["dimred_data"]]
+var_path <- snakemake@input[["dimred_var"]]
+axes_path <- snakemake@input[["dimred_axes"]]
+loadings_path <- snakemake@input[["dimred_loadings"]]
+metadata_path <- snakemake@input[["metadata"]]
 
-diagnostics_path <- snakemake@output[["diagnostics_plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/plots/PCA_diagnostics.png"
-pairs_path <- snakemake@output[["pairs_plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/plots/PCA_pairs.png"
-loadingsplot_path <- snakemake@output[["loadings_plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/plots/PCA_loadings.png"
+diagnostics_path <- snakemake@output[["diagnostics_plot"]]
+pairs_path <- snakemake@output[["pairs_plot"]]
+loadingsplot_path <- snakemake@output[["loadings_plot"]]
 
 pairs_size <- snakemake@config[["scatterplot2d"]][["size"]]/10 # 0.5
 pairs_alpha <- snakemake@config[["scatterplot2d"]][["alpha"]]/2 # 1
@@ -35,6 +35,12 @@ metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 if(metadata_col==""){
     metadata_col <- colnames(metadata)[1]
 }
+
+# make metadata rownames R "compatible"
+rownames(metadata) <- gsub(pattern= '-' ,replacement = '.', x = rownames(metadata))
+
+# align rows
+data <- data[rownames(metadata),]
 
 data_axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)
 data_loadings <- read.csv(file=file.path(loadings_path), row.names=1, header=TRUE)
@@ -124,15 +130,24 @@ if (is.numeric(metadata[[metadata_col]]) & length(unique(metadata[[metadata_col]
     }
 }
 # if a metadata class is empty ("") fill with "unknown"
-if (any(metadata[[metadata_col]]=="")){
-    metadata[metadata[[metadata_col]]=="", metadata_col] <- "unknown"
+if (!any(is.na(metadata[[metadata_col]]))){
+    if (any(metadata[[metadata_col]]=="")){
+        metadata[metadata[[metadata_col]]=="", metadata_col] <- "unknown"
+    }
 }
+
 
 # legend parameter according to data type
 if (is.numeric(metadata[[metadata_col]])){
     legend <- NULL
 }else{
     legend <- 1
+    
+    # remove groups with less than 3 members from metadata and data
+    keep_groups <- names(table(metadata[[metadata_col]]))[table(metadata[[metadata_col]])>2]
+    keep_idx <- metadata[[metadata_col]] %in% keep_groups
+    metadata <- metadata[keep_idx,,drop=FALSE]
+    data <- data[rownames(metadata),]
 }
 
 # options(repr.plot.width=10, repr.plot.height=10)
@@ -189,7 +204,7 @@ width_panel <- n_col * 4
 
 loading_plots <- list()
 
-for(i in 1:n_dim){
+for(i in 1:(n_dim-1)){
     tmp_x <- i
     tmp_y <- i+1
     
@@ -204,7 +219,7 @@ for(i in 1:n_dim){
     # plot data
     loading_plots[[i]] <- ggplot(data=tmp_loadings, aes_string(x=paste0("PC_",tmp_x), y=paste0("PC_",tmp_y), label=text_var))+
     geom_segment(data=tmp_loadings, aes_string(x=0, y=0, xend=paste0("PC_",tmp_x), yend=paste0("PC_",tmp_y)), arrow=arrow(length=unit(0.2,"cm")), alpha=0.75, color="black") +
-    geom_label_repel()+
+    geom_label_repel(size = 2)+
     xlab(paste0("Principal Component ",tmp_x)) +
     ylab(paste0("Principal Component ",tmp_y)) +
     theme_linedraw()
