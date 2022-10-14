@@ -55,7 +55,7 @@ plot_path = snakemake.output["plot"] #"/nobackup/lab_bock/projects/macroIC/resul
 
 # parameters
 dimensions = int(snakemake.params["n_components"]) #2 #
-point_size = 2*snakemake.params["size"] if dimensions==3 else 3*snakemake.params["size"] # 2
+point_size = 2*snakemake.params["size"] if dimensions==3 else 5*snakemake.params["size"] # 2
 point_alpha = snakemake.params["alpha"] #1
 
 width = 750

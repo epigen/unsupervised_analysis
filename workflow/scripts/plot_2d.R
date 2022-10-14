@@ -52,7 +52,7 @@ height_panel <- ceiling(ncol(metadata)/n_col) * height
 ### make plots
 scatter_plots <- list()
 
-for (col in colnames(metadata)){
+for (col in sort(colnames(metadata))){
     print(col)
     
     # check if metadata column is only NA

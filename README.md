@@ -87,6 +87,7 @@ The workflow perfroms the following analyses on each dataset provided in the ann
 # Usage
 Here are some tips for the usage of this workflow:
 - Start with minimal parameter combinations and without UMAP diagnostics and connectivity plots (computational expensive and slow)
+- Heatmaps require **a lot** of memory, hence the memory allocation is solved dynamically. If nevertheless a out-of-memory exception occurs the flag `--retries 2` can be used to trigger automatic resubmission upon failure with twice (2x) the memory.
 
 # Configuration
 Detailed specifications can be found here [./config/README.md](./config/README.md)
