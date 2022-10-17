@@ -31,11 +31,9 @@ if (!dir.exists(result_dir)){
 data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 
-# check of rownames agree
-if (!all(sort(rownames(data))==sort(rownames(metadata)))){
-    rownames(data) <- make.names(rownames(data))
-    rownames(metadata) <- make.names(rownames(metadata))
-}
+# make rownames (R) syntactically valid
+rownames(data) <- make.names(rownames(data))
+rownames(metadata) <- make.names(rownames(metadata))
 
 
 # prepare metadata
@@ -169,13 +167,18 @@ if (is.numeric(metadata[[metadata_col]])){
     data <- data[rownames(metadata),]
 }
 
+# check if one PC is only zeros (yes, that's apparently possible)
+non_zero_cols <- unname(apply(data, 2, function(x) !all(x==0)))
+data <- data[,non_zero_cols]
+data_axes <- data_axes[non_zero_cols,,drop=FALSE]
+
 # options(repr.plot.width=10, repr.plot.height=10)
 
 # make pairs plot
 pairs_plot <- ggpairs(
   data = data,
   mapping = ggplot2::aes(color = metadata[[metadata_col]]),
-  columns = 1:n_dim,
+  columns = 1:min(n_dim, ncol(data)),
   title = paste0("PCA pairs plot colored by ",metadata_col),
   upper = list(continuous = "density"),
   lower = list(continuous = wrap("points", alpha = pairs_alpha, size = pairs_size)),
@@ -184,7 +187,7 @@ pairs_plot <- ggpairs(
   xlab = NULL,
   ylab = NULL,
   axisLabels = c("show", "internal", "none"),
-  columnLabels = data_axes[1:n_dim,'label'],
+  columnLabels = data_axes[1:min(n_dim, ncol(data)),'label'],
   labeller = "label_value",
   switch = NULL,
   showStrips = NULL,

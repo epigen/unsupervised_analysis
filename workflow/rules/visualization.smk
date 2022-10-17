@@ -179,7 +179,7 @@ rule plot_heatmap:
                       subcategory="{sample}"),
     resources:
         # dynamic memory allocation based on input size and attempts (multiple attempts can be triggered with --retries X)
-        mem_mb=lambda wildcards, attempt:attempt*int(config.get("mem", "32000")),#lambda wildcards, input, attempt: max(int(config.get("mem", "16000")),((input.size//1000000) * attempt * 70)),#config.get("mem", "16000"),
+        mem_mb=lambda wildcards, attempt: attempt*int(config.get("mem", "16000")),#lambda wildcards, input, attempt: max(int(config.get("mem", "16000")),((input.size//1000000) * attempt * 70)),#config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/ComplexHeatmap.yaml"
