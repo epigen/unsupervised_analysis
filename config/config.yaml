@@ -38,7 +38,7 @@ umap:
 # clustering methods: methods for hierarchical clustering that are supported by stats::hclust() (https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust)
 heatmap:
     metrics: ['spearman']
-    hclust_methods: ['average']
+    hclust_methods: ['complete']
     
 ##### VISUALIZATION #####
 # 2D/3D visualization with ggplot2 and plotly

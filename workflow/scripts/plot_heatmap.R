@@ -45,9 +45,22 @@ data <- data[,colSums(is.na(data))<nrow(data)]
 data[is.na(data)] <- 0
 
 # prepare metadata
-if((metadata_col=="")|(all(is.na(metadata[[metadata_col]])))){
+if((metadata_col=="")|!(metadata_col %in% colnames(metadata))){
     metadata_col <- colnames(metadata)[1]
 }
+
+# check if metadata column is only NA and switch to the first that is not
+if(all(is.na(metadata[[metadata_col]]))){
+    for(col in colnames(metadata)){
+        if(all(is.na(metadata[[col]]))){
+            next
+        }else{
+            metadata_col <- col
+            break
+        }
+    }
+}
+
 if (is.numeric(metadata[[metadata_col]]) & length(unique(metadata[[metadata_col]]))<=25){
     if(all(metadata[[metadata_col]] == round(metadata[[metadata_col]]))){
         metadata[metadata_col] <- as.factor(metadata[[metadata_col]])
@@ -60,6 +73,15 @@ if (!any(is.na(metadata[[metadata_col]]))){
     }
 }
 
+# replace NA values
+if (any(is.na(metadata[[metadata_col]]))){
+    if (is.numeric(metadata[[metadata_col]])){
+        metadata[is.na(metadata[[metadata_col]]),metadata_col] <- 0
+    }else{
+        metadata[is.na(metadata[[metadata_col]]),metadata_col] <- "NA"
+    }
+}
+
 
 # plot specifications
 
@@ -69,22 +91,19 @@ col_fun <- colorRamp2(c(-limit, 0, limit), c("blue", "white", "red"))
 
 # make color mapping
 if (is.numeric(metadata[[metadata_col]])){
-    #check if divergent or sequential
-    print("test")
+    #check if divergent or sequential?
     row_annot <- HeatmapAnnotation(df=metadata[,metadata_col, drop=FALSE], which="row")
     
 }else{
     n_cat <- length(unique(metadata[[metadata_col]]))
     qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-    colors <- sample(unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals))),n_cat)
+    colors <- sample(unique(unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))),n_cat)
     names(colors) <- unique(metadata[[metadata_col]])
     colors_list <- list()
     colors_list[[metadata_col]] <- colors# put here the mapped colors
     
     row_annot <- HeatmapAnnotation(df=metadata[,metadata_col, drop=FALSE], which="row", col=colors_list)
 }
-
-
 
 
 # limit labeling to 100 in each dim for readability

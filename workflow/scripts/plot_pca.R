@@ -31,9 +31,28 @@ if (!dir.exists(result_dir)){
 data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 
+# check of rownames agree
+if (!all(sort(rownames(data))==sort(rownames(metadata)))){
+    rownames(data) <- make.names(rownames(data))
+    rownames(metadata) <- make.names(rownames(metadata))
+}
+
+
 # prepare metadata
 if(metadata_col==""){
     metadata_col <- colnames(metadata)[1]
+}
+
+# check if metadata column is only NA and switch to the first that is not
+if(all(is.na(metadata[[metadata_col]]))){
+    for(col in colnames(metadata)){
+        if(all(is.na(metadata[[col]]))){
+            next
+        }else{
+            metadata_col <- col
+            break
+        }
+    }
 }
 
 # make metadata rownames R "compatible"

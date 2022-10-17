@@ -88,7 +88,7 @@ rule plot_pca_diagnostics:
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
     resources:
-        mem_mb=config.get("mem", "32000"),
+        mem_mb=config.get("mem_small", "8000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/ggplot.yaml"
@@ -110,7 +110,7 @@ rule plot_umap_diagnostics:
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
     resources:
-        mem_mb=config.get("mem", "16000"),
+        mem_mb=config.get("mem", "32000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/umap.yaml"
@@ -179,7 +179,7 @@ rule plot_heatmap:
                       subcategory="{sample}"),
     resources:
         # dynamic memory allocation based on input size and attempts (multiple attempts can be triggered with --retries X)
-        mem_mb=lambda wildcards, input, attempt: max(int(config.get("mem", "16000")),((input.size//1000000) * attempt * 70)),#config.get("mem", "16000"),
+        mem_mb=lambda wildcards, attempt:attempt*int(config.get("mem", "32000")),#lambda wildcards, input, attempt: max(int(config.get("mem", "16000")),((input.size//1000000) * attempt * 70)),#config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/ComplexHeatmap.yaml"
