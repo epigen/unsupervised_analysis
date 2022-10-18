@@ -103,6 +103,7 @@ We provide a minimal example of the analysis of the [UCI ML hand-written digits 
 - results
     - containing all results in a dataset oriented structure (without large interactive HTML or object files)
 - detailed self-contained HTML [report](./.test/report.html) for distribution and reproducibility
+- performance/speed: on a HPC it took less than 6.5 minutes to complete a full run (with up to 32GB of memory per task)
 
 # Links
 - [GitHub Repository](https://github.com/epigen/unsupervised_analysis/)

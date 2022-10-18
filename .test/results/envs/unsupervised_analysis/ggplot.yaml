@@ -1,4 +1,4 @@
-name: /home/sreichl/projects/unsupervised_analysis/.snakemake/conda/a8548bfd948da72a175678cb67066d03
+name: /nobackup/lab_bock/users/sreichl/snakemake_conda/f4a030e93d31c95176adf0bd40ae009f_
 channels:
   - conda-forge
   - bioconda
@@ -7,7 +7,7 @@ dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - _r-mutex=1.0.1=anacondar_1
-  - binutils_impl_linux-64=2.36.1=h193b22a_2
+  - binutils_impl_linux-64=2.39=h6ceecb4_0
   - blas=1.1=openblas
   - bwidget=1.9.14=ha770c72_1
   - bzip2=1.0.8=h7f98852_4
@@ -25,19 +25,19 @@ dependencies:
   - fonts-conda-forge=1=0
   - freetype=2.12.1=hca18f0e_0
   - fribidi=1.0.10=h516909a_0
-  - gcc_impl_linux-64=12.1.0=hea43390_16
-  - gettext=0.19.8.1=h27087fc_1009
-  - gfortran_impl_linux-64=12.1.0=h1db8e46_16
+  - gcc_impl_linux-64=12.2.0=hcc96c02_18
+  - gettext=0.21.1=h27087fc_0
+  - gfortran_impl_linux-64=12.2.0=h55be85b_18
   - graphite2=1.3.14=h295c915_1
   - gsl=2.7.1=h917eeb2_1
-  - gxx_impl_linux-64=12.1.0=hea43390_16
-  - harfbuzz=5.2.0=hf9f4e7c_0
+  - gxx_impl_linux-64=12.2.0=hcc96c02_18
+  - harfbuzz=5.3.0=h418a68e_0
   - icu=70.1=h27087fc_0
   - jpeg=9e=h166bdaf_2
   - kernel-headers_linux-64=2.6.32=he073ed8_15
   - keyutils=1.6.1=h166bdaf_0
   - krb5=1.19.3=h08a2579_0
-  - ld_impl_linux-64=2.36.1=hea4e1c9_2
+  - ld_impl_linux-64=2.39=hc81fddc_0
   - lerc=4.0.0=h27087fc_0
   - libblas=3.9.0=16_linux64_openblas
   - libcurl=7.85.0=h2283fc2_0
@@ -45,27 +45,27 @@ dependencies:
   - libedit=3.1.20210910=h7f8727e_0
   - libev=4.33=h516909a_1
   - libffi=3.4.2=h7f98852_5
-  - libgcc-devel_linux-64=12.1.0=h1ec3361_16
-  - libgcc-ng=12.1.0=h8d9b700_16
-  - libgfortran-ng=12.1.0=h69a702a_16
-  - libgfortran5=12.1.0=hdcd56e2_16
+  - libgcc-devel_linux-64=12.2.0=h3b97bd3_18
+  - libgcc-ng=12.2.0=h65d4601_18
+  - libgfortran-ng=12.2.0=h69a702a_18
+  - libgfortran5=12.2.0=h337968e_18
   - libglib=2.74.0=h7a41b64_0
-  - libgomp=12.1.0=h8d9b700_16
+  - libgomp=12.2.0=h65d4601_18
   - libiconv=1.17=h166bdaf_0
   - liblapack=3.9.0=16_linux64_openblas
   - libnghttp2=1.47.0=hff17c54_1
   - libopenblas=0.3.21=pthreads_h78a6416_3
   - libpng=1.6.38=h753d276_0
-  - libsanitizer=12.1.0=ha89aaad_16
+  - libsanitizer=12.2.0=h46fd767_18
   - libssh2=1.10.0=hf14f497_3
-  - libstdcxx-devel_linux-64=12.1.0=h1ec3361_16
-  - libstdcxx-ng=12.1.0=ha89aaad_16
+  - libstdcxx-devel_linux-64=12.2.0=h3b97bd3_18
+  - libstdcxx-ng=12.2.0=h46fd767_18
   - libtiff=4.4.0=h55922b4_4
   - libuuid=2.32.1=h14c3975_1000
   - libwebp-base=1.2.4=h166bdaf_0
   - libxcb=1.13=h7f98852_1004
-  - libxml2=2.10.2=h4c7fe37_1
-  - libzlib=1.2.12=h166bdaf_4
+  - libxml2=2.9.14=h22db469_4
+  - libzlib=1.2.13=h166bdaf_4
   - make=4.3=hd18ef5c_1
   - ncurses=6.3=h27087fc_1
   - openblas=0.3.21=pthreads_h320a7e8_3
@@ -74,70 +74,70 @@ dependencies:
   - pcre2=10.37=hc3806b6_1
   - pixman=0.40.0=h36c2ea0_0
   - pthread-stubs=0.4=h36c2ea0_1001
-  - r-assertthat=0.2.1=r41hc72bb7e_2
-  - r-backports=1.4.1=r41hcfec24a_0
-  - r-base=4.1.3=ha8c3e7c_2
-  - r-brio=1.1.3=r41hcfec24a_0
-  - r-callr=3.7.2=r41hc72bb7e_0
-  - r-cli=3.4.1=r41h7525677_0
-  - r-colorspace=2.0_3=r41h06615bd_0
-  - r-crayon=1.5.2=r41hc72bb7e_0
-  - r-desc=1.4.2=r41hc72bb7e_0
-  - r-diffobj=0.3.5=r41hcfec24a_0
-  - r-digest=0.6.29=r41h03ef668_0
-  - r-dplyr=1.0.10=r41h7525677_0
-  - r-ellipsis=0.3.2=r41hcfec24a_0
-  - r-evaluate=0.16=r41hc72bb7e_0
-  - r-fansi=1.0.3=r41h06615bd_0
-  - r-farver=2.1.1=r41h7525677_0
-  - r-forcats=0.5.2=r41hc72bb7e_0
-  - r-fs=1.5.2=r41h7525677_1
-  - r-generics=0.1.3=r41hc72bb7e_0
-  - r-ggally=2.1.2=r41hc72bb7e_0
-  - r-ggplot2=3.3.6=r41hc72bb7e_0
-  - r-ggrepel=0.9.1=r41h03ef668_0
-  - r-glue=1.6.2=r41h06615bd_0
-  - r-gtable=0.3.1=r41hc72bb7e_0
-  - r-hms=1.1.2=r41hc72bb7e_0
-  - r-isoband=0.2.5=r41h03ef668_0
-  - r-jsonlite=1.8.2=r41h06615bd_0
-  - r-labeling=0.4.2=r41hc72bb7e_1
-  - r-lattice=0.20_45=r41hcfec24a_0
-  - r-lifecycle=1.0.2=r41hc72bb7e_0
-  - r-magrittr=2.0.3=r41h06615bd_0
-  - r-mass=7.3_58.1=r41h06615bd_0
-  - r-matrix=1.4_1=r41h0154571_0
-  - r-mgcv=1.8_40=r41h0154571_0
-  - r-munsell=0.5.0=r41hc72bb7e_1004
-  - r-nlme=3.1_159=r41h8da6f51_0
-  - r-patchwork=1.1.2=r41hc72bb7e_0
-  - r-pillar=1.8.1=r41hc72bb7e_0
-  - r-pkgconfig=2.0.3=r41hc72bb7e_1
-  - r-pkgload=1.3.0=r41hc72bb7e_0
-  - r-plyr=1.8.7=r41h7525677_0
-  - r-praise=1.0.0=r41hc72bb7e_1005
-  - r-prettyunits=1.1.1=r41hc72bb7e_1
-  - r-processx=3.7.0=r41h06615bd_0
-  - r-progress=1.2.2=r41hc72bb7e_2
-  - r-ps=1.7.1=r41h06615bd_0
-  - r-purrr=0.3.4=r41hcfec24a_1
-  - r-r6=2.5.1=r41hc72bb7e_0
-  - r-rcolorbrewer=1.1_3=r41h785f33e_0
-  - r-rcpp=1.0.9=r41h7525677_1
-  - r-rematch2=2.1.2=r41hc72bb7e_1
-  - r-reshape=0.8.9=r41hc72bb7e_0
-  - r-rlang=1.0.6=r41h7525677_0
-  - r-rprojroot=2.0.3=r41hc72bb7e_0
-  - r-scales=1.2.1=r41hc72bb7e_0
-  - r-testthat=3.1.4=r41h7525677_0
-  - r-tibble=3.1.8=r41h06615bd_0
-  - r-tidyr=1.2.1=r41h7525677_0
-  - r-tidyselect=1.1.2=r41hc72bb7e_0
-  - r-utf8=1.2.2=r41hcfec24a_0
-  - r-vctrs=0.4.2=r41h7525677_0
-  - r-viridislite=0.4.1=r41hc72bb7e_0
-  - r-waldo=0.4.0=r41hc72bb7e_0
-  - r-withr=2.5.0=r41hc72bb7e_0
+  - r-assertthat=0.2.1=r42hc72bb7e_3
+  - r-backports=1.4.1=r42h06615bd_1
+  - r-base=4.2.1=h7880091_2
+  - r-brio=1.1.3=r42h06615bd_1
+  - r-callr=3.7.2=r42hc72bb7e_1
+  - r-cli=3.4.1=r42h7525677_1
+  - r-colorspace=2.0_3=r42h06615bd_1
+  - r-crayon=1.5.2=r42hc72bb7e_1
+  - r-desc=1.4.2=r42hc72bb7e_1
+  - r-diffobj=0.3.5=r42h06615bd_1
+  - r-digest=0.6.29=r42h7525677_1
+  - r-dplyr=1.0.10=r42h7525677_1
+  - r-ellipsis=0.3.2=r42h06615bd_1
+  - r-evaluate=0.17=r42hc72bb7e_1
+  - r-fansi=1.0.3=r42h06615bd_1
+  - r-farver=2.1.1=r42h7525677_1
+  - r-forcats=0.5.2=r42hc72bb7e_1
+  - r-fs=1.5.2=r42h7525677_2
+  - r-generics=0.1.3=r42hc72bb7e_1
+  - r-ggally=2.1.2=r42hc72bb7e_1
+  - r-ggplot2=3.3.6=r42hc72bb7e_1
+  - r-ggrepel=0.9.1=r42h7525677_1
+  - r-glue=1.6.2=r42h06615bd_1
+  - r-gtable=0.3.1=r42hc72bb7e_1
+  - r-hms=1.1.2=r42hc72bb7e_1
+  - r-isoband=0.2.6=r42h7525677_1
+  - r-jsonlite=1.8.2=r42h06615bd_1
+  - r-labeling=0.4.2=r42hc72bb7e_2
+  - r-lattice=0.20_45=r42h06615bd_1
+  - r-lifecycle=1.0.3=r42hc72bb7e_1
+  - r-magrittr=2.0.3=r42h06615bd_1
+  - r-mass=7.3_58.1=r42h06615bd_1
+  - r-matrix=1.5_1=r42h5f7b363_0
+  - r-mgcv=1.8_40=r42h5f7b363_1
+  - r-munsell=0.5.0=r42hc72bb7e_1005
+  - r-nlme=3.1_160=r42h8da6f51_0
+  - r-patchwork=1.1.2=r42hc72bb7e_1
+  - r-pillar=1.8.1=r42hc72bb7e_1
+  - r-pkgconfig=2.0.3=r42hc72bb7e_2
+  - r-pkgload=1.3.0=r42hc72bb7e_1
+  - r-plyr=1.8.7=r42h7525677_1
+  - r-praise=1.0.0=r42hc72bb7e_1006
+  - r-prettyunits=1.1.1=r42hc72bb7e_2
+  - r-processx=3.7.0=r42h06615bd_1
+  - r-progress=1.2.2=r42hc72bb7e_3
+  - r-ps=1.7.1=r42h06615bd_1
+  - r-purrr=0.3.5=r42h06615bd_1
+  - r-r6=2.5.1=r42hc72bb7e_1
+  - r-rcolorbrewer=1.1_3=r42h785f33e_1
+  - r-rcpp=1.0.9=r42h7525677_2
+  - r-rematch2=2.1.2=r42hc72bb7e_2
+  - r-reshape=0.8.9=r42hc72bb7e_1
+  - r-rlang=1.0.6=r42h7525677_1
+  - r-rprojroot=2.0.3=r42hc72bb7e_1
+  - r-scales=1.2.1=r42hc72bb7e_1
+  - r-testthat=3.1.5=r42h7525677_1
+  - r-tibble=3.1.8=r42h06615bd_1
+  - r-tidyr=1.2.1=r42h7525677_1
+  - r-tidyselect=1.2.0=r42hc72bb7e_0
+  - r-utf8=1.2.2=r42h06615bd_1
+  - r-vctrs=0.4.2=r42h7525677_1
+  - r-viridislite=0.4.1=r42hc72bb7e_1
+  - r-waldo=0.4.0=r42hc72bb7e_1
+  - r-withr=2.5.0=r42hc72bb7e_1
   - readline=8.1.2=h0f457ee_0
   - sed=4.8=he412f7d_0
   - sysroot_linux-64=2.12=he073ed8_15
@@ -156,6 +156,6 @@ dependencies:
   - xorg-xextproto=7.3.0=h14c3975_1002
   - xorg-xproto=7.0.31=h14c3975_1007
   - xz=5.2.6=h166bdaf_0
-  - zlib=1.2.12=h166bdaf_4
+  - zlib=1.2.13=h166bdaf_4
   - zstd=1.5.2=h6239696_4
-prefix: /home/sreichl/projects/unsupervised_analysis/.snakemake/conda/a8548bfd948da72a175678cb67066d03
+prefix: /nobackup/lab_bock/users/sreichl/snakemake_conda/f4a030e93d31c95176adf0bd40ae009f_
