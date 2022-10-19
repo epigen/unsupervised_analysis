@@ -112,7 +112,7 @@ rule all:
                           ),
         envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap','plotly','ComplexHeatmap']),
         configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),
-#         annotations = config["annotation"],
+        annotations = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_annot.csv'.format(config["project_name"])),
     resources:
         mem_mb=1000, #config.get("mem_small", "8000"),
     threads: config.get("threads", 1)

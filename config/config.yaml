@@ -24,13 +24,13 @@ project_name: digits
 # densmap flag: perform densMAP  (0==no, 1==yes) on top of UMAP with all parameter combinations (https://umap-learn.readthedocs.io/en/latest/densmap_demo.html)
 # connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
 umap:
-    metrics: ['euclidean','correlation']
-    n_neighbors: [10]
+    metrics: ['euclidean']
+    n_neighbors: [100]
     min_dist: [0.1]
-    n_components: [2]
-    densmap: 0
-    connectivity: 0
-    diagnostics: 0
+    n_components: [2,3]
+    densmap: 1
+    connectivity: 1
+    diagnostics: 1
 
 ##### HEATMAP #####
 # information on the ComplexHeatmap parameters: https://jokergoo.github.io/ComplexHeatmap-reference/book/index.html
@@ -53,5 +53,5 @@ metadata_of_interest: "target"
 # specify features of interest, which values from the data, will be highlgihted in the 2D/3D plots
 # motivated by bioinformatics highlighting expression levels of marker genes (eg: ['PTPRC'])
 # if not used leave empty []
-features_to_plot: []
+features_to_plot: ['pixel_0_0','pixel_0_1','pixel_0_2','pixel_0_3']
 

@@ -7,7 +7,6 @@ features_to_plot:
 heatmap:
   hclust_methods:
   - complete
-  - average
   metrics:
   - spearman
 mem: '32000'

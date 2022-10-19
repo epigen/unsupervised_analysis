@@ -51,3 +51,5 @@ __pycache__
 resources
 results
 data
+
+snakejob_conductor.sh

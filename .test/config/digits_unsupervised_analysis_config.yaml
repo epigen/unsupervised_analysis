@@ -36,9 +36,10 @@ umap:
 # information on the ComplexHeatmap parameters: https://jokergoo.github.io/ComplexHeatmap-reference/book/index.html
 # distance metrics: for rows and columns. all metrics that are supported by stats::dist() (https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) and 'pearson','spearman', and 'kendall'.
 # clustering methods: methods for hierarchical clustering that are supported by stats::hclust() (https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust)
+# it is the most resource (memory) intensive method, leave empty [] if not required
 heatmap:
     metrics: ['spearman']
-    hclust_methods: ['complete','average']
+    hclust_methods: ['complete']
     
 ##### VISUALIZATION #####
 # 2D/3D visualization with ggplot2 and plotly
