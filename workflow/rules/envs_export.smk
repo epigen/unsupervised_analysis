@@ -44,7 +44,7 @@ rule annot_export:
     input:
         config["annotation"],
     output:
-        configs = report(os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_annot.csv'.format(config["project_name"])), 
+        annot = report(os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_annot.csv'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
                          subcategory="{}_unsupervised_analysis".format(config["project_name"])
