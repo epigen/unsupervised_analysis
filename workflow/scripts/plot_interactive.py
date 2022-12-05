@@ -11,23 +11,25 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 # helper function for button to determine colors of categorical metadata
-def config_button_cat(variable):
+def config_button_cat(fig, data, cat_var):
     
-    unique_vals = data_all[variable].unique()
+    unique_vals = data[cat_var].unique()
     unique_vals = unique_vals[pd.notna(unique_vals)]
     
-    if len(unique_vals)<10:
-        cm = plt.get_cmap('tab10')
-    elif len(unique_vals)<20:
-        cm = plt.get_cmap('tab20')
-    else:
-        cm = plt.get_cmap('gist_ncar')
-    
-    colors =[cm(1.*i/(len(unique_vals)+1)) for i in range(len(unique_vals)+1)]
+#     if len(unique_vals)<10:
+#         cm = plt.get_cmap('tab10')
+#     elif len(unique_vals)<20:
+#         cm = plt.get_cmap('tab20')
+#     else:
+#         cm = plt.get_cmap('gist_ncar')
+
+    cm = plt.get_cmap('gist_ncar')
+#     colors = [cm(1.*i/(len(unique_vals)+1)) for i in range(len(unique_vals)+1)]
+    colors = [cm(1.*i/(len(unique_vals))) for i in range(len(unique_vals))]
     color_map = dict(zip(unique_vals, colors))
     
-    tmp_idx = list(data_all.columns).index(variable)-dimensions
-    data_colors = [color_map[datapoint[tmp_idx]] for datapoint in fig_cat["data"][0]["customdata"]]
+    tmp_idx = list(data.columns).index(cat_var)-dimensions
+    data_colors = [color_map[datapoint[tmp_idx]] for datapoint in fig["data"][0]["customdata"]]
     return [data_colors]
 
 # helper function to put both plotly figures into the same HTML next to each other (independently)
@@ -46,15 +48,15 @@ def figures_to_html(figs, filename="dashboard.html"):
 #### configurations
 
 # inputs
-data_path = snakemake.input["dimred_data"] # "/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/unsupervised_analysis/merged_NORMALIZED/PCA/PCA_data.csv" #"/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/unsupervised_analysis/merged_NORMALIZED/UMAP/UMAP_correlation_100_0.1_2_data.csv" 
-metadata_path = snakemake.input["metadata"] #"/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/scrnaseq_processing_seurat/merged/NORMALIZED_metadata.csv"
-metadata_features_path = snakemake.input["metadata_features"] #"/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/unsupervised_analysis/merged_NORMALIZED/metadata_features.csv"
+data_path = snakemake.input["dimred_data"]
+metadata_path = snakemake.input["metadata"]
+metadata_features_path = snakemake.input["metadata_features"]
 
 # outputs
-plot_path = snakemake.output["plot"] #"/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/unsupervised_analysis/merged_NORMALIZED/UMAP/plots/UMAP_correlation_100_0.1_2_interactive.html" 
+plot_path = snakemake.output["plot"]
 
 # parameters
-dimensions = int(snakemake.params["n_components"]) #2 #
+dimensions = int(snakemake.params["n_components"]) #2 
 point_size = 2*snakemake.params["size"] if dimensions==3 else 5*snakemake.params["size"] # 2
 point_alpha = snakemake.params["alpha"] #1
 
@@ -69,11 +71,13 @@ if not os.path.exists(result_dir):
 
 ### load data
 data = pd.read_csv(data_path, index_col=0)
-
 metadata = pd.read_csv(metadata_path, index_col=0)
-#metadata.index = metadata.index.map(str)
-if metadata.index.inferred_type=='string':
-    metadata.index = [idx.replace('-','.') for idx in metadata.index]
+
+# fix metadata indices if they do not agree with data as they come from outside the workflow
+if ~all(data.index==metadata.index):
+    #metadata.index = metadata.index.map(str)
+    if metadata.index.inferred_type=='string':
+        metadata.index = [idx.replace('-','.') for idx in metadata.index]
 
 metadata_features = pd.read_csv(metadata_features_path, index_col=0)
 
@@ -126,6 +130,7 @@ if dimensions==2:
                      height=height,
                          opacity=point_alpha,
                          title="Categorical Metadata",
+                         render_mode = "webgl" # required for less than 1000 datapoints, otherwise metadata selection does not work
                     )
 # in 3D
 elif dimensions==3:
@@ -206,7 +211,7 @@ fig_cat.update_layout(
                     "label": variable,
                     "method": "update",
                     "args": [
-                        {"marker.color": config_button_cat(variable),
+                        {"marker.color": config_button_cat(fig_cat, data_all, variable),
                         'showlegend': False, #[data_all.shape[0]*[True]],
                         'legendgroup': '',#data_all[variable],
                         'name': '',#data_all[variable]
