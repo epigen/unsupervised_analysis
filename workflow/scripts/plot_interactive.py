@@ -16,16 +16,16 @@ def config_button_cat(fig, data, cat_var):
     unique_vals = data[cat_var].unique()
     unique_vals = unique_vals[pd.notna(unique_vals)]
     
-#     if len(unique_vals)<10:
-#         cm = plt.get_cmap('tab10')
-#     elif len(unique_vals)<20:
-#         cm = plt.get_cmap('tab20')
-#     else:
-#         cm = plt.get_cmap('gist_ncar')
+    if len(unique_vals)<10:
+        cm = plt.get_cmap('tab10')
+    elif len(unique_vals)<20:
+        cm = plt.get_cmap('tab20')
+    else:
+        cm = plt.get_cmap('gist_ncar')
 
-    cm = plt.get_cmap('gist_ncar')
-#     colors = [cm(1.*i/(len(unique_vals)+1)) for i in range(len(unique_vals)+1)]
-    colors = [cm(1.*i/(len(unique_vals))) for i in range(len(unique_vals))]
+#     cm = plt.get_cmap('gist_ncar')
+    colors = [cm(1.*i/(len(unique_vals)+1)) for i in range(len(unique_vals)+1)]
+#     colors = [cm(1.*i/(len(unique_vals))) for i in range(len(unique_vals))]
     color_map = dict(zip(unique_vals, colors))
     
     tmp_idx = list(data.columns).index(cat_var)-dimensions
@@ -73,8 +73,8 @@ if not os.path.exists(result_dir):
 data = pd.read_csv(data_path, index_col=0)
 metadata = pd.read_csv(metadata_path, index_col=0)
 
-# fix metadata indices if they do not agree with data as they come from outside the workflow
-if ~all(data.index==metadata.index):
+# fix metadata indices if they do not agree with data as they come from outside the workflow (e.g., R)
+if not(all(data.index==metadata.index)):
     #metadata.index = metadata.index.map(str)
     if metadata.index.inferred_type=='string':
         metadata.index = [idx.replace('-','.') for idx in metadata.index]
