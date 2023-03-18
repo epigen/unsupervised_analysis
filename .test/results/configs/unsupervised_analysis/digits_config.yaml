@@ -1,4 +1,5 @@
 annotation: .test/config/digits_unsupervised_analysis_annotation.csv
+coord_fixed: 0
 features_to_plot:
 - pixel_0_0
 - pixel_0_1

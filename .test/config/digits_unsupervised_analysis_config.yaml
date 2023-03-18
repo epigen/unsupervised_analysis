@@ -42,6 +42,10 @@ heatmap:
     hclust_methods: ['complete']
     
 ##### VISUALIZATION #####
+# flag if coordinates should be fixed in 2D plots by +coord_fixed() (0==no, 1==yes) 
+# https://ggplot2.tidyverse.org/reference/coord_fixed.html
+coord_fixed: 0
+
 # 2D/3D visualization with ggplot2 and plotly
 scatterplot2d:
     size: 1

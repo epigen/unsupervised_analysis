@@ -13,15 +13,18 @@ addSmallLegend <- function(myPlot, pointSize = 2, textSize = 3, spaceLegend = 0,
 
 ### configurations
 
-# inputs
-data_path <- snakemake@input[["dimred_data"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/PCA_data.csv"
-axes_path <- snakemake@input[["dimred_axes"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/PCA_axes.csv"
-metadata_path <- snakemake@input[["metadata"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/KOcall_NonTargeting/counts/CORRECTED_metadata.csv"
+# input
+data_path <- snakemake@input[["dimred_data"]]
+axes_path <- snakemake@input[["dimred_axes"]]
+metadata_path <- snakemake@input[["metadata"]]
 
-plot_path <- snakemake@output[["plot"]] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/plots/PCA_metadata.png"
+# output
+plot_path <- snakemake@output[["plot"]]
 
+# parameters
 size <- snakemake@params[["size"]]# 0.5
 alpha <- snakemake@params[["alpha"]]# 1
+coord_fixed_flag <- if(as.integer(snakemake@config[["coord_fixed"]])==1) TRUE else FALSE
 
 result_dir <- file.path(dirname(plot_path))
 # make result directory if not exist
@@ -29,8 +32,7 @@ if (!dir.exists(result_dir)){
     dir.create(result_dir, recursive = TRUE)
 }
 
-# parameters
-# step <- snakemake@params[["step"]] #""
+
 
 
 ### load data
@@ -82,7 +84,7 @@ for (col in sort(colnames(metadata))){
         # plot categorical data
         tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
         geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
-        coord_fixed() +
+        {if(coord_fixed_flag) coord_fixed()} +
         xlab(axes[1]) +    
         ylab(axes[2]) +
         ggtitle(col) +
@@ -100,7 +102,7 @@ for (col in sort(colnames(metadata))){
         # plot numerical data
         tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
         geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
-        coord_fixed() +
+        {if(coord_fixed_flag) coord_fixed()} +
         scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab") +
         xlab(axes[1]) +    
         ylab(axes[2]) +
