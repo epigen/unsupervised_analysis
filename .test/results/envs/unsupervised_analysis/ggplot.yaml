@@ -1,4 +1,5 @@
-name: /nobackup/lab_bock/users/sreichl/snakemake_conda/f4a030e93d31c95176adf0bd40ae009f_
+name: 
+  /nobackup/lab_bock/users/sreichl/snakemake_conda/f4a030e93d31c95176adf0bd40ae009f_
 channels:
   - conda-forge
   - bioconda
@@ -158,4 +159,5 @@ dependencies:
   - xz=5.2.6=h166bdaf_0
   - zlib=1.2.13=h166bdaf_4
   - zstd=1.5.2=h6239696_4
-prefix: /nobackup/lab_bock/users/sreichl/snakemake_conda/f4a030e93d31c95176adf0bd40ae009f_
+prefix: 
+  /nobackup/lab_bock/users/sreichl/snakemake_conda/f4a030e93d31c95176adf0bd40ae009f_

@@ -41,6 +41,15 @@ heatmap:
     metrics: ['spearman']
     hclust_methods: ['complete']
     
+##### LEIDEN #####
+# https://leidenalg.readthedocs.io/en/stable/index.html
+leiden:
+    metrics: ['euclidean'] # has to be a subset of aboves UMAP parameters
+    n_neighbors: [100] # has to be a subset of aboves UMAP parameters
+    partition_types: ["RBConfigurationVertexPartition", "ModularityVertexPartition"]
+    resolutions: [0.5,1,2] # only used for relevant partition_types
+    n_iterations: 2 # default: 2; -1 until convergence
+    
 ##### VISUALIZATION #####
 # flag if coordinates should be fixed in 2D plots by +coord_fixed() (0==no, 1==yes) 
 # https://ggplot2.tidyverse.org/reference/coord_fixed.html

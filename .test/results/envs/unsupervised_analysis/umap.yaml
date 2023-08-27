@@ -1,4 +1,5 @@
-name: /nobackup/lab_bock/users/sreichl/snakemake_conda/513c3eece9f3e16ab23d4213ff2b9ab8_
+name: 
+  /nobackup/lab_bock/users/sreichl/snakemake_conda/f15966d832bbab56c59bf1689176d51f_
 channels:
   - conda-forge
   - bioconda
@@ -6,105 +7,116 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
+  - brotli-python=1.0.9=py39h5a03fae_9
   - bzip2=1.0.8=h7f98852_4
-  - ca-certificates=2022.9.24=ha878542_0
-  - colorama=0.4.5=pyhd8ed1ab_0
-  - joblib=1.2.0=pyhd8ed1ab_0
-  - ld_impl_linux-64=2.39=hc81fddc_0
-  - libblas=3.9.0=16_linux64_openblas
-  - libcblas=3.9.0=16_linux64_openblas
+  - ca-certificates=2023.7.22=hbcca054_0
+  - certifi=2023.7.22=pyhd8ed1ab_0
+  - charset-normalizer=3.2.0=pyhd8ed1ab_0
+  - colorama=0.4.6=pyhd8ed1ab_0
+  - icu=73.2=h59595ed_0
+  - idna=3.4=pyhd8ed1ab_0
+  - joblib=1.3.2=pyhd8ed1ab_0
+  - ld_impl_linux-64=2.40=h41732ed_0
+  - libblas=3.9.0=17_linux64_openblas
+  - libcblas=3.9.0=17_linux64_openblas
   - libffi=3.4.2=h7f98852_5
-  - libgcc-ng=12.2.0=h65d4601_18
-  - libgfortran-ng=12.2.0=h69a702a_18
-  - libgfortran5=12.2.0=h337968e_18
-  - libgomp=12.2.0=h65d4601_18
-  - liblapack=3.9.0=16_linux64_openblas
-  - libllvm11=11.1.0=he0ac6c6_4
+  - libgcc-ng=13.1.0=he5830b7_0
+  - libgfortran-ng=13.1.0=h69a702a_0
+  - libgfortran5=13.1.0=h15d22d2_0
+  - libgomp=13.1.0=he5830b7_0
+  - libhwloc=2.9.2=nocuda_h7313eea_1008
+  - libiconv=1.17=h166bdaf_0
+  - liblapack=3.9.0=17_linux64_openblas
+  - libllvm14=14.0.6=hcd5def8_4
   - libnsl=2.0.0=h7f98852_0
-  - libopenblas=0.3.21=pthreads_h78a6416_3
-  - libsqlite=3.39.4=h753d276_0
-  - libstdcxx-ng=12.2.0=h46fd767_18
-  - libuuid=2.32.1=h14c3975_1000
-  - libzlib=1.2.13=h166bdaf_4
-  - llvmlite=0.39.1=py39h7d9a04d_0
-  - ncurses=6.3=h27087fc_1
-  - numba=0.56.3=py39h61ddf18_0
+  - libopenblas=0.3.23=pthreads_h80387f5_0
+  - libsqlite=3.43.0=h2797004_0
+  - libstdcxx-ng=13.1.0=hfd8a6a1_0
+  - libuuid=2.38.1=h0b41bf4_0
+  - libxml2=2.11.5=h232c23b_1
+  - libzlib=1.2.13=hd590300_5
+  - llvmlite=0.40.1=py39h174d805_0
+  - ncurses=6.4=hcb278e6_0
+  - numba=0.57.1=py39hb75a051_0
   - numpy=1.23.3=py39hba7629e_0
-  - openssl=3.0.5=h166bdaf_2
+  - openssl=3.1.2=hd590300_0
+  - packaging=23.1=pyhd8ed1ab_0
   - pandas=1.5.0=py39h4661b88_0
-  - pip=22.3=pyhd8ed1ab_0
-  - pynndescent=0.5.7=pyh6c4a22f_0
-  - python=3.9.13=h2660328_0_cpython
+  - pip=23.2.1=pyhd8ed1ab_0
+  - platformdirs=3.10.0=pyhd8ed1ab_0
+  - pooch=1.7.0=pyha770c72_3
+  - pynndescent=0.5.10=pyh1a96a4e_0
+  - pysocks=1.7.1=pyha2e5f31_6
+  - python=3.9.17=h0755675_0_cpython
   - python-dateutil=2.8.2=pyhd8ed1ab_0
-  - python_abi=3.9=2_cp39
-  - pytz=2022.4=pyhd8ed1ab_0
-  - readline=8.1.2=h0f457ee_0
-  - scikit-learn=1.1.2=py39he5e8d7e_0
-  - scipy=1.9.1=py39h8ba3f38_0
-  - setuptools=65.5.0=pyhd8ed1ab_0
+  - python_abi=3.9=3_cp39
+  - pytz=2023.3=pyhd8ed1ab_0
+  - readline=8.2=h8228510_1
+  - requests=2.31.0=pyhd8ed1ab_0
+  - rocm-smi=5.6.0=h59595ed_1
+  - scikit-learn=1.3.0=py39hc236052_0
+  - scipy=1.11.2=py39h6183b62_0
+  - setuptools=68.1.2=pyhd8ed1ab_0
   - six=1.16.0=pyh6c4a22f_0
-  - sqlite=3.39.4=h4ff8645_0
-  - tbb=2021.6.0=h924138e_0
-  - threadpoolctl=3.1.0=pyh8a188c0_0
+  - tbb=2021.10.0=h00ab1b0_0
+  - threadpoolctl=3.2.0=pyha21a80b_0
   - tk=8.6.12=h27826a3_0
-  - tqdm=4.64.1=pyhd8ed1ab_0
-  - tzdata=2022e=h191b570_0
-  - umap-learn=0.5.3=py39hf3d152e_0
-  - wheel=0.37.1=pyhd8ed1ab_0
+  - tqdm=4.66.1=pyhd8ed1ab_0
+  - typing-extensions=4.7.1=hd8ed1ab_0
+  - typing_extensions=4.7.1=pyha770c72_0
+  - tzdata=2023c=h71feb2d_0
+  - umap-learn=0.5.3=py39hf3d152e_1
+  - urllib3=2.0.4=pyhd8ed1ab_0
+  - wheel=0.41.2=pyhd8ed1ab_0
   - xz=5.2.6=h166bdaf_0
   - pip:
-    - bleach==5.0.1
-    - bokeh==2.4.3
-    - certifi==2022.9.24
-    - charset-normalizer==2.1.1
-    - click==8.1.3
-    - cloudpickle==2.2.0
-    - colorcet==3.0.1
-    - contourpy==1.0.5
-    - cycler==0.11.0
-    - dask==2022.10.0
-    - datashader==0.14.2
-    - datashape==0.5.2
-    - distributed==2022.10.0
-    - fonttools==4.37.4
-    - fsspec==2022.8.2
-    - heapdict==1.0.1
-    - holoviews==1.15.1
-    - idna==3.4
-    - imageio==2.22.2
-    - importlib-metadata==5.0.0
-    - jinja2==3.1.2
-    - kiwisolver==1.4.4
-    - locket==1.0.0
-    - markdown==3.4.1
-    - markupsafe==2.1.1
-    - matplotlib==3.6.1
-    - msgpack==1.0.4
-    - multipledispatch==0.6.0
-    - networkx==2.8.7
-    - packaging==21.3
-    - panel==0.14.0
-    - param==1.12.2
-    - partd==1.3.0
-    - pillow==9.2.0
-    - psutil==5.9.2
-    - pyct==0.4.8
-    - pyparsing==3.0.9
-    - pyviz-comms==2.2.1
-    - pywavelets==1.4.1
-    - pyyaml==6.0
-    - requests==2.28.1
-    - scikit-image==0.19.3
-    - seaborn==0.12.0
-    - sortedcontainers==2.4.0
-    - tblib==1.7.0
-    - tifffile==2022.10.10
-    - toolz==0.12.0
-    - tornado==6.1
-    - typing-extensions==4.4.0
-    - urllib3==1.26.12
-    - webencodings==0.5.1
-    - xarray==2022.10.0
-    - zict==2.2.0
-    - zipp==3.9.0
-prefix: /nobackup/lab_bock/users/sreichl/snakemake_conda/513c3eece9f3e16ab23d4213ff2b9ab8_
+      - bleach==6.0.0
+      - bokeh==3.2.2
+      - click==8.1.7
+      - cloudpickle==2.2.1
+      - colorcet==3.0.1
+      - contourpy==1.1.0
+      - cycler==0.11.0
+      - dask==2023.8.1
+      - datashader==0.15.2
+      - datashape==0.5.2
+      - fonttools==4.42.1
+      - fsspec==2023.6.0
+      - holoviews==1.17.1
+      - imageio==2.31.2
+      - importlib-metadata==6.8.0
+      - importlib-resources==6.0.1
+      - jinja2==3.1.2
+      - kiwisolver==1.4.5
+      - lazy-loader==0.3
+      - linkify-it-py==2.0.2
+      - locket==1.0.0
+      - markdown==3.4.4
+      - markdown-it-py==3.0.0
+      - markupsafe==2.1.3
+      - matplotlib==3.7.2
+      - mdit-py-plugins==0.4.0
+      - mdurl==0.1.2
+      - multipledispatch==1.0.0
+      - networkx==3.1
+      - panel==1.2.1
+      - param==1.13.0
+      - partd==1.4.0
+      - pillow==10.0.0
+      - pyct==0.5.0
+      - pyparsing==3.0.9
+      - pyviz-comms==3.0.0
+      - pywavelets==1.4.1
+      - pyyaml==6.0.1
+      - scikit-image==0.21.0
+      - seaborn==0.12.2
+      - tifffile==2023.8.25
+      - toolz==0.12.0
+      - tornado==6.3.3
+      - uc-micro-py==1.0.2
+      - webencodings==0.5.1
+      - xarray==2023.8.0
+      - xyzservices==2023.7.0
+      - zipp==3.16.2
+prefix: 
+  /nobackup/lab_bock/users/sreichl/snakemake_conda/f15966d832bbab56c59bf1689176d51f_

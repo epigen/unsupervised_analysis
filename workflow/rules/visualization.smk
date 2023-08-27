@@ -192,3 +192,29 @@ rule plot_heatmap:
         cluster_method = lambda w: "{}".format(w.method)
     script:
         "../scripts/plot_heatmap.R"
+        
+        
+########## CLUSTERING PLOTS ##########
+        
+# dimred 2D scatter plot panel by clustering
+rule plot_dimred_clustering:
+    input:
+        unpack(get_aggregated_clustering_paths),
+    output:
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_clustering.png'),
+                               caption="../report/dimred_2d_clustering.rst", 
+                               category="{}_unsupervised_analysis".format(config["project_name"]), 
+                               subcategory="{sample}"),
+    resources:
+        mem_mb=config.get("mem", "32000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/ggplot.yaml"
+    log:
+        os.path.join("logs","rules","plot_clustering_{sample}_{method}_{parameters}_{n_components}.log"),
+    params:
+        partition=config.get("partition"),
+        size = config["scatterplot2d"]["size"],
+        alpha = config["scatterplot2d"]["alpha"]
+    script:
+        "../scripts/plot_2d.R"

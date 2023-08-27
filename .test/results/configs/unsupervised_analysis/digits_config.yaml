@@ -10,6 +10,18 @@ heatmap:
   - complete
   metrics:
   - spearman
+leiden:
+  metrics:
+  - euclidean
+  n_iterations: 2
+  n_neighbors:
+  - 100
+  partition_types:
+  - RBConfigurationVertexPartition
+  - ModularityVertexPartition
+  resolutions:
+  - 0.5
+  - 1
 mem: '32000'
 mem_small: '16000'
 metadata_of_interest: target
