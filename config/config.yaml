@@ -25,7 +25,7 @@ project_name: digits
 # connectivity visualization flag (0==no, 1==yes), computational expensive (slow), recommendation 0 for exploration and 1 for validation
 umap:
     metrics: ['euclidean']
-    n_neighbors: [100]
+    n_neighbors: [15]
     min_dist: [0.1]
     n_components: [2,3]
     densmap: 1
@@ -42,12 +42,14 @@ heatmap:
     hclust_methods: ['complete']
     
 ##### LEIDEN #####
-# https://leidenalg.readthedocs.io/en/stable/index.html
+# Leiden clustering applied on UMAP KNN graphs specified but the resepctive parameters (metric, n_neighbors).
+# Leiden algorithm specific parameters (partition_types, resolutions, n_iterations) -> https://leidenalg.readthedocs.io/en/stable/index.html
+# To skip Leiden clustering, leave the "metrics" parameter empty i.e., []
 leiden:
     metrics: ['euclidean'] # has to be a subset of aboves UMAP parameters
-    n_neighbors: [100] # has to be a subset of aboves UMAP parameters
+    n_neighbors: [15] # has to be a subset of aboves UMAP parameters
     partition_types: ["RBConfigurationVertexPartition", "ModularityVertexPartition"]
-    resolutions: [0.5,1,2] # only used for relevant partition_types
+    resolutions: [0.5,1,1.5,2,4] # only used for relevant partition_types
     n_iterations: 2 # default: 2; -1 until convergence
     
 ##### VISUALIZATION #####

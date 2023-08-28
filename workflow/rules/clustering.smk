@@ -22,7 +22,7 @@ rule leiden_cluster:
     script:
         "../scripts/leiden_cluster.py"
         
-# aggregate clustering results
+# aggregate clustering results per method
 rule aggregate_clustering_results:
     input:
         get_clustering_paths,
@@ -47,4 +47,26 @@ rule aggregate_clustering_results:
         
         # Write the DataFrame to a CSV file
         agg_clust_df.to_csv(output.aggregated_clusterings, index=True)
+        
+# aggregate clustering results across methods
+rule aggregate_all_clustering_results:
+    input:
+        get_aggregated_clustering_paths,
+    output:
+        metadata_clusterings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_clusterings.csv'),
+    log:
+        os.path.join("logs","rules","aggregate_all_clustering_results_{sample}.log"),
+    run:
+        # list to hold the data
+        agg_clust = []
 
+        # read each clustering result and add to data dict
+        for filename in input:
+            agg_clust.append(pd.read_csv(filename, header=0, index_col=0))
+
+        
+        # convert the dictionary to a DataFrame
+        agg_clust_df = pd.concat(agg_clust, axis=1)
+        
+        # Write the DataFrame to a CSV file
+        agg_clust_df.to_csv(output.metadata_clusterings, index=True)

@@ -52,6 +52,11 @@ data_path = snakemake.input["dimred_data"]
 metadata_path = snakemake.input["metadata"]
 metadata_features_path = snakemake.input["metadata_features"]
 
+if "metadata_clusterings" in snakemake.input.keys():
+    metadata_clusterings_path = snakemake.input["metadata_clusterings"]
+else:
+    metadata_clusterings_path = ""
+
 # outputs
 plot_path = snakemake.output["plot"]
 
@@ -108,6 +113,12 @@ for variable in data_all.columns[dimensions:]:
     else:
         print("variable type not-detected for {}".format(variable))
 
+# if clustering results are provided add them as categorical data
+if metadata_clusterings_path!="":
+    metadata_clusterings = pd.read_csv(metadata_clusterings_path, index_col=0)
+    data_all = pd.concat([data_all, metadata_clusterings], axis=1)
+    meta_cat = meta_cat + metadata_clusterings.columns.tolist()
+        
 # plotting the interactive scatter plot
 #in 2D
 if dimensions==2:

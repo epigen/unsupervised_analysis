@@ -199,10 +199,10 @@ rule plot_heatmap:
 # dimred 2D scatter plot panel by clustering
 rule plot_dimred_clustering:
     input:
-        unpack(get_aggregated_clustering_paths),
+        unpack(get_metadata_clustering_paths),
     output:
         plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_clustering.png'),
-                               caption="../report/dimred_2d_clustering.rst", 
+                               caption="../report/dimred_2d_clusterings.rst", 
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
     resources:

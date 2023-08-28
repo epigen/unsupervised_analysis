@@ -33,8 +33,6 @@ if (!dir.exists(result_dir)){
 }
 
 
-
-
 ### load data
 data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)[,1:2]
 axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)[1:2,]
@@ -60,6 +58,11 @@ for (col in sort(colnames(metadata))){
     # check if metadata column is only NA
     if(all(is.na(metadata[[col]]))){
         next
+    }
+    
+    # convert to categorical if the substring "cluster" is present
+    if (grepl("cluster", col)) {
+        metadata[col] <- as.factor(metadata[[col]])
     }
     
     # convert to categorical if less than 25 unique integer values

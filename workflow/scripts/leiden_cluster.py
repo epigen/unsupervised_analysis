@@ -37,7 +37,6 @@ def knn_to_adj(knn_indices: np.ndarray, knn_weights: np.ndarray) -> csr_matrix:
 
     return adj
 
-
 #### configurations
 
 # inputs
@@ -47,7 +46,7 @@ graph_path = os.path.join(snakemake.input[1]) # "/research/home/sreichl/projects
 # outputs
 result_path = os.path.join(snakemake.output["clustering"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_RBConfigurationVertexPartition_1.txt"
 
-# parameters
+# UMAP parameters for small data (<11 observations)
 samples_by_features = int(snakemake.params['samples_by_features']) #0
 metric = snakemake.params['metric'] #"correlation"
 n_neighbors = int(snakemake.params['n_neighbors']) #100
@@ -55,7 +54,7 @@ n_neighbors = int(snakemake.params['n_neighbors']) #100
 # Leiden algorithm parameters
 n_iterations = int(snakemake.params["n_iterations"]) # 2
 # Get the partition method from the leidenalg module
-partition_type = getattr(la, str(snakemake.params["partition_type"]))
+partition_type = getattr(la, str(snakemake.params["partition_type"])) #"RBConfigurationVertexPartition"
 # Get the kwargs from the config dict
 if str(snakemake.params["partition_type"]) in ["RBConfigurationVertexPartition", "RBERVertexPartition", "CPMVertexPartition"]:
     la_kwargs = {"resolution_parameter": float(snakemake.params["resolution"])} #0.05 #1.0
@@ -130,15 +129,17 @@ else:
     # Convert the CSR matrix to COO format
     adj_coo = adj_csr.tocoo()
 
-# Convert the adjacency matric in COO format to igraph format
+# Convert the adjacency matrix in COO format to igraph object (weighted undirected graph)
 edges = np.column_stack((adj_coo.row, adj_coo.col))
 graph = Graph(edges.tolist(), directed=False)
+graph.es['weight'] = adj_coo.data.tolist()
+
 
 # Perform Leiden clustering
 partition = la.find_partition(graph=graph, 
                               partition_type=partition_type,
                               initial_membership=None, # default
-                              weights=None,  # default
+                              weights='weight',  # default: None
                               n_iterations=n_iterations,
                               max_comm_size=0, 
                               seed=42,
@@ -149,9 +150,3 @@ partition = la.find_partition(graph=graph,
 with open(result_path, 'w') as f:
     for label in partition.membership:
         f.write(str(label) + '\n')
-
-        
-        
-        
-        
-
