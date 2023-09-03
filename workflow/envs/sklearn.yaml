@@ -2,5 +2,5 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - scikit-learn>=1.0.2
-  - pandas
+  - scikit-learn=1.1.2
+  - pandas=1.5.0

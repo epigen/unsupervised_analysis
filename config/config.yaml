@@ -51,6 +51,10 @@ leiden:
     partition_types: ["RBConfigurationVertexPartition", "ModularityVertexPartition"]
     resolutions: [0.5,1,1.5,2,4] # only used for relevant partition_types
     n_iterations: 2 # default: 2; -1 until convergence
+
+
+##### Clustree #####
+
     
 ##### VISUALIZATION #####
 # flag if coordinates should be fixed in 2D plots by +coord_fixed() (0==no, 1==yes) 

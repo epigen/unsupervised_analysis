@@ -3,7 +3,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - r-ggplot2
-  - r-patchwork
-  - r-ggally
-  - r-ggrepel
+  - r-ggplot2=3.3.6
+  - r-patchwork=1.1.2
+  - r-ggally=2.1.2
+  - r-ggrepel=0.9.1

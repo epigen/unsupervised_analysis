@@ -15,13 +15,16 @@ leiden:
   - euclidean
   n_iterations: 2
   n_neighbors:
-  - 100
+  - 15
   partition_types:
   - RBConfigurationVertexPartition
   - ModularityVertexPartition
   resolutions:
   - 0.5
   - 1
+  - 1.5
+  - 2
+  - 4
 mem: '32000'
 mem_small: '16000'
 metadata_of_interest: target
@@ -44,4 +47,4 @@ umap:
   - 2
   - 3
   n_neighbors:
-  - 100
+  - 15
