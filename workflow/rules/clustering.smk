@@ -3,7 +3,7 @@ rule leiden_cluster:
     input:
         get_umap_sample_paths,
     output:
-        clustering = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','Leiden','Leiden_{metric}_{n_neighbors}_{partition_type}_{resolution}_clustering.txt'),
+        clustering = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','Leiden','Leiden_{metric}_{n_neighbors}_{partition_type}_{resolution}_clustering.csv'),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -31,19 +31,23 @@ rule aggregate_clustering_results:
     log:
         os.path.join("logs","rules","aggregate_clustering_results_{sample}_{method}.log"),
     run:
-        # dictionary to hold the data
-        agg_clust = {}
+        # list to hold the individual clusterings
+        agg_clust = []
 
-        # read each clustering result and add to data dict
+        # read each clustering result and add to list
         for filename in input[1:]:
-            clust_tmp = pd.read_csv(filename, header=None).squeeze("columns")
-            agg_clust[os.path.splitext(os.path.basename(filename))[0]] = clust_tmp
+            clust_tmp = pd.read_csv(filename, header=0, index_col=0)#.squeeze("columns")
+            agg_clust.append(clust_tmp)
+            #agg_clust[os.path.splitext(os.path.basename(filename))[0]] = clust_tmp
 
         # Load the index from the metadata
-        metadata_df = pd.read_csv(input[0], index_col=0)
+#         metadata_df = pd.read_csv(input[0], index_col=0)
         
         # convert the dictionary to a DataFrame
-        agg_clust_df = pd.DataFrame(agg_clust, index=metadata_df.index)
+#         agg_clust_df = pd.DataFrame(agg_clust, index=metadata_df.index)
+
+        # convert list to dataframe
+        agg_clust_df = pd.concat(agg_clust, axis=1)
         
         # Write the DataFrame to a CSV file
         agg_clust_df.to_csv(output.aggregated_clusterings, index=True)

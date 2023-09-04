@@ -84,7 +84,7 @@ def get_clustering_paths(wildcards):
             else:
                 leiden_parameters.append("{}_NA".format(partition_type))
         
-        path_list = path_list + expand(os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'Leiden','Leiden_{metric}_{n_neighbors}_{leiden_parameters}_clustering.txt'),
+        path_list = path_list + expand(os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'Leiden','Leiden_{metric}_{n_neighbors}_{leiden_parameters}_clustering.csv'),
                                 metric=config["leiden"]["metrics"],
                                 n_neighbors=config["leiden"]["n_neighbors"],
                                 leiden_parameters=leiden_parameters,
