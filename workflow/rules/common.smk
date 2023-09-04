@@ -104,3 +104,18 @@ def get_metadata_clustering_paths(wildcards):
             'dimred_axes': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,wildcards.method,'{wildcards.method}_{wildcards.parameters}_{wildcards.n_components}_axes.csv'.format(wildcards=wildcards)),
             'metadata': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv")
     }
+
+# get the input paths for clustree analysis depending on requested content type
+def get_clustree_paths(wildcards):
+    
+    if wildcards.content=="features":
+        return {
+            'metadata_clustering': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv"),
+            'metadata': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'metadata_features.csv')
+        }
+    else:
+        return {
+            'metadata_clustering': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv"),
+            'metadata': annot.loc[wildcards.sample,"metadata"]
+        }
+        

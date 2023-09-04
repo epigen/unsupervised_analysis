@@ -53,7 +53,17 @@ leiden:
     n_iterations: 2 # default: 2; -1 until convergence
 
 
-##### Clustree #####
+##### clustree #####
+# Cluster analysis and visualization using clustree: https://lazappi.github.io/clustree/index.html
+# Clustree specific parameters (count_filter, prop_filter, layout): https://lazappi.github.io/clustree/reference/clustree.html
+# Will be skipped if no clustering results are available
+clustree:
+    count_filter: 0 # default: 0
+    prop_filter: 0.1 # default: 0.1
+    layout: "tree"  # options: "tree" or "sugiyama"
+    categorical_label_option: "pure" # aggregation mechanism for categorical metadata, options: "pure" or "majority"
+    numerical_aggregation_option: "mean" # aggregation mechanism for numerical metadata, options: mean, median, max, min
+    custom_metadata: ["target"] # list of metadata columns for custom clustree plot that visualizes categorical data as clusterings
 
     
 ##### VISUALIZATION #####

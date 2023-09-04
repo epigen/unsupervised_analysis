@@ -65,8 +65,8 @@ for (col in sort(colnames(metadata))){
         metadata[col] <- as.factor(metadata[[col]])
     }
     
-    # convert to categorical if less than 25 unique integer values
-    if (is.numeric(metadata[[col]]) & length(unique(metadata[[col]]))<=25){
+    # convert metadata to categorical if less than 25 unique integer values
+    if (grepl("metadata", basename(plot_path)) & is.numeric(metadata[[col]]) & length(unique(metadata[[col]]))<=25){
         if(all(metadata[[col]] == round(metadata[[col]]))){
             metadata[col] <- as.factor(metadata[[col]])
         }
