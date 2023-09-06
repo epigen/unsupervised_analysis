@@ -19,9 +19,15 @@ configfile: os.path.join("config", "config.yaml")
 # load annotations
 annot = pd.read_csv(config['annotation'], index_col='name')
 
-# Clustering: Leiden
-cluster_methods = ["Leiden"] if len(config["leiden"]["metrics"])>0 else []
+# Clustering: Leiden, clustification
+cluster_methods = []
 clustree_content = []
+
+if len(config["leiden"]["metrics"])>0:
+    cluster_methods.append("Leiden")
+    
+if len(config["clustification"]["initial_clustering_file"])!="":
+    cluster_methods.append("clustification")
 
 # Dimensionality Reduction: apply PCA, UMAP and densMAP sepcific visualization flags
 umap_content = ['metadata']
@@ -49,7 +55,7 @@ if len(config["features_to_plot"]) > 0:
 if len(cluster_methods) > 0 and len(config["clustree"]["custom_metadata"])>0:
     clustree_content.append('custom')
 
-
+ruleorder: clustification > aggregate_clustering_results
 
 rule all:
     input:

@@ -52,6 +52,9 @@ leiden:
     resolutions: [0.5,1,1.5,2,4] # only used for relevant partition_types
     n_iterations: 2 # default: 2; -1 until convergence
 
+##### clustification #####
+clustification:
+    initial_clustering_file: "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_euclidean_15_RBConfigurationVertexPartition_4_clustering.csv" # to support externally provided clusterings as well
 
 ##### clustree #####
 # Cluster analysis and visualization using clustree: https://lazappi.github.io/clustree/index.html

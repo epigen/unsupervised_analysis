@@ -70,6 +70,11 @@ def get_dimred_features_paths(wildcards):
 
 ########## CLUSTERING ##########
 
+# get paths for clustification
+def get_clustification_paths(wildcards):
+    return [annot.loc[wildcards.sample,'data'],
+           config["clustification"]["initial_clustering_file"]]
+
 # get all clustering results of one method to be aggregated into {method}/{method}_clusterings.csv
 def get_clustering_paths(wildcards):
     path_list = [annot.loc[wildcards.sample,"metadata"]]

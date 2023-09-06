@@ -22,6 +22,25 @@ rule leiden_cluster:
     script:
         "../scripts/leiden_cluster.py"
         
+# perform clustification based on initial clustering
+rule clustification:
+    input:
+        get_clustification_paths,
+    output:
+        clustering = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustification','clustification_clusterings.csv'),
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/sklearn.yaml"
+    log:
+        os.path.join("logs","rules","clustification_{sample}_clusterings.log"),
+    params:
+        partition=config.get("partition"),
+        samples_by_features = get_data_orientation,
+    script:
+        "../scripts/clustification.py"
+        
 # aggregate clustering results per method
 rule aggregate_clustering_results:
     input:
@@ -38,13 +57,6 @@ rule aggregate_clustering_results:
         for filename in input[1:]:
             clust_tmp = pd.read_csv(filename, header=0, index_col=0)#.squeeze("columns")
             agg_clust.append(clust_tmp)
-            #agg_clust[os.path.splitext(os.path.basename(filename))[0]] = clust_tmp
-
-        # Load the index from the metadata
-#         metadata_df = pd.read_csv(input[0], index_col=0)
-        
-        # convert the dictionary to a DataFrame
-#         agg_clust_df = pd.DataFrame(agg_clust, index=metadata_df.index)
 
         # convert list to dataframe
         agg_clust_df = pd.concat(agg_clust, axis=1)
