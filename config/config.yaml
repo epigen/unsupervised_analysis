@@ -65,7 +65,7 @@ clustree:
     count_filter: 0 # default: 0
     prop_filter: 0.1 # default: 0.1
     layout: "tree"  # options: "tree" or "sugiyama"
-    categorical_label_option: "pure" # aggregation mechanism for categorical metadata, options: "pure" or "majority"
+    categorical_label_option: "majority" # aggregation mechanism for categorical metadata, options: "pure" or "majority"
     numerical_aggregation_option: "mean" # aggregation mechanism for numerical metadata, options: mean, median, max, min
     custom_metadata: ["target"] # list of metadata columns for custom clustree plot that visualizes categorical data as clusterings
 

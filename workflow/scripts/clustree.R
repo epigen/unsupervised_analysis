@@ -9,7 +9,7 @@ clustering_path <- snakemake@input[["metadata_clustering"]] # "/research/home/sr
 metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
 
 # output
-plot_path <- snakemake@output[["plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/clustree/clustree_metadata.png"
+plot_path <- snakemake@output[["plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/clustree/clustree_metadata"
 
 # parameters
 content <- snakemake@wildcards[["content"]] # wildcard, one of: metadata, features, default, custom
@@ -20,7 +20,12 @@ count_filter <- as.numeric(snakemake@params[["count_filter"]]) # 0
 prop_filter <- as.numeric(snakemake@params[["prop_filter"]]) # 0.1
 layout <- as.character(snakemake@params[["layout"]])  # "tree" or "sugiyama"
 
-result_dir <- file.path(dirname(plot_path))
+
+if (content=="default" | content=="custom"){
+    result_dir <- file.path(dirname(plot_path))
+}else{
+    result_dir <- file.path(plot_path)
+}
 # make result directory if not exist
 if (!dir.exists(result_dir)){
     dir.create(result_dir, recursive = TRUE)
@@ -107,18 +112,33 @@ metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 
 ### transform data
 
-# sort rows by clustering rownames and columns by alphabet
-metadata <- metadata[rownames(clusterings),sort(colnames(metadata)),drop=FALSE]
+# sort (rows by clustering rownames and) columns by alphabet -> rows should be sorted correctly in all cases
+metadata <- metadata[,sort(colnames(metadata)),drop=FALSE] # rownames(clusterings)
 
-# convert metadata to categorical if less than 25 unique integer values
+# transform metadata
 if (content=="metadata"){
+    na_cols <- c()
     for (col in colnames(metadata)){
+        # if NA -> remove column and move on
+        if (any(is.na(metadata[[col]]))){
+            na_cols <- c(na_cols, col)
+            next
+        }
+        # if a metadata class is empty ("") fill with "unknown"
+        if (!any(is.na(metadata[[col]]))){
+            if (any(metadata[[col]]=="")){
+                metadata[metadata[[col]]=="", col] <- "unknown"
+            }
+        }
+        # convert metadata to categorical if less than 25 unique integer values
         if (is.numeric(metadata[[col]]) & length(unique(metadata[[col]]))<=25){
             if(all(metadata[[col]] == round(metadata[[col]]))){
                 metadata[col] <- as.factor(metadata[[col]])
             }
         }
     }
+    # remove columns with NA
+    metadata <- metadata[, !(colnames(metadata) %in% na_cols),drop=FALSE]
 } else if (content=="custom"){# for custom plot with selected categorical metadata as clustering
     # subset to selected metadata & add prefix to colnames "metadata_"
     metadata <- metadata[,custom_metadata, drop=FALSE]
@@ -155,35 +175,59 @@ data <- cbind(clusterings, metadata)#, features)
                      
 ### clustree analysis
 if (content=="default" | content=="custom"){
-    width_panel <- width
-    height_panel <- height
+#     width_panel <- width
+#     height_panel <- height
     # make default or custom plot without any metadata highlighted
     clustree_final <- plot_clustree(data, "X_")
-} else{
-    # generate & save metadata/features panel
-    n_col <- min(10, ncol(metadata))
-    width_panel <- n_col * width
-    height_panel <- ceiling(ncol(metadata)/n_col) * height
-    clustree_metadata <- list()
-    for (col in colnames(metadata)){
-        clustree_metadata[[col]] <- plot_clustree(data, col)
-    }
-    clustree_final <- wrap_plots(clustree_metadata, ncol = n_col)
-}
-       
-
-                   
-### save plot
-# options(repr.plot.width=width_panel, repr.plot.height=height_panel)
-# clustree_final                     
-                     
-ggsave(basename(plot_path),
+    
+    ggsave(basename(plot_path),
        plot = clustree_final,
        device = 'png',
        path = result_dir,
        scale = 1,
        dpi = 300,
-       width = width_panel,
-       height = height_panel,
+       width = width,
+       height = height,
        limitsize = FALSE,
       )
+} else{
+    # generate & save metadata/features panel
+#     n_col <- min(10, ncol(metadata))
+#     width_panel <- n_col * width
+#     height_panel <- ceiling(ncol(metadata)/n_col) * height
+#     clustree_metadata <- list()
+    for (col in colnames(metadata)){
+#         clustree_metadata[[col]] <- plot_clustree(data, col)
+        
+        clustree_final <- plot_clustree(data, col)
+        
+        ggsave(paste0("clustree_",content,"_",col,".png"),
+           plot = clustree_final,
+           device = 'png',
+           path = result_dir,
+           scale = 1,
+           dpi = 300,
+           width = width,
+           height = height,
+           limitsize = FALSE,
+          )
+    }
+#     clustree_final <- wrap_plots(clustree_metadata, ncol = n_col)
+}
+
+
+
+### save plot
+# options(repr.plot.width=width_panel, repr.plot.height=height_panel)
+# clustree_final
+                     
+# ggsave(basename(plot_path),
+#        plot = clustree_final,
+#        device = 'png',
+#        path = result_dir,
+#        scale = 1,
+#        dpi = 300,
+#        width = width_panel,
+#        height = height_panel,
+#        limitsize = FALSE,
+#       )

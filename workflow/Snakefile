@@ -22,6 +22,7 @@ annot = pd.read_csv(config['annotation'], index_col='name')
 # Clustering: Leiden, clustification
 cluster_methods = []
 clustree_content = []
+clustree_metadata_content = []
 
 if len(config["leiden"]["metrics"])>0:
     cluster_methods.append("Leiden")
@@ -43,14 +44,15 @@ if config["umap"]["diagnostics"]==1:
 if len(cluster_methods) > 0:
     pca_content.append('clustering')
     umap_content.append('clustering')
-    clustree_content = clustree_content + ["default", "metadata"]
+    clustree_content.append("default")
+    clustree_metadata_content.append("metadata")
 if len(config["features_to_plot"]) > 0:
     pca_content.append('features')
     umap_content.append('features')
 #     densmap_content.append('features')
     
     if len(cluster_methods) > 0:
-        clustree_content.append('features')
+        clustree_metadata_content.append('features')
 
 if len(cluster_methods) > 0 and len(config["clustree"]["custom_metadata"])>0:
     clustree_content.append('custom')
@@ -160,6 +162,10 @@ rule all:
         clustree_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}.png'),
                             sample=list(annot.index),
                             content=clustree_content
+                          ),
+        clustree_metadata_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}_plots'),
+                            sample=list(annot.index),
+                            content=clustree_metadata_content
                           ),
         envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap','plotly','ComplexHeatmap','leiden']),
         configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),

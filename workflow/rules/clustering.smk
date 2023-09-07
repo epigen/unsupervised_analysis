@@ -114,3 +114,31 @@ rule clustree_analysis:
         custom_metadata = config["clustree"]["custom_metadata"],
     script:
         "../scripts/clustree.R"
+        
+# clustree analysis for highlighting indiivdual metadata and features
+rule clustree_analysis_metadata:
+    input:
+        unpack(get_clustree_paths),
+    output:
+        plot = report(directory(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}_plots')),
+                      caption="../report/clustree.rst", 
+                               category="{}_unsupervised_analysis".format(config["project_name"]), 
+                               subcategory="{sample}"),
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/clustree.yaml"
+    log:
+        os.path.join("logs","rules","clustree_{sample}_{content}.log"),
+    params:
+        partition=config.get("partition"),
+        content = lambda w: "{}".format(w.content),
+        count_filter = config["clustree"]["count_filter"],
+        prop_filter = config["clustree"]["prop_filter"],
+        layout = config["clustree"]["layout"],
+        categorical_label_option = config["clustree"]["categorical_label_option"],
+        numerical_aggregation_option = config["clustree"]["numerical_aggregation_option"],
+        custom_metadata = config["clustree"]["custom_metadata"],
+    script:
+        "../scripts/clustree.R"
