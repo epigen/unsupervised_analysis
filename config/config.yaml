@@ -53,8 +53,9 @@ leiden:
     n_iterations: 2 # default: 2; -1 until convergence
 
 ##### clustification #####
+# TODO: does not work like that! needs to be generalizable across datasets!
 clustification:
-    initial_clustering_file: "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_euclidean_15_RBConfigurationVertexPartition_4_clustering.csv" # to support externally provided clusterings as well
+    method: "Leiden" # doesn't support externally provided clusterings
 
 ##### clustree #####
 # Cluster analysis and visualization using clustree: https://lazappi.github.io/clustree/index.html

@@ -26,7 +26,7 @@ clustree_content = []
 if len(config["leiden"]["metrics"])>0:
     cluster_methods.append("Leiden")
     
-if len(config["clustification"]["initial_clustering_file"])!="":
+if len(config["clustification"]["method"])!="":
     cluster_methods.append("clustification")
 
 # Dimensionality Reduction: apply PCA, UMAP and densMAP sepcific visualization flags

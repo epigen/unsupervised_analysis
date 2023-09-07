@@ -54,7 +54,7 @@ def iterative_classification(data, labels, n_trees=100, max_iterations=100):
 
 # inputs
 data_path = os.path.join(snakemake.input[0]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
-clustering_path = os.path.join(snakemake.input[1]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_euclidean_15_RBConfigurationVertexPartition_4_clustering.csv"
+clusterings_path = os.path.join(snakemake.input[1]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_clusterings.csv"
 
 # parameters
 samples_by_features = int(snakemake.params['samples_by_features']) #0
@@ -69,8 +69,9 @@ if samples_by_features == 1:
 else:
     data = pd.read_csv(data_path, index_col=0).T
 
-
-clustering_init = pd.read_csv(clustering_path, index_col=0).to_numpy().ravel()
+    
+clusterings = pd.read_csv(clusterings_path, index_col=0)
+clustering_init = clusterings[clusterings.nunique().idxmax()].to_numpy().ravel()
 
 # run clustification
 clustering_new = iterative_classification(data.to_numpy(), clustering_init)#, n_trees=100, max_iterations=100)
