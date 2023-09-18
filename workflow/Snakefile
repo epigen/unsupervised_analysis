@@ -24,6 +24,10 @@ cluster_methods = []
 clustree_content = []
 clustree_metadata_content = []
 
+# Cluster validation
+indices_external = ["AMI","ARI","FMI", "Homogeneity", "Completeness", "V"]
+indices_internal = []
+
 if len(config["leiden"]["metrics"])>0:
     cluster_methods.append("Leiden")
     
@@ -167,6 +171,10 @@ rule all:
                             sample=list(annot.index),
                             content=clustree_metadata_content
                           ),
+        cluster_validation = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','cluster_validation','{index_type}_indices.png'),
+                                             sample=list(annot.index),
+                                             index_type = ["external"]
+                                            ),
         envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['sklearn','ggplot','umap','plotly','ComplexHeatmap','leiden']),
         configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_annot.csv'.format(config["project_name"])),
@@ -184,4 +192,5 @@ include: os.path.join("rules", "common.smk")
 include: os.path.join("rules", "dimred.smk")
 include: os.path.join("rules", "visualization.smk")
 include: os.path.join("rules", "clustering.smk")
+include: os.path.join("rules", "cluster_validation.smk")
 include: os.path.join("rules", "envs_export.smk")

@@ -111,6 +111,8 @@ def get_metadata_clustering_paths(wildcards):
             'metadata': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv")
     }
 
+########## CLUSTER VALIDATION ##########
+
 # get the input paths for clustree analysis depending on requested content type
 def get_clustree_paths(wildcards):
     
@@ -124,4 +126,18 @@ def get_clustree_paths(wildcards):
             'metadata_clustering': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv"),
             'metadata': annot.loc[wildcards.sample,"metadata"]
         }
-        
+
+# get paths to determine external cluster indices
+def get_external_validation_paths(wildcards):
+    return {'clusterings': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv"),
+            'metadata': annot.loc[wildcards.sample,"metadata"]
+           }
+
+# for plotting heatmaps of cluster indices
+def get_validation_paths(wildcards):
+    return {
+        idx: os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "external_index_{}.csv".format(idx)) for idx in indices_external
+    }
+
+
+
