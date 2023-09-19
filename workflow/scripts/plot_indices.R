@@ -48,8 +48,8 @@ for (idx in indices){
 
     # Create a heatmap
     heatmaps[[idx]] <- ggplot(scores_plot, aes(x=metadata, y=clusterings, fill=value)) + 
-        geom_tile() + 
-        geom_text(aes(label=round(value, 1)), size=3) +
+        geom_tile(color = "white", size = 1) + 
+        geom_text(aes(label=round(value, 2)), size=3) +
         theme_minimal() + 
         labs(title=idx) +
         scale_fill_gradient2(midpoint=0, low="royalblue4", mid="white", high="firebrick2", space ="Lab") +
