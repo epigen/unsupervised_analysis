@@ -1,0 +1,5 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - r-clustercrit=1.2.8

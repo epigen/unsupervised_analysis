@@ -13,6 +13,7 @@ axes_path <- snakemake@input[["dimred_axes"]]
 loadings_path <- snakemake@input[["dimred_loadings"]]
 metadata_path <- snakemake@input[["metadata"]]
 
+# outputs
 diagnostics_path <- snakemake@output[["diagnostics_plot"]]
 pairs_path <- snakemake@output[["pairs_plot"]]
 loadingsplot_path <- snakemake@output[["loadings_plot"]]
