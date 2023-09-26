@@ -30,7 +30,7 @@ rule clustification:
         clustering = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustification','clustification_clusterings.csv'),
     resources:
         mem_mb=config.get("mem", "16000"),
-    threads: config.get("threads", 1)
+    threads: 8#config.get("threads", 1)
     conda:
         "../envs/sklearn.yaml"
     log:

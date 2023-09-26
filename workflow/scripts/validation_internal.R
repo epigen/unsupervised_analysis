@@ -1,3 +1,5 @@
+#### load all clustering results and metadata and determine internal cluster indices ####
+
 #### load libraries
 library("clusterCrit")
 library("stats")
