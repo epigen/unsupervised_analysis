@@ -73,6 +73,43 @@ rule validation_external:
         partition=config.get("partition"),
     script:
         "../scripts/validation_external.py"
+        
+# determine internal cluster indices
+rule validation_internal:
+    input:
+        unpack(get_internal_validation_paths),
+    output:
+        internal_indices = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_indices.csv"),
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/clusterCrit.yaml"
+    log:
+        os.path.join("logs","rules","validation_internal_{sample}.log"),
+    params:
+        partition=config.get("partition"),
+        samples_by_features = get_data_orientation,
+    script:
+        "../scripts/validation_internal.R"
+        
+# rank internal cluster indices using MCDM method TOPSIS
+rule rank_internal:
+    input:
+        internal_indices = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_indices.csv"),
+    output:
+        internal_indices_ranked = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_indices_ranked.csv"),
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/pymcdm.yaml"
+    log:
+        os.path.join("logs","rules","rank_internal_{sample}.log"),
+    params:
+        partition=config.get("partition"),
+    script:
+        "../scripts/mcdm_topsis.py"
 
 
 # plot cluster indices as hierarchically clustered heatmaps
@@ -80,7 +117,7 @@ rule plot_indices:
     input:
         unpack(get_validation_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','cluster_validation','external_indices.png'),
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','cluster_validation','{type}_indices.png'),
                       caption="../report/cluster_validation.rst", 
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
@@ -90,7 +127,7 @@ rule plot_indices:
     conda:
         "../envs/ggplot.yaml"
     log:
-        os.path.join("logs","rules","plot_indices_{sample}.log"),
+        os.path.join("logs","rules","plot_{type}_indices_{sample}.log"),
     params:
         partition=config.get("partition"),
     script:

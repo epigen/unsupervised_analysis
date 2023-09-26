@@ -133,11 +133,23 @@ def get_external_validation_paths(wildcards):
             'metadata': annot.loc[wildcards.sample,"metadata"]
            }
 
+# get paths to determine internal cluster indices
+def get_internal_validation_paths(wildcards):
+    return {'data': annot.loc[wildcards.sample,'data'],
+            'metadata': annot.loc[wildcards.sample,"metadata"],
+            'clusterings': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv"),
+            'pca': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'PCA','PCA_default_data_small.csv'),
+            'pca_var': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'PCA','PCA_default_var.csv')
+           }
+
 # for plotting heatmaps of cluster indices
 def get_validation_paths(wildcards):
-    return {
-        idx: os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "external_index_{}.csv".format(idx)) for idx in indices_external
-    }
+    if wildcards.type=="external":
+        return {
+            idx: os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "external_index_{}.csv".format(idx)) for idx in indices_external
+        }
+    else:
+        return {"internal": os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "internal_indices_ranked.csv")}
 
 
 

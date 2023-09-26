@@ -9,7 +9,7 @@ library("stats")
 # input
 data_path <- snakemake@input[["data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
 metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
-clustering_path <- snakemake@input[["clustering"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/metadata_clusterings.csv"
+clusterings_path <- snakemake@input[["clusterings"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/metadata_clusterings.csv"
 pca_path <- snakemake@input[["pca"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_default_data_small.csv"
 pca_var_path <- snakemake@input[["pca_var"]] #"/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_default_2_var.csv"
 
@@ -22,7 +22,7 @@ samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
 ### load data
 data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
-clusterings <- read.csv(file=file.path(clustering_path), row.names=1, header=TRUE)
+clusterings <- read.csv(file=file.path(clusterings_path), row.names=1, header=TRUE)
 pca <- read.csv(file=file.path(pca_path), row.names=1, header=TRUE)
 pca_var <- read.csv(file=file.path(pca_var_path), row.names=1, header=TRUE)
 
