@@ -102,14 +102,22 @@ def get_clustering_paths(wildcards):
 # get all aggregated clustering results across methods to be aggregated into {sample}/metadata_clusterings.csv
 def get_aggregated_clustering_paths(wildcards):
     return expand(os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'{method}','{method}_clusterings.csv'), method=cluster_methods)
-    
-# get the aggregated clustering results acros methods for visualization
+
+# get the aggregated clustering results across methods for visualization
 def get_metadata_clustering_paths(wildcards):
-    return {
+    
+    if wildcards.method=="PCA":
+        return {
+            'dimred_data': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'PCA','PCA_{wildcards.parameters}_data_small.csv'.format(wildcards=wildcards)),
+            'dimred_axes': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'PCA','PCA_{wildcards.parameters}_axes.csv'.format(wildcards=wildcards)),
+            'metadata': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'metadata_clusterings.csv')
+               }
+    else:
+        return {
             'dimred_data': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,wildcards.method,'{wildcards.method}_{wildcards.parameters}_{wildcards.n_components}_data.csv'.format(wildcards=wildcards)),
             'dimred_axes': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,wildcards.method,'{wildcards.method}_{wildcards.parameters}_{wildcards.n_components}_axes.csv'.format(wildcards=wildcards)),
-            'metadata': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "metadata_clusterings.csv")
-    }
+            'metadata': os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample,'metadata_clusterings.csv')
+               }
 
 ########## CLUSTER VALIDATION ##########
 
