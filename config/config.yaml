@@ -53,7 +53,7 @@ leiden:
     n_iterations: 2 # default: 2; -1 until convergence
 
 ##### clustification #####
-# TODO: does not work like that! needs to be generalizable across datasets!
+# TODO: add documentation
 clustification:
     method: "Leiden" # doesn't support externally provided clusterings
 
@@ -69,6 +69,9 @@ clustree:
     numerical_aggregation_option: "mean" # aggregation mechanism for numerical metadata, options: mean, median, max, min
     custom_metadata: ["target"] # list of metadata columns for custom clustree plot that visualizes categorical data as clusterings
 
+##### cluster validation ####
+# TODO: add documentation
+sample_proportion: 1
     
 ##### VISUALIZATION #####
 # flag if coordinates should be fixed in 2D plots by +coord_fixed() (0==no, 1==yes) 
@@ -80,7 +83,7 @@ scatterplot2d:
     size: 1
     alpha: 1
     
-# metadata column used for plotting of PCA pairs plot and ComplexHeatmaps annotation(or empty "", then first column of the metadata dataframe will be taken)
+# categorical metadata column used for plotting of PCA pairs plot and ComplexHeatmaps annotation(or empty "", then first column of the metadata dataframe will be taken)
 metadata_of_interest: "target"
 
 # specify features of interest, which values from the data, will be highlgihted in the 2D/3D plots

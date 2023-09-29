@@ -79,24 +79,26 @@ rule validation_internal:
     input:
         unpack(get_internal_validation_paths),
     output:
-        internal_indices = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_indices.csv"),
+        internal_indices = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_index_{internal_index}.csv"),
     resources:
-        mem_mb=config.get("mem", "16000"),
+        mem_mb=2*int(config.get("mem", "16000")),
     threads: config.get("threads", 1)
     conda:
         "../envs/clusterCrit.yaml"
     log:
-        os.path.join("logs","rules","validation_internal_{sample}.log"),
+        os.path.join("logs","rules","validation_internal_{internal_index}_{sample}.log"),
     params:
         partition=config.get("partition"),
-        samples_by_features = get_data_orientation,
+#         samples_by_features = get_data_orientation,
+        internal_index = lambda w: "{}".format(w.internal_index),
+        sample_proportion = config["sample_proportion"],
     script:
         "../scripts/validation_internal.R"
         
 # rank internal cluster indices using MCDM method TOPSIS
-rule rank_internal:
+rule aggregate_rank_internal:
     input:
-        internal_indices = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_indices.csv"),
+        expand(os.path.join(config["result_path"],"unsupervised_analysis","{{sample}}", "cluster_validation", "internal_index_{index}.csv"), index=indices_internal),
     output:
         internal_indices_ranked = os.path.join(config["result_path"],"unsupervised_analysis","{sample}", "cluster_validation", "internal_indices_ranked.csv"),
     resources:

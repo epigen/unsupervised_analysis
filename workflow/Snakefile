@@ -26,7 +26,7 @@ clustree_metadata_content = []
 
 # Cluster validation
 indices_external = ["AMI","ARI","FMI", "Homogeneity", "Completeness", "V"]
-indices_internal = []
+indices_internal = ["Silhouette", "Calinski_Harabasz", "Dunn", "C_index", "Davies_Bouldin", "BIC"] # removed "AIC"
 
 if len(config["leiden"]["metrics"])>0:
     cluster_methods.append("Leiden")

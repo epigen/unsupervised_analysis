@@ -3,39 +3,55 @@
 #### load libraries
 library("clusterCrit")
 library("stats")
+set.seed(42)
 
 ### configurations
 
 # input
-data_path <- snakemake@input[["data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
+# data_path <- snakemake@input[["data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
 metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
 clusterings_path <- snakemake@input[["clusterings"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/metadata_clusterings.csv"
-pca_path <- snakemake@input[["pca"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_default_data_small.csv"
+pca_path <- snakemake@input[["pca"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_default_data.csv"
 pca_var_path <- snakemake@input[["pca_var"]] #"/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/PCA/PCA_default_2_var.csv"
 
 # output
-result_path <- snakemake@output[["internal_indices"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/internal_indices.csv"
+result_path <- snakemake@output[["internal_indices"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/internal_index_Silhouette.csv"
 
 # parameters
-samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
+# samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
+internal_index <- as.character(snakemake@params['internal_index']) #"Silhouette"
+sample_proportion <- as.numeric(snakemake@params['sample_proportion']) #0.1
 
 ### load data
-data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
+# data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 clusterings <- read.csv(file=file.path(clusterings_path), row.names=1, header=TRUE)
-pca <- read.csv(file=file.path(pca_path), row.names=1, header=TRUE)
+# pca <- read.csv(file=file.path(pca_path), row.names=1, header=TRUE)
 pca_var <- read.csv(file=file.path(pca_var_path), row.names=1, header=TRUE)
 
+
+# load PCs that explain >90% of the variance in the data
+# Find the first row where the cumulative sum is greater than 0.9
+cumulative_sum <- cumsum(pca_var[,1])
+PCn <- which(cumulative_sum > 0.9)[1]
+# Get the column classes of the full dataframe, select cols to load and set classes of the columns not to load to "NULL"
+full_classes <- sapply(read.csv(file.path(pca_path), nrows = 1), class)
+cols_to_load <- names(full_classes)[1:PCn+1]
+classes <- ifelse(names(full_classes) %in% c("sample_name", cols_to_load), full_classes, "NULL")
+# load the selected PCs only (slow)
+pca <- read.csv(file.path(pca_path), colClasses = classes, row.names=1, header=TRUE)
+
+
 # check and fix orientation
-if(samples_by_features==0){
-    data <- t(data)
-}
+# if(samples_by_features==0){
+#     data <- t(data)
+# }
 
 # transform metadata
 na_cols <- c()
 for (col in colnames(metadata)){
-    # if NA -> remove column and move on
-    if (any(is.na(metadata[[col]]))){
+    # if NA or less than 2 unique values -> remove column and move on
+    if (any(is.na(metadata[[col]])) | length(unique(metadata[[col]]))<2){
         na_cols <- c(na_cols, col)
         next
     }
@@ -58,32 +74,46 @@ metadata <- metadata[, !(colnames(metadata) %in% na_cols),drop=FALSE]
 metadata_cat <- metadata[,sapply(metadata, function(x) !is.numeric(x)), drop=FALSE]
 # Convert all categorical columns to integer
 metadata_cat[colnames(metadata_cat)] <- lapply(metadata_cat[colnames(metadata_cat)], function(x) as.integer(factor(x)))
-colnames(metadata_cat) <- paste0("metadata_", colnames(metadata_cat))                  
+colnames(metadata_cat) <- paste0("metadata_", colnames(metadata_cat))
 clusterings <- cbind(clusterings, metadata_cat)
 
+### determine internal indices using clusterCrit
+indices_df <- data.frame(matrix(ncol = 1, nrow = ncol(clusterings), dimnames = list(colnames(clusterings), internal_index)))
 
-### determine indices using clusterCrit
-indices_df <- data.frame()
-for(clust in colnames(clusterings)){
-    indices_tmp <- intCriteria(traj=as.matrix(data), part=as.integer(clusterings[[clust]]), crit=c("Silhouette", "Calinski_Harabasz", "C_index", "Davies_Bouldin", "Dunn"))
-    indices_tmp_df <- as.data.frame(t(unlist(indices_tmp)))
-    indices_df <- rbind(indices_df, indices_tmp_df)
-}
-rownames(indices_df) <- colnames(clusterings)
-                                 
-                                 
-### determine indices using AIC & BIC on top PC of PCA
-AIC_sum <- rep(0L, ncol(clusterings))
-BIC_sum <- rep(0L, ncol(clusterings))
+# prepare data for caluclations
+# data_mtx <- as.matrix(data)
+clusterings[colnames(clusterings)] <- lapply(clusterings[colnames(clusterings)], function(x) as.integer(x))
+data_mtx <- as.matrix(pca)
+data_mtx <- data_mtx[sample(nrow(data_mtx), ceiling(sample_proportion * nrow(data_mtx))), ]
+clusterings <- clusterings[rownames(data_mtx),,drop=FALSE]
 
-for(i in 1:ncol(pca)){
-    AIC_sum <- AIC_sum + unlist(apply(clusterings,2,function(x) AIC(lm(pca[,i]~as.factor(x)))))*pca_var[i,1]
-    BIC_sum <- BIC_sum + unlist(apply(clusterings,2,function(x) BIC(lm(pca[,i]~as.factor(x)))))*pca_var[i,1]
+####### for testing
+start.time <- Sys.time()
+
+if(internal_index %in% c("Silhouette", "Calinski_Harabasz", "C_index", "Davies_Bouldin", "Dunn")){
+    for(clust in colnames(clusterings)){        
+        indices_df[clust,internal_index] <- intCriteria(traj=data_mtx, part=clusterings[[clust]], crit=c(internal_index))
+    }
+} else if(internal_index=="AIC"){ # not used anymore
+    ### determine indices using AIC on top PC of PCA
+    AIC_sum <- rep(0L, ncol(clusterings))
+    
+    for(i in 1:ncol(data_mtx)){
+        AIC_sum <- AIC_sum + unlist(apply(clusterings,2,function(x) AIC(lm(data_mtx[,i]~as.factor(x)))))*pca_var[i,1]
+    }
+    indices_df$AIC <- AIC_sum
+} else if(internal_index=="BIC"){
+    ### determine indices using BIC on top PC of PCA
+    BIC_sum <- rep(0L, ncol(clusterings))
+    
+    for(i in 1:ncol(pca)){
+        BIC_sum <- BIC_sum + unlist(apply(clusterings,2,function(x) BIC(lm(data_mtx[,i]~as.factor(x)))))*pca_var[i,1]
+    }
+    indices_df$BIC <- BIC_sum
 }
-                                      
-indices_df$AIC <- AIC_sum
-indices_df$BIC <- BIC_sum
-                                 
+
+####### for testing
+print(Sys.time() - start.time)
 
 ### save results
 write.csv(indices_df, file=result_path, row.names=TRUE)
