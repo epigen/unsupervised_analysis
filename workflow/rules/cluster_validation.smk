@@ -23,11 +23,11 @@ rule clustree_analysis:
         layout = config["clustree"]["layout"],
         categorical_label_option = config["clustree"]["categorical_label_option"],
         numerical_aggregation_option = config["clustree"]["numerical_aggregation_option"],
-        custom_metadata = config["clustree"]["custom_metadata"],
+        custom_metadata = config["metadata_of_interest"],
     script:
         "../scripts/clustree.R"
         
-# clustree analysis for highlighting indiivdual metadata and features
+# clustree analysis for highlighting individual metadata and features
 rule clustree_analysis_metadata:
     input:
         unpack(get_clustree_paths),
@@ -51,7 +51,7 @@ rule clustree_analysis_metadata:
         layout = config["clustree"]["layout"],
         categorical_label_option = config["clustree"]["categorical_label_option"],
         numerical_aggregation_option = config["clustree"]["numerical_aggregation_option"],
-        custom_metadata = config["clustree"]["custom_metadata"],
+        custom_metadata = config["metadata_of_interest"],
     script:
         "../scripts/clustree.R"
 
@@ -92,6 +92,7 @@ rule validation_internal:
 #         samples_by_features = get_data_orientation,
         internal_index = lambda w: "{}".format(w.internal_index),
         sample_proportion = config["sample_proportion"],
+        metadata_of_interest = config["metadata_of_interest"],
     script:
         "../scripts/validation_internal.R"
         

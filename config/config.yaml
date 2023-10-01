@@ -67,11 +67,18 @@ clustree:
     layout: "tree"  # options: "tree" or "sugiyama"
     categorical_label_option: "majority" # aggregation mechanism for categorical metadata, options: "pure" or "majority"
     numerical_aggregation_option: "mean" # aggregation mechanism for numerical metadata, options: mean, median, max, min
-    custom_metadata: ["target"] # list of metadata columns for custom clustree plot that visualizes categorical data as clusterings
 
 ##### cluster validation ####
 # TODO: add documentation
 sample_proportion: 1
+
+##### categorical metadata column for the following analyses
+# - PCA pairs plot (first entry only)
+# - ComplexHeatmaps annotation (first entry only)
+# - clustree custom plot (visualizes categorical metadata interpreted as clusterings)
+# - internal cluster validation (categorical metadata interpreted as clusterings)
+# Can be empty [], then the first column of the metadata dataframe will be taken.
+metadata_of_interest: ["target"]
     
 ##### VISUALIZATION #####
 # flag if coordinates should be fixed in 2D plots by +coord_fixed() (0==no, 1==yes) 
@@ -82,9 +89,7 @@ coord_fixed: 0
 scatterplot2d:
     size: 1
     alpha: 1
-    
-# categorical metadata column used for plotting of PCA pairs plot and ComplexHeatmaps annotation(or empty "", then first column of the metadata dataframe will be taken)
-metadata_of_interest: "target"
+
 
 # specify features of interest, which values from the data, will be highlgihted in the 2D/3D plots
 # motivated by bioinformatics highlighting expression levels of marker genes (eg: ['PTPRC'])

@@ -52,4 +52,7 @@ resources
 results
 data
 
+.test/results/
+.test/report.html
+
 snakejob_conductor.sh

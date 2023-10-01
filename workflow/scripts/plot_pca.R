@@ -20,7 +20,7 @@ loadingsplot_path <- snakemake@output[["loadings_plot"]]
 
 pairs_size <- snakemake@config[["scatterplot2d"]][["size"]]/10 # 0.5
 pairs_alpha <- snakemake@config[["scatterplot2d"]][["alpha"]]/2 # 1
-metadata_col <- snakemake@config[["metadata_of_interest"]] # "target"
+metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1] # c("target")[1]
 
 result_dir <- file.path(dirname(diagnostics_path))
 # make result directory if not exist
@@ -38,7 +38,7 @@ rownames(metadata) <- make.names(rownames(metadata))
 
 
 # prepare metadata
-if(metadata_col==""){
+if(is.null(metadata_col)|!(metadata_col %in% colnames(metadata))){
     metadata_col <- colnames(metadata)[1]
 }
 

@@ -21,6 +21,7 @@ result_path <- snakemake@output[["internal_indices"]] # "/research/home/sreichl/
 # samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
 internal_index <- as.character(snakemake@params['internal_index']) #"Silhouette"
 sample_proportion <- as.numeric(snakemake@params['sample_proportion']) #0.1
+metadata_of_interest <- unlist(c(snakemake@params['metadata_of_interest']))
 
 ### load data
 # data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
@@ -46,6 +47,13 @@ pca <- read.csv(file.path(pca_path), colClasses = classes, row.names=1, header=T
 # if(samples_by_features==0){
 #     data <- t(data)
 # }
+
+# subset metadata to metadata_of_interest
+if(length(metadata_of_interest)==0){
+    metadata <- metadata[,1,drop=FALSE]
+}else{
+    metadata <- metadata[,metadata_of_interest,drop=FALSE]
+}
 
 # transform metadata
 na_cols <- c()

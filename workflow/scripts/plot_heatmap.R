@@ -19,7 +19,7 @@ plot_path <- snakemake@output[["plot"]] # "/research/home/sreichl/projects/unsup
 samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
 metric <- snakemake@params[["metric"]]# "pearson"
 cluster_method <- snakemake@params[["cluster_method"]]# "complete"
-metadata_col <- snakemake@config[["metadata_of_interest"]] # "target"
+metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1] # c("target")[1]
 
 
 result_dir <- file.path(dirname(plot_path))
@@ -45,7 +45,7 @@ data <- data[,colSums(is.na(data))<nrow(data)]
 data[is.na(data)] <- 0
 
 # prepare metadata
-if((metadata_col=="")|!(metadata_col %in% colnames(metadata))){
+if(is.null(metadata_col)|!(metadata_col %in% colnames(metadata))){
     metadata_col <- colnames(metadata)[1]
 }
 
