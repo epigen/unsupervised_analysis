@@ -7,13 +7,10 @@ library("reshape2")
 ### configurations
 
 # input
-index_paths <- snakemake@input # list("AMI"='/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_AMI.csv', "ARI"='/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_ARI.csv', "FMI"='/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_FMI.csv')
+index_paths <- snakemake@input
 
 # output
-plot_path <- snakemake@output[["plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_indices.png"
-
-# parameters
-# content <- snakemake@wildcards[["content"]] 
+plot_path <- snakemake@output[["plot"]]
 
 result_dir <- file.path(dirname(plot_path))
 # make result directory if not exist
@@ -24,13 +21,11 @@ if (!dir.exists(result_dir)){
 indices <- names(index_paths)
 indices <- indices[indices!=""]
 
-# print(indices)
-
 heatmaps <- list()
 
 # loop through all proivided index paths and create (clustered) heatmap
 for (idx in indices){
-#     print(index_paths[[idx]])
+    
     scores <- read.csv(file.path(index_paths[[idx]]), row.names = 1)
     
     # scale internal indices, add seperator and reorder columns (max/sep/min)
@@ -84,7 +79,6 @@ if(length(heatmaps)==1){
     width_panel <- 3 * width
     height_panel <- ceiling(length(indices)/3) * height
 }
-
 
 ### save plot
 # options(repr.plot.width=width_panel, repr.plot.height=height_panel)

@@ -5,16 +5,16 @@ library("patchwork")
 ### configurations
 
 # input
-clustering_path <- snakemake@input[["metadata_clustering"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/metadata_clusterings.csv"
-metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
+clustering_path <- snakemake@input[["metadata_clustering"]]
+metadata_path <- snakemake@input[["metadata"]]
 
 # output
-plot_path <- snakemake@output[["plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/clustree/clustree_metadata"
+plot_path <- snakemake@output[["plot"]]
 
 # parameters
 content <- snakemake@wildcards[["content"]] # wildcard, one of: metadata, features, default, custom
 categorical_label_option <- as.character(snakemake@params[["categorical_label_option"]]) #"pure" or "majority"
-numerical_aggregation_option <- as.character(snakemake@params[["numerical_aggregation_option"]]) # mean, median, max, min -> config
+numerical_aggregation_option <- as.character(snakemake@params[["numerical_aggregation_option"]]) # mean, median, max, min
 custom_metadata <- c(snakemake@params[["custom_metadata"]]) # c("target")
 count_filter <- as.numeric(snakemake@params[["count_filter"]]) # 0
 prop_filter <- as.numeric(snakemake@params[["prop_filter"]]) # 0.1
@@ -175,8 +175,6 @@ data <- cbind(clusterings, metadata)#, features)
                      
 ### clustree analysis
 if (content=="default" | content=="custom"){
-#     width_panel <- width
-#     height_panel <- height
     # make default or custom plot without any metadata highlighted
     clustree_final <- plot_clustree(data, "X_")
     
@@ -191,13 +189,8 @@ if (content=="default" | content=="custom"){
        limitsize = FALSE,
       )
 } else{
-    # generate & save metadata/features panel
-#     n_col <- min(10, ncol(metadata))
-#     width_panel <- n_col * width
-#     height_panel <- ceiling(ncol(metadata)/n_col) * height
-#     clustree_metadata <- list()
+    # generate & save metadata/features plots
     for (col in colnames(metadata)){
-#         clustree_metadata[[col]] <- plot_clustree(data, col)
         
         clustree_final <- plot_clustree(data, col)
         
@@ -212,22 +205,5 @@ if (content=="default" | content=="custom"){
            limitsize = FALSE,
           )
     }
-#     clustree_final <- wrap_plots(clustree_metadata, ncol = n_col)
 }
 
-
-
-### save plot
-# options(repr.plot.width=width_panel, repr.plot.height=height_panel)
-# clustree_final
-                     
-# ggsave(basename(plot_path),
-#        plot = clustree_final,
-#        device = 'png',
-#        path = result_dir,
-#        scale = 1,
-#        dpi = 300,
-#        width = width_panel,
-#        height = height_panel,
-#        limitsize = FALSE,
-#       )

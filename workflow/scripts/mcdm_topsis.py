@@ -10,10 +10,10 @@ from pymcdm.helpers import rrankdata
 #### configurations
 
 # inputs
-indices_paths = snakemake.input # ["/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/internal_index_Silhouette.csv","/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/internal_index_AIC.csv"]
+indices_paths = snakemake.input
 
 # outputs
-indices_ranked_path = os.path.join(snakemake.output["internal_indices_ranked"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/internal_indices_ranked.csv"
+indices_ranked_path = os.path.join(snakemake.output["internal_indices_ranked"])
 
 # load the internal indices and aggregate
 idx_dfs = []
@@ -21,7 +21,6 @@ for idx_path in indices_paths:
     idx_dfs.append(pd.read_csv(os.path.join(idx_path), index_col=0))
 
 indices = pd.concat(idx_dfs, axis=1)
-# indices = pd.read_csv(indices_path, index_col=0)
 
 # remove rows with NA
 indices = indices.dropna()
@@ -36,10 +35,8 @@ types = np.array([1, 1, 1, -1, -1, -1])
 topsis = TOPSIS()
 # run TOPSIS
 pref = topsis(indices.to_numpy(), weights, types)
-# extract ranks
-# rank = rrankdata(pref)
-# print(rank)
 
+# sort by TOPSIS results
 indices_ranked = indices.iloc[pref.argsort()[::-1]]
 
 # save ranked indices

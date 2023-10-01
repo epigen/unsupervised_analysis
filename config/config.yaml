@@ -4,7 +4,6 @@
 ##### RESOURCES #####
 # memory in MB
 mem: '32000'
-mem_small: '16000'
 threads: 2
 partition: 'shortq'
 

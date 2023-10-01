@@ -38,7 +38,7 @@ rownames(metadata) <- make.names(rownames(metadata))
 
 
 # prepare metadata
-if(is.null(metadata_col)|!(metadata_col %in% colnames(metadata))){
+if(is.null(metadata_col)){
     metadata_col <- colnames(metadata)[1]
 }
 

@@ -9,17 +9,17 @@ set.seed(42)
 ht_opt(fast_hclust = TRUE)
 
 # inputs
-data_path <- snakemake@input[["data"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
-metadata_path <- snakemake@input[["metadata"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
+data_path <- snakemake@input[["data"]]
+metadata_path <- snakemake@input[["metadata"]]
 
 # output
-plot_path <- snakemake@output[["plot"]] # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Heatmap/plots/Heatmap.png"
+plot_path <- snakemake@output[["plot"]]
 
 # parameters
 samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
 metric <- snakemake@params[["metric"]]# "pearson"
 cluster_method <- snakemake@params[["cluster_method"]]# "complete"
-metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1] # c("target")[1]
+metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1]
 
 
 result_dir <- file.path(dirname(plot_path))
@@ -45,7 +45,7 @@ data <- data[,colSums(is.na(data))<nrow(data)]
 data[is.na(data)] <- 0
 
 # prepare metadata
-if(is.null(metadata_col)|!(metadata_col %in% colnames(metadata))){
+if(is.null(metadata_col)){ #|!(metadata_col %in% colnames(metadata))){
     metadata_col <- colnames(metadata)[1]
 }
 
@@ -110,7 +110,7 @@ if (is.numeric(metadata[[metadata_col]])){
 show_row_names <- ifelse(nrow(data)>100, FALSE, TRUE)
 show_column_names <- ifelse(ncol(data)>100, FALSE, TRUE)
 
-# # alternative way to: determine distance, hierarchical clustering and order dendrogrms
+# # alternative way to: determine distance, hierarchical clustering and order dendrograms
 # # would be used in the parameters cluster_rows=row_dend and cluster_columns=col_dend as arguments
 # if(metric %in% c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")){
 #     row_dend <- dendsort(hclust(dist(data, method=metric), method=cluster_method))

@@ -9,19 +9,11 @@ from sklearn import metrics
 #### configurations
 
 # inputs
-metadata_path = os.path.join(snakemake.input["metadata"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv"
-clusterings_path = os.path.join(snakemake.input["clusterings"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/metadata_clusterings.csv"
+metadata_path = os.path.join(snakemake.input["metadata"])
+clusterings_path = os.path.join(snakemake.input["clusterings"])
 
 # outputs
-# ami_path = os.path.join(snakemake.output["ami"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_AMI.csv"
-# ari_path = os.path.join(snakemake.output["ari"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_ARI.csv"
-# fmi_path = os.path.join(snakemake.output["fmi"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_FMI.csv"
-# homogeneity_path = os.path.join(snakemake.output["homogeneity"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_Homogeneity.csv"
-# completeness_path = os.path.join(snakemake.output["completeness"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_Completeness.csv"
-# v_path = os.path.join(snakemake.output["v"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/cluster_validation/external_index_V.csv"
-
-result_paths = snakemake.output #  [".test/results/unsupervised_analysis/digits/cluster_validation/external_index_AMI.csv", ".test/results/unsupervised_analysis/digits/cluster_validation/external_index_ARI.csv", ".test/results/unsupervised_analysis/digits/cluster_validation/external_index_FMI.csv", ".test/results/unsupervised_analysis/digits/cluster_validation/external_index_Homogeneity.csv", ".test/results/unsupervised_analysis/digits/cluster_validation/external_index_Completeness.csv", ".test/results/unsupervised_analysis/digits/cluster_validation/external_index_V.csv"]
-
+result_paths = snakemake.output
 
 # load the clustering results and categorical metadata
 metadata = pd.read_csv(metadata_path, index_col=0)
@@ -83,37 +75,3 @@ for clustering in clustering_results.columns:
 # # Save the DataFrames as CSV files
 for i, idx in enumerate(indices):
     idx_dfs[idx].to_csv(result_paths[i])
-
-# # Create a DataFrame for each index
-# ami_scores = pd.DataFrame(index=clustering_results.columns, columns=categorical_metadata.columns)
-# ari_scores = pd.DataFrame(index=clustering_results.columns, columns=categorical_metadata.columns)
-# fmi_scores = pd.DataFrame(index=clustering_results.columns, columns=categorical_metadata.columns)
-# homogeneity_scores = pd.DataFrame(index=clustering_results.columns, columns=categorical_metadata.columns)
-# completeness_scores = pd.DataFrame(index=clustering_results.columns, columns=categorical_metadata.columns)
-# v_measure_scores = pd.DataFrame(index=clustering_results.columns, columns=categorical_metadata.columns)
-
-# # For each clustering result
-# for clustering in clustering_results.columns:
-#     # For each categorical metadata
-#     for metadata in categorical_metadata.columns:
-#         # Calculate the scores
-#         ami = metrics.adjusted_mutual_info_score(categorical_metadata[metadata], clustering_results[clustering])
-#         ari = metrics.adjusted_rand_score(categorical_metadata[metadata], clustering_results[clustering])
-#         fmi = metrics.fowlkes_mallows_score(categorical_metadata[metadata], clustering_results[clustering])
-#         homogeneity, completeness, v_measure = metrics.homogeneity_completeness_v_measure(categorical_metadata[metadata], clustering_results[clustering])
-
-#         # Store the scores in the corresponding DataFrame
-#         ami_scores.loc[clustering, metadata] = ami
-#         ari_scores.loc[clustering, metadata] = ari
-#         fmi_scores.loc[clustering, metadata] = fmi
-#         homogeneity_scores.loc[clustering, metadata] = homogeneity
-#         completeness_scores.loc[clustering, metadata] = completeness
-#         v_measure_scores.loc[clustering, metadata] = v_measure
-
-# # Save the DataFrames as CSV files
-# ami_scores.to_csv(ami_path)
-# ari_scores.to_csv(ari_path)
-# fmi_scores.to_csv(fmi_path)
-# homogeneity_scores.to_csv(homogeneity_path)
-# completeness_scores.to_csv(completeness_path)
-# v_measure_scores.to_csv(v_path)

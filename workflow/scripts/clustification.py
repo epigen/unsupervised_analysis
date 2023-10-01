@@ -1,4 +1,4 @@
-#### load a clustering result with high-resolution (i.e., overclustered) and iteratively merge clusters using a classifier ####
+#### load a clustering result with high-resolution (i.e., overclustered) and iteratively merge clusters using a RF classifier ####
 
 #### libraries
 import os
@@ -53,14 +53,14 @@ def iterative_classification(data, labels, n_trees=100, max_iterations=100):
 #### configurations
 
 # inputs
-data_path = os.path.join(snakemake.input[0]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
-clusterings_path = os.path.join(snakemake.input[1]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_clusterings.csv"
+data_path = os.path.join(snakemake.input[0])
+clusterings_path = os.path.join(snakemake.input[1])
 
 # parameters
 samples_by_features = int(snakemake.params['samples_by_features']) #0
 
 # outputs
-result_path = os.path.join(snakemake.output["clustering"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/clustification/clustification_clusterings.csv"
+result_path = os.path.join(snakemake.output["clustering"])
 
 # load data
 # check data orientation to fit: samples/observations x features
@@ -78,67 +78,3 @@ clustering_new = iterative_classification(data.to_numpy(), clustering_init)#, n_
 
 # save clustering as CSV
 pd.DataFrame({"clustification_clustering": clustering_new}, index=data.index).to_csv(result_path, index=True)
-
-
-
-#### TESTING NOTES
-
-# # COMPARE result with ground truth
-# labels_true = pd.read_csv("/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_labels.csv", index_col=0).to_numpy().ravel()
-
-# # metrics
-# from sklearn.metrics.cluster import adjusted_rand_score
-# from sklearn.metrics.cluster import normalized_mutual_info_score
-# from sklearn.metrics.cluster import adjusted_mutual_info_score
-
-# # external cluster indices with ground truth
-# print("before")
-# adjusted_rand_score(labels, labels_true)
-# normalized_mutual_info_score(labels, labels_true)
-# adjusted_mutual_info_score(labels, labels_true)
-
-# print("after")
-# adjusted_rand_score(final_labels, labels_true)
-# normalized_mutual_info_score(final_labels, labels_true)
-# adjusted_mutual_info_score(final_labels, labels_true)
-
-#### STOPPING USING max edge weight of crossprediction graph
-
-# with 100 trees and 0.025 ie 2.5% as max edge weight cut off -> does that mean 5% of cells want to go from cluster A to B or vice-versa?
-# ARI 0.8619293526483519
-# NMI 0.8905384726712815
-
-# with 1000 trees and 0.025 ie 2.5% as max edge weight cut off -> does that mean 5% of cells want to go from cluster A to B or vice-versa?
-# ARI 0.8738051377073799
-# NMI 0.8995254588822036
-
-# with 5000 trees and 0.025 ie 2.5% as max edge weight cut off -> does that mean 5% of cells want to go from cluster A to B or vice-versa?
-# ARI 0.8689756028623556
-# NMI 0.8984957984189852
-
-
-
-#### STOPPING USING ACCURACY
-
-# with 100 trees and 0.975 acc
-# ARI 0.8570580695592698
-# NMI 0.898311524053469
-
-
-# with 1000 trees and 0.975 acc
-# ARI 0.82217666507298
-# NMI 0.8769193958701921
-
-
-# with 5000 trees and 0.975 acc
-# ARI 0.853381198544215
-# NMI 0.8879365153842752
-
-
-# alternative stopping criteria/stretagies
-#  (candidates: max_weight, axccuracy, f1_score, or a change in accuracy belo e.g., 0.05%)
-# # Check if the accuracy threshold is met
-# accuracy = accuracy_score(labels, new_labels)
-# print(f"Accuracy: {accuracy}")
-# f1 = f1_score(labels, new_labels, average='weighted')
-# print(f"F1: {f1}")

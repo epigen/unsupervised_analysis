@@ -89,7 +89,6 @@ rule validation_internal:
         os.path.join("logs","rules","validation_internal_{internal_index}_{sample}.log"),
     params:
         partition=config.get("partition"),
-#         samples_by_features = get_data_orientation,
         internal_index = lambda w: "{}".format(w.internal_index),
         sample_proportion = config["sample_proportion"],
         metadata_of_interest = config["metadata_of_interest"],

@@ -88,7 +88,7 @@ rule plot_pca_diagnostics:
                                category="{}_unsupervised_analysis".format(config["project_name"]), 
                                subcategory="{sample}"),
     resources:
-        mem_mb=config.get("mem_small", "8000"),
+        mem_mb=config.get("mem", "8000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/ggplot.yaml"
@@ -152,7 +152,7 @@ rule plot_dimred_interactive:
     output:
         plot = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_interactive.html'),
     resources:
-        mem_mb=config.get("mem_small", "8000"),
+        mem_mb=config.get("mem", "8000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/plotly.yaml"

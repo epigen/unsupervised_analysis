@@ -40,11 +40,11 @@ def knn_to_adj(knn_indices: np.ndarray, knn_weights: np.ndarray) -> csr_matrix:
 #### configurations
 
 # inputs
-data_path = os.path.join(snakemake.input[0]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/data/digits_data.csv"
-graph_path = os.path.join(snakemake.input[1]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/UMAP/UMAP_euclidean_100_graph.pickle"
+data_path = os.path.join(snakemake.input[0])
+graph_path = os.path.join(snakemake.input[1])
 
 # outputs
-result_path = os.path.join(snakemake.output["clustering"]) # "/research/home/sreichl/projects/unsupervised_analysis/.test/results/unsupervised_analysis/digits/Leiden/Leiden_RBConfigurationVertexPartition_1.csv"
+result_path = os.path.join(snakemake.output["clustering"])
 
 # UMAP parameters for small data (<11 observations)
 samples_by_features = int(snakemake.params['samples_by_features']) #0
@@ -149,7 +149,3 @@ partition = la.find_partition(graph=graph,
 # save clustering as CSV
 clustering_name = os.path.splitext(os.path.basename(result_path))[0]
 pd.DataFrame({clustering_name: partition.membership}, index=data.index).to_csv(result_path, index=True)
-
-# with open(result_path, 'w') as f:
-#     for label in partition.membership:
-#         f.write(str(label) + '\n')
