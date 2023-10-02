@@ -1,5 +1,5 @@
 # always use absolute paths
-# provide at least one parameter per option (no empty parameters allowed)
+# provide at least one parameter per option (no empty fields allowed)
 
 ##### RESOURCES #####
 # memory in MB
@@ -41,20 +41,21 @@ heatmap:
     hclust_methods: ['complete']
     
 ##### LEIDEN #####
-# Leiden clustering applied on UMAP KNN graphs specified but the resepctive parameters (metric, n_neighbors).
+# Leiden clustering applied on UMAP KNN graphs specified by the respective parameters (metric, n_neighbors).
 # Leiden algorithm specific parameters (partition_types, resolutions, n_iterations) -> https://leidenalg.readthedocs.io/en/stable/index.html
 # To skip Leiden clustering, leave the "metrics" parameter empty i.e., []
 leiden:
-    metrics: ['euclidean'] # has to be a subset of aboves UMAP parameters
-    n_neighbors: [15] # has to be a subset of aboves UMAP parameters
+    metrics: ['euclidean'] # has to be a subset of above's UMAP parameters
+    n_neighbors: [15] # has to be a subset of above's UMAP parameters
     partition_types: ["RBConfigurationVertexPartition", "ModularityVertexPartition"]
     resolutions: [0.5,1,1.5,2,4] # only used for relevant partition_types
     n_iterations: 2 # default: 2; -1 until convergence
 
 ##### clustification #####
-# TODO: add documentation
+# ML-based clustering approach that iteratively merges clusters based on misclassification.
+# Doesn't support externally provided clusterings.
 clustification:
-    method: "Leiden" # doesn't support externally provided clusterings
+    method: "Leiden" # starting clustering result method, options: "Leiden"
 
 ##### clustree #####
 # Cluster analysis and visualization using clustree: https://lazappi.github.io/clustree/index.html
@@ -64,14 +65,15 @@ clustree:
     count_filter: 0 # default: 0
     prop_filter: 0.1 # default: 0.1
     layout: "tree"  # options: "tree" or "sugiyama"
-    categorical_label_option: "majority" # aggregation mechanism for categorical metadata, options: "pure" or "majority"
-    numerical_aggregation_option: "mean" # aggregation mechanism for numerical metadata, options: mean, median, max, min
+    categorical_label_option: "majority" # aggregation function for categorical metadata, options: "pure" or "majority"
+    numerical_aggregation_option: "mean" # aggregation function for numerical metadata, options: mean, median, max, min
 
 ##### cluster validation ####
-# TODO: add documentation
-sample_proportion: 1
+# Cluster validation using inrternal cluster indices is computationally very expensive.
+# To reduce complexity and increase performance as proportion of samples can be used for the internal cluster evaluation.
+sample_proportion: 1 # float 0-1, >500 samples should be included.
 
-##### categorical metadata column for the following analyses
+##### categorical metadata column used in the following analyses:
 # - PCA pairs plot (first entry only)
 # - ComplexHeatmaps annotation (first entry only)
 # - clustree custom plot (visualizes categorical metadata interpreted as clusterings)
