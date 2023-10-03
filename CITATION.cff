@@ -1,0 +1,34 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Unsupervised Analysis Workflow
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Stephan
+    family-names: Reichl
+    orcid: 'https://orcid.org/0000-0001-8555-7198'
+    affiliation: CeMM Research Center for Molecular Medicine
+  - given-names: Raphael
+    family-names: Bednarsky
+    affiliation: CeMM Research Center for Molecular Medicine
+  - given-names: Christoph
+    family-names: Bock
+    orcid: 'https://orcid.org/0000-0001-6091-3088'
+    affiliation: CeMM Research Center for Molecular Medicine
+repository-code: 'https://github.com/epigen/unsupervised_analysis'
+url: 'https://epigen.github.io/unsupervised_analysis/'
+abstract: >-
+  A general purpose Snakemake workflow to perform
+  unsupervised analyses (dimensionality reduction & cluster
+  analysis) and visualizations of high-dimensional data.
+keywords:
+  - Unsupervised Learning
+  - Cluster Analysis
+  - Dimensionality Reduction
+  - Workflow
+  - Snakemake
+license: MIT

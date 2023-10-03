@@ -1,4 +1,4 @@
-# Unsupervised Analysis Worfklow
+# Unsupervised Analysis Workflow
 A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) and visualizations of high-dimensional data.
 
 This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository.
@@ -52,11 +52,12 @@ This project wouldn't be possible without the following software and their depen
 | umap-learn     | https://doi.org/10.21105/joss.00861               |
 
 
-
 # Methods
 This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (.yaml file) or post execution. Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g. [X].
 
 The outlined analyses were performed using the programming languages R (ver) [ref] and Python (ver) [ref] unless stated otherwise. We applied both linear and non-linear unsupervised analysis methods for dimensionality reduction on normalized data for downstream analyses (e.g., clustering) and to visualize emerging patterns in lower dimensional embeddings.
+
+**Dimensionality Reduction**
 
 **Principal Component Analysis (PCA)**
 We used Principal Component Analysis (PCA) [ref] from scikit-learn (ver) [ref] as the linear approach. We visualized [n_components] principal components and kept [X/all] components for downstream analyses. For diagnostic purposes we visualized the variance explained of all and the top 10% of principal components (PCs) using elbow- and cumulative-variance-plots, sequential pair-wise PCs for up to 10 PCs using scatter-, and density-plots (colored by [metadata_of_interest]), and finally loadings plots showing the magnitude and direction of the 10 most influential features for each PC combination. The R packages ggally (ver) [ref] and ggrepel (ver) [ref] were used to improve the diagnostic visualizations.
@@ -71,6 +72,23 @@ Hierarchically clustered heatmaps of scaled data (z-score) were generated using 
 **Visualization**
 The R-packages ggplot2 (ver) [ref] and patchwork (ver) [ref] were used to generate all 2D visualizations colored by metadata [metadata], feature(s) [features_to_plot], and/or clustering results.
 Interactive visualizations in self-contained HTML files of all 2D and 3D projections/embeddings were generated using plotly express (ver) [ref].
+
+**Cluster Analysis**
+
+**Leiden Clustering**
+We applied the Leiden algorithm (ver) [ref] to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors). The adjacency matrix of the KNN graph was converted to a weighted undirected graph using igraph (ver) [ref]. The Leiden algorithm was then applied to this graph, using the specified partition type [partition_types], resolution [resolutions], and number of iterations [n_iterations]. All clustering results were visualized as described above as 2D and interactive 2D and 3D plots for all available embedings/projections.
+
+**Clustification Approach**
+We developed/emplyed an iterative clustering approach, termed Clustification, that merges clusters based on misclassification. The method was initialized with the clustering result that had the highest resolution (i.e., the most clusters). We then performed iterative classification using the cluster labels. This involved a stratified 5-fold cross-validation and a Random Forest classifier with default parameters (e.g., 100 trees). The predicted labels were retained for each iteration. Clusters were merged based on a normalized confusion matrix built using the predicted labels. This matrix was made symmetric and upper triangular, resulting in a similarity graph. The stopping criterion was set such that if the maximum edge weight was less than 2.5% (i.e., 0.025), the process would stop and return the current cluster labels. Otherwise, the two clusters connected by the maximum edge weight were merged. This process was repeated until the stopping criterion was met.
+
+**Clustree Analysis & Visualization**
+We performed cluster analysis and visualization using the Clustree package (ver) [ref] with the parameters [count_filter], [prop_filter], and [layout]. The default analysis produced a standard Clustree visualization, ordered by the number of clusters and annotated accordingly. For the custom analysis, we extended the default behaviour by adding [metadata_of_interest] as additional "clusterings". Metadata and features, specified in the configuration, were highlighted on top of the clusterings using aggregation functions. For numerical data, we used the [numerical_aggregation_option] function , and for categorical data, we used the [categorical_label_option] function.
+
+**Cluster Validation - External Indices**
+We validated/analyzed the clustering results by comparing them with all categorical metadata using external cluster indices. The complementary indices used were Adjusted Mutual Information (AMI) [ref], Adjusted Rand Index (ARI) [ref], Fowlkes-Mallows Index (FMI) [ref], Homogeneity, Completeness, and V-Measure [ref] from scikit-learn (ver) [ref]. The indices were calculated for each clustering result and each categorical metadata, and visualized using hierarchically clustered heatmaps.
+
+**Cluster Validation - Internal Indices & MCDM using TOPSIS**
+We performed internal cluster validation using six complementary indices: Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score from the clusterCrit package (ver) [ref], and a weighted Bayesian Information Criterion (BIC) approach as described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488). Due to computational cost, PCA results representing 90% of variance explained were used as input, and only a random sample proportion of [sample_proportion] was used. These internal cluster indices are linear, using Euclidean distance metrics. To rank all clustering results and [metadata_of_interest] from best to worst, we applied the Multiple-criteria decision-making (MCDM) method TOPSIS from the the Python package pymcdm (ver) [ref] to the internal cluster indices, as described in [Reichl 2018 - Chapter 4.3.1 - The Favorite Approach](https://repositum.tuwien.at/handle/20.500.12708/3488).
 
 **The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [DOI]().**
 
@@ -170,6 +188,7 @@ We provide a minimal example of the analysis of the [UCI ML hand-written digits 
 
 # single-cell RNA sequencing (scRNA-seq) data analysis
 Unsupervised analyses, dimensionality reduction and cluster analysis, are corner stones of scRNA-seq data analyses.
+A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory, with 8 cores for clustification, ).
 Below are configurations of the two most commonly used frameworks, [scanpy](https://scanpy.readthedocs.io/en/stable/index.html) (Python) and [Seurat](https://satijalab.org/seurat/) (R), and the original package's defaults as comparison and to facilitate reproducibility:
 
 UMAP for dimensionality reduction
@@ -214,6 +233,7 @@ Leiden algorithm for clustering
   - for upstream processing:
     - [ATAC-seq Processing](https://github.com/epigen/atacseq_pipeline) to quantify  chromatin accessibility.
     - [Split, Filter, Normalize and Integrate Sequencing Data](https://github.com/epigen/spilterlize_integrate) process sequencing data.
+- [Reichl, S. (2018). Mathematical methods in single cell RNA sequencing analysis with an emphasis on the validation of clustering results [Diploma Thesis, Technische Universität Wien]](https://doi.org/10.34726/hss.2018.49662)
 
 # Publications
 The following publications successfully used this module for their analyses.
