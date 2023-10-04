@@ -1,9 +1,11 @@
+[![DOI](https://zenodo.org/badge/475465311.svg)](https://zenodo.org/badge/latestdoi/475465311)
+
 # Unsupervised Analysis Workflow
 A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) and visualizations of high-dimensional data.
 
 This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository.
 
-**If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [coming soon]().**
+**If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 
 ![Workflow Rulegraph](./workflow/dags/rulegraph.svg)
 
@@ -90,7 +92,7 @@ We validated/analyzed the clustering results by comparing them with all categori
 **Cluster Validation - Internal Indices & MCDM using TOPSIS**
 We performed internal cluster validation using six complementary indices: Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score from the clusterCrit package (ver) [ref], and a weighted Bayesian Information Criterion (BIC) approach as described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488). Due to computational cost, PCA results representing 90% of variance explained were used as input, and only a random sample proportion of [sample_proportion] was used. These internal cluster indices are linear, using Euclidean distance metrics. To rank all clustering results and [metadata_of_interest] from best to worst, we applied the Multiple-criteria decision-making (MCDM) method TOPSIS from the the Python package pymcdm (ver) [ref] to the internal cluster indices, as described in [Reichl 2018 - Chapter 4.3.1 - The Favorite Approach](https://repositum.tuwien.at/handle/20.500.12708/3488).
 
-**The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [DOI]().**
+**The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 
 
 # Features
@@ -225,7 +227,7 @@ Leiden algorithm for clustering
 # Links
 - [GitHub Repository](https://github.com/epigen/unsupervised_analysis/)
 - [GitHub Page](https://epigen.github.io/unsupervised_analysis/)
-- [Zenodo Repository]()
+- [Zenodo Repository](https://doi.org/10.5281/zenodo.8405360)
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/unsupervised_analysis)
 
 # Resources

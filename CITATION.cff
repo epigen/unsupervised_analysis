@@ -19,6 +19,12 @@ authors:
     family-names: Bock
     orcid: 'https://orcid.org/0000-0001-6091-3088'
     affiliation: CeMM Research Center for Molecular Medicine
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.8405360.
+    description: >-
+      This DOI represents all versions, and will always
+      resolve to the latest one.
 repository-code: 'https://github.com/epigen/unsupervised_analysis'
 url: 'https://epigen.github.io/unsupervised_analysis/'
 abstract: >-
