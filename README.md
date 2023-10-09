@@ -81,7 +81,7 @@ Interactive visualizations in self-contained HTML files of all 2D and 3D project
 We applied the Leiden algorithm (ver) [ref] to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors). The adjacency matrix of the KNN graph was converted to a weighted undirected graph using igraph (ver) [ref]. The Leiden algorithm was then applied to this graph, using the specified partition type [partition_types], resolution [resolutions], and number of iterations [n_iterations]. All clustering results were visualized as described above as 2D and interactive 2D and 3D plots for all available embedings/projections.
 
 **Clustification Approach**
-We developed/emplyed an iterative clustering approach, termed Clustification, that merges clusters based on misclassification. The method was initialized with the clustering result that had the highest resolution (i.e., the most clusters). We then performed iterative classification using the cluster labels. This involved a stratified 5-fold cross-validation and a Random Forest classifier with default parameters (e.g., 100 trees). The predicted labels were retained for each iteration. Clusters were merged based on a normalized confusion matrix built using the predicted labels. This matrix was made symmetric and upper triangular, resulting in a similarity graph. The stopping criterion was set such that if the maximum edge weight was less than 2.5% (i.e., 0.025), the process would stop and return the current cluster labels. Otherwise, the two clusters connected by the maximum edge weight were merged. This process was repeated until the stopping criterion was met.
+We developed/employed an iterative clustering approach, termed Clustification, that merges clusters based on misclassification. The method was initialized with the clustering result that had the highest resolution (i.e., the most clusters). We then performed iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged. This involved a stratified 5-fold cross-validation and a Random Forest classifier with default parameters (e.g., 100 trees). The predicted labels were retained for each iteration. Clusters were merged based on a normalized confusion matrix built using the predicted labels. This matrix was made symmetric and upper triangular, resulting in a similarity graph, such that each edge weight ranges from 0 to 1, where 0 means that the classifier was able to distinguish all observations between the two respective clusters. The stopping criterion was set such that if the maximum edge weight was less than 2.5% (i.e., 0.025 – less than 5% of observations are misclassified between any two clusters), the process would stop and return the current cluster labels. Otherwise, the two clusters connected by the maximum edge weight were merged. This process was repeated until the stopping criterion was met.
 
 **Clustree Analysis & Visualization**
 We performed cluster analysis and visualization using the Clustree package (ver) [ref] with the parameters [count_filter], [prop_filter], and [layout]. The default analysis produced a standard Clustree visualization, ordered by the number of clusters and annotated accordingly. For the custom analysis, we extended the default behaviour by adding [metadata_of_interest] as additional "clusterings". Metadata and features, specified in the configuration, were highlighted on top of the clusterings using aggregation functions. For numerical data, we used the [numerical_aggregation_option] function , and for categorical data, we used the [categorical_label_option] function.
@@ -130,14 +130,16 @@ The workflow perfroms the following analyses on each dataset provided in the ann
     - Clustification: an ML-based clustering approach that iteratively merges clusters based on misclassification
         0. User: Specify a clustering method [method].
         1. Chose the clustering with the most clusters as starting point (i.e., overclustered).
-        2. Iterative classification using the cluster labels.
+        2. Iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged.
             - Stratified 5-fold CV
             - RF with 100 trees (i.e., defaults)
             - Retain predicted labels
         3. Merging of clusters.
             - Build a normalized confusion matrix using the predicted labels.
             - Make it symmetric and upper triangle, resulting in a similarity graph.
-            - Check stopping criterion: if maximum edge weight < 2.5% -> STOP and return current cluster labels
+            - Edge weight ranges from 0 to 1, where 0 means that the classifier was able to distinguish all observations between the two respective clusters.
+            - Check stopping criterion: if maximum edge weight < 2.5% (i.e., 0.025 – less than 5% of observations are misclassified between any two clusters).
+              - -> STOP and return current cluster labels
             - Merge the two clusters connected by the maximum edge weight.
         4. Back to 2. using the new labels.
 - Clustree analysis and visualization
