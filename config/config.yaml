@@ -69,7 +69,7 @@ clustree:
     numerical_aggregation_option: "mean" # aggregation function for numerical metadata, options: mean, median, max, min
 
 ##### cluster validation ####
-# Cluster validation using inrternal cluster indices is computationally very expensive.
+# Cluster validation using internal cluster indices is computationally very expensive.
 # To reduce complexity and increase performance as proportion of samples can be used for the internal cluster evaluation.
 sample_proportion: 1 # float 0-1, >500 samples should be included.
 
@@ -90,7 +90,6 @@ coord_fixed: 0
 scatterplot2d:
     size: 1
     alpha: 1
-
 
 # specify features of interest, which values from the data, will be highlgihted in the 2D/3D plots
 # motivated by bioinformatics highlighting expression levels of marker genes (eg: ['PTPRC'])

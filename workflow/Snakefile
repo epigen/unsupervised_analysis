@@ -28,10 +28,10 @@ clustree_metadata_content = []
 indices_external = []
 indices_internal = []
 
-if len(config["leiden"]["metrics"])>0:
+if len(config["leiden"]["metrics"])>0 and all([leiden_metric in config["umap"]["metrics"] for leiden_metric in config["leiden"]["metrics"]]):
     cluster_methods.append("Leiden")
     
-if len(config["clustification"]["method"])!="":
+if len(config["clustification"]["method"])!="" and config["clustification"]["method"] in cluster_methods:
     cluster_methods.append("clustification")
 
 # Dimensionality Reduction: apply PCA, UMAP and densMAP sepcific visualization flags
@@ -66,7 +66,6 @@ if len(cluster_methods) > 0:
         
     if len(config["metadata_of_interest"])>0:
         clustree_content.append('custom')
-
 
 ruleorder: clustification > aggregate_clustering_results
 
