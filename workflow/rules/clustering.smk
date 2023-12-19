@@ -49,6 +49,8 @@ rule aggregate_clustering_results:
         aggregated_clusterings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_clusterings.csv'),
     log:
         os.path.join("logs","rules","aggregate_clustering_results_{sample}_{method}.log"),
+    params:
+        partition=config.get("partition"),
     run:
         # list to hold the individual clusterings
         agg_clust = []
@@ -72,6 +74,8 @@ rule aggregate_all_clustering_results:
         metadata_clusterings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_clusterings.csv'),
     log:
         os.path.join("logs","rules","aggregate_all_clustering_results_{sample}.log"),
+    params:
+        partition=config.get("partition"),
     run:
         # list to hold the data
         agg_clust = []
