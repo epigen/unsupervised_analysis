@@ -166,8 +166,8 @@ clustering_names <- data.frame(clustering = colnames(clusterings), index = ncol(
 colnames(clusterings) <- paste0("X_", 1:ncol(clusterings))
                      
 # plot specifications
-width <- ceiling(length(unique(clusterings[,ncol(clusterings)]))/3) + 2 # per clustering 1/3 inch
-height <- ncol(clusterings) + 2
+width <- min(50,ceiling(length(unique(clusterings[,ncol(clusterings)]))/3) + 2) # per clustering 1/3 inch
+height <- min(50,ncol(clusterings) + 2)
                                           
 # add metadata and features to clusterings
 data <- cbind(clusterings, metadata)#, features)
