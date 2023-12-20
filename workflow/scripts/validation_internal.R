@@ -5,6 +5,18 @@ library("clusterCrit")
 library("stats")
 set.seed(42)
 
+# helper function for BIC calculation
+do_BIC <- function(x) {
+    # Check if there are at least two unique values in the column
+    if(length(unique(x)) < 2){
+        # Return Inf if there's only one unique value
+        return(Inf)
+    } else {
+        # Perform BIC calculation if there are two or more unique values
+        return(BIC(lm(data_mtx[,i] ~ as.factor(x))))
+    }
+}
+
 ### configurations
 
 # input
@@ -103,7 +115,8 @@ if(internal_index %in% c("Silhouette", "Calinski_Harabasz", "C_index", "Davies_B
     BIC_sum <- rep(0L, ncol(clusterings))
     
     for(i in 1:ncol(pca)){
-        BIC_sum <- BIC_sum + unlist(apply(clusterings,2,function(x) BIC(lm(data_mtx[,i]~as.factor(x)))))*pca_var[i,1]
+#         BIC_sum <- BIC_sum + unlist(apply(clusterings,2,function(x) BIC(lm(data_mtx[,i]~as.factor(x)))))*pca_var[i,1] # crashed in case of only 1 cluster
+        BIC_sum <- BIC_sum + unlist(apply(clusterings, 2, do_BIC)) * pca_var[i, 1]
     }
     indices_df$BIC <- BIC_sum
 }
