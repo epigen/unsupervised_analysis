@@ -3,7 +3,7 @@
 # Unsupervised Analysis Workflow
 A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) and visualizations of high-dimensional data.
 
-This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository.
+This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository. Please consider **starring** and sharing modules that are interesting or useful to you, this helps others to find and benefit from the effort and me to prioritize my efforts!
 
 **If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 

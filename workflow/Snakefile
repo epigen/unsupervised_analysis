@@ -7,9 +7,6 @@ from snakemake.utils import min_version
 
 min_version("7.15.2")
 
-SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
-shell.prefix(f"set -eo pipefail;")
-
 ##### setup report #####
 report: os.path.join("report", "workflow.rst")
 
