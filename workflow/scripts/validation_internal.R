@@ -3,6 +3,7 @@
 #### load libraries
 library("clusterCrit")
 library("stats")
+library("data.table")
 set.seed(42)
 
 # helper function for BIC calculation
@@ -34,9 +35,12 @@ sample_proportion <- as.numeric(snakemake@params['sample_proportion']) #0.1
 metadata_of_interest <- unlist(c(snakemake@params['metadata_of_interest']))
 
 ### load data
-metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
-clusterings <- read.csv(file=file.path(clusterings_path), row.names=1, header=TRUE)
-pca_var <- read.csv(file=file.path(pca_var_path), row.names=1, header=TRUE)
+# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+# clusterings <- read.csv(file=file.path(clusterings_path), row.names=1, header=TRUE)
+# pca_var <- read.csv(file=file.path(pca_var_path), row.names=1, header=TRUE)
+metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
+clusterings <- data.frame(fread(file.path(clusterings_path), header=TRUE), row.names=1)
+pca_var <- data.frame(fread(file.path(pca_var_path), header=TRUE), row.names=1)
 
 
 # load PCs that explain >90% of the variance in the data
@@ -48,7 +52,11 @@ full_classes <- sapply(read.csv(file.path(pca_path), nrows = 1), class)
 cols_to_load <- names(full_classes)[1:PCn+1]
 classes <- ifelse(names(full_classes) %in% c("sample_name", cols_to_load), full_classes, "NULL")
 # load the selected PCs only (slow)
-pca <- read.csv(file.path(pca_path), colClasses = classes, row.names=1, header=TRUE)
+# pca <- read.csv(file.path(pca_path), colClasses = classes, row.names=1, header=TRUE)
+# TODO: to be tested
+pca <- data.frame(fread(file.path(pca_path), colClasses = classes, header=TRUE))
+rownames(pca) <- pca[[1]]
+pca <- pca[, -1, with=FALSE]
 
 # subset metadata to metadata_of_interest
 if(length(metadata_of_interest)==0){
@@ -122,4 +130,5 @@ if(internal_index %in% c("Silhouette", "Calinski_Harabasz", "C_index", "Davies_B
 }
 
 ### save results
-write.csv(indices_df, file=result_path, row.names=TRUE)
+# write.csv(indices_df, file=result_path, row.names=TRUE)
+fwrite(as.data.frame(indices_df), file=file.path(result_path), row.names=TRUE)

@@ -7,4 +7,5 @@ dependencies:
   - r-patchwork=1.1.2
   - r-ggally=2.1.2
   - r-ggrepel=0.9.1
-  - r-reshape2=1.4.4 
+  - r-reshape2=1.4.4
+  - r-data.table

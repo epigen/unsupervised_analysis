@@ -2,6 +2,7 @@
 library("ggplot2")
 library("patchwork")
 library("reshape2")
+library("data.table")
 # library(dendextend)
 
 ### configurations
@@ -26,7 +27,8 @@ heatmaps <- list()
 # loop through all proivided index paths and create (clustered) heatmap
 for (idx in indices){
     
-    scores <- read.csv(file.path(index_paths[[idx]]), row.names = 1)
+#     scores <- read.csv(file.path(index_paths[[idx]]), row.names = 1)
+    scores <- data.frame(fread(file.path(index_paths[[idx]]), header=TRUE), row.names=1)
     
     # scale internal indices, add seperator and reorder columns (max/sep/min)
     if(length(indices)==1){

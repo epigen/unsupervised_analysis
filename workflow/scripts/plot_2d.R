@@ -1,6 +1,7 @@
 #### load libraries
 library("ggplot2")
 library("patchwork")
+library("data.table")
 
 # utility function to adapt legend according to metadata
 addSmallLegend <- function(myPlot, pointSize = 2, textSize = 3, spaceLegend = 0, alpha = 1) {
@@ -34,9 +35,12 @@ if (!dir.exists(result_dir)){
 
 
 ### load data
-data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)[,1:2]
-axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)[1:2,]
-metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+# data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)[,1:2]
+# axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)[1:2,]
+# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+data <- data.frame(fread(file.path(data_path), header=TRUE), row.names=1)[,1:2]
+axes <- data.frame(fread(file.path(axes_path), header=TRUE), row.names=1)[1:2,]
+metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
 # plot specifications
 n_col <- min(10, ncol(metadata))

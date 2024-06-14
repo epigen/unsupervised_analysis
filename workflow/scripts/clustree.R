@@ -1,6 +1,7 @@
 #### load libraries
 library("clustree")
 library("patchwork")
+library("data.table")
 
 ### configurations
 
@@ -107,8 +108,10 @@ plot_clustree <- function(data, col) {
 
 
 ### load data
-clusterings <- read.csv(file=file.path(clustering_path), row.names=1, header=TRUE)
-metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+# clusterings <- read.csv(file=file.path(clustering_path), row.names=1, header=TRUE)
+# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+clusterings <- data.frame(fread(file.path(clustering_path), header=TRUE), row.names=1)
+metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
 ### transform data
 

@@ -3,6 +3,7 @@ library("ggplot2")
 library("patchwork")
 library("GGally")
 library("ggrepel")
+library("data.table")
 
 ### configurations
 
@@ -29,13 +30,14 @@ if (!dir.exists(result_dir)){
 }
 
 ### load data
-data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
-metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+# data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
+# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
+data <- data.frame(fread(file.path(data_path), header=TRUE), row.names=1)
+metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
 # make rownames (R) syntactically valid
 rownames(data) <- make.names(rownames(data))
 rownames(metadata) <- make.names(rownames(metadata))
-
 
 # prepare metadata
 if(is.null(metadata_col)){
@@ -60,10 +62,13 @@ rownames(metadata) <- gsub(pattern= '-' ,replacement = '.', x = rownames(metadat
 # align rows
 data <- data[rownames(metadata),]
 
-data_axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)
-data_loadings <- read.csv(file=file.path(loadings_path), row.names=1, header=TRUE)
+# data_axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)
+# data_loadings <- read.csv(file=file.path(loadings_path), row.names=1, header=TRUE)
+# data_var <- read.csv(file=file.path(var_path), row.names=1, header=TRUE)
+data_axes <- data.frame(fread(file.path(axes_path), header=TRUE), row.names=1)
+data_loadings <- data.frame(fread(file.path(loadings_path), header=TRUE), row.names=1)
 
-data_var <- read.csv(file=file.path(var_path), row.names=1, header=TRUE)
+data_var <- data.frame(fread(file.path(var_path), header=TRUE), row.names=1)
 colnames(data_var) <- c('var')
 data_var$PC <- as.numeric(rownames(data_var))+1
 
