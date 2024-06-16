@@ -11,3 +11,5 @@ dependencies:
   - pandas=1.5.0
   - scipy=1.11.2
   - numpy=1.23.3
+  - dask
+  - pynndescent >=0.5,<0.5.12
