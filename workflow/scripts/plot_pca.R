@@ -23,12 +23,6 @@ pairs_size <- snakemake@config[["scatterplot2d"]][["size"]]/10 # 0.5
 pairs_alpha <- snakemake@config[["scatterplot2d"]][["alpha"]]/2 # 1
 metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1] # c("target")[1]
 
-result_dir <- file.path(dirname(diagnostics_path))
-# make result directory if not exist
-if (!dir.exists(result_dir)){
-    dir.create(result_dir, recursive = TRUE)
-}
-
 ### load data
 # data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
 # metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
@@ -134,7 +128,7 @@ pca_plot_panel <- wrap_plots(pca_plots, ncol = n_col)
 ggsave(basename(diagnostics_path),
        plot = pca_plot_panel,
        device = 'png',
-       path = result_dir,
+       path = dirname(diagnostics_path),
        scale = 1,
        dpi = 300,
        width = width_panel,
@@ -160,17 +154,20 @@ if (!any(is.na(metadata[[metadata_col]]))){
 }
 
 
-# legend parameter according to data type
-if (is.numeric(metadata[[metadata_col]])){
-    legend <- NULL
-}else{
-    legend <- 1
+# remove groups with less than 3 members from metadata and data
+# and set legend parameter according to data type
+legend <- NULL
+if (!is.numeric(metadata[[metadata_col]])){
     
-    # remove groups with less than 3 members from metadata and data
     keep_groups <- names(table(metadata[[metadata_col]]))[table(metadata[[metadata_col]])>2]
     keep_idx <- metadata[[metadata_col]] %in% keep_groups
     metadata <- metadata[keep_idx,,drop=FALSE]
     data <- data[rownames(metadata),]
+    
+    # only add legend in case of less than 10 groups within metadata
+    if(length(unique(metadata[[metadata_col]]))<11){
+        legend <- 1
+    }
 }
 
 # check if one PC is only zeros (yes, that's apparently possible)
@@ -213,7 +210,7 @@ if (is.numeric(metadata[[metadata_col]])){
 ggsave(basename(pairs_path),
        plot = pairs_plot,
        device = 'png',
-       path = result_dir,
+       path = dirname(pairs_path),
        scale = 1,
        dpi = 300,
        width = n_dim,
@@ -264,7 +261,7 @@ loadings_plot_panel <- wrap_plots(loading_plots, ncol = n_col)
 ggsave(basename(loadingsplot_path),
        plot = loadings_plot_panel,
        device = 'png',
-       path = result_dir,
+       path = dirname(loadingsplot_path),
        scale = 1,
        dpi = 300,
        width = width_panel,

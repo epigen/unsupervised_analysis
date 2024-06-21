@@ -68,12 +68,6 @@ point_alpha = snakemake.params["alpha"] #1
 width = 750
 height = 750
 
-result_dir = os.path.dirname(plot_path)
-
-# make directory if not existing
-if not os.path.exists(result_dir):
-    os.makedirs(result_dir, exist_ok=True)
-
 ### load data
 data = pd.read_csv(data_path, index_col=0)
 metadata = pd.read_csv(metadata_path, index_col=0)

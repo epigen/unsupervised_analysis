@@ -157,5 +157,5 @@ def get_validation_paths(wildcards):
             idx: os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "external_index_{}.csv".format(idx)) for idx in indices_external
         }
     else:
-        return {"ranked_internal_cluster_validation": os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "internal_indices_ranked.csv")}
+        return {"ranked_internal_indices": os.path.join(config["result_path"],'unsupervised_analysis',wildcards.sample, "cluster_validation", "internal_indices_ranked.csv")}
 

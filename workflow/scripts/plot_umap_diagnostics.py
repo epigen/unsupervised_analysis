@@ -13,16 +13,10 @@ import umap.plot
 #### configurations
 
 # ipnuts
-object_path = snakemake.input["umap_object"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/UMAP/UMAP_correlation_100_0.1_2_object.pickle"
+object_path = snakemake.input["umap_object"]
 
 # outputs
-plot_diagnostics_path = snakemake.output["diagnostics_plot"] # "/nobackup/lab_bock/projects/macroIC/results/AKsmall/unsupervised_analysis/AKsmall_KOcall_NonTargeting_CORRECTED/UMAP/plots/UMAP_correlation_100_0.1_2_diagnostics.png"
-
-result_dir = os.path.dirname(plot_diagnostics_path)
-
-# make directory if not existing
-if not os.path.exists(result_dir):
-    os.makedirs(result_dir, exist_ok=True)
+plot_diagnostics_path = snakemake.output["diagnostics_plot"]
 
 ### load data
 with open(object_path, 'rb') as f:

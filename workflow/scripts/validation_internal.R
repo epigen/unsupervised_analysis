@@ -53,10 +53,7 @@ cols_to_load <- names(full_classes)[1:PCn+1]
 classes <- ifelse(names(full_classes) %in% c("sample_name", cols_to_load), full_classes, "NULL")
 # load the selected PCs only (slow)
 # pca <- read.csv(file.path(pca_path), colClasses = classes, row.names=1, header=TRUE)
-# TODO: to be tested
-pca <- data.frame(fread(file.path(pca_path), colClasses = classes, header=TRUE))
-rownames(pca) <- pca[[1]]
-pca <- pca[, -1, with=FALSE]
+pca <- data.frame(fread(file.path(pca_path), colClasses = classes, header=TRUE), row.names=1)
 
 # subset metadata to metadata_of_interest
 if(length(metadata_of_interest)==0){

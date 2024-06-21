@@ -8,8 +8,8 @@ threads: 2
 partition: 'shortq'
 
 ##### GENERAL #####
-annotation: .test/config/digits_unsupervised_analysis_annotation.csv
-result_path: .test/results/
+annotation: test/config/digits_unsupervised_analysis_annotation.csv
+result_path: test/results/
 project_name: digits
 
 ##### PCA #####

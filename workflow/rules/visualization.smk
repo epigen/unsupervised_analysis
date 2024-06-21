@@ -5,7 +5,7 @@ rule prep_feature_plot:
     input:
         unpack(get_sample_paths),
     output:
-        os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_features.csv'),
+        os.path.join(result_path,'{sample}','metadata_features.csv'),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -20,15 +20,24 @@ rule prep_feature_plot:
     script:
         "../scripts/subset_data.py"
         
-# dimred scatter plot panel by features
+# dimred feature scatter plots
 rule plot_dimred_features:
     input:
         unpack(get_dimred_features_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_features.png'),
-                               caption="../report/dimred_2d_features.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+        plot = report(directory(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}_{n_components}','features')),
+                      patterns=["{feature}.png"],
+                      caption="../report/dimred_2d_features.rst", 
+                      category="{}_{}".format(config["project_name"], module_name),
+                      subcategory="{sample}",
+                      labels={
+                          "method": "{method}",
+                          "parameters": "{parameters}",
+                          "dimensions": "{n_components}",
+                          "type": "features",
+                          "content": "{feature}",
+                      }
+                     ),
     resources:
         mem_mb=config.get("mem", "32000"),
     threads: config.get("threads", 1)
@@ -37,9 +46,9 @@ rule plot_dimred_features:
     log:
         os.path.join("logs","rules","plot_features_{sample}_{method}_{parameters}_{n_components}.log"),
     params:
-        partition=config.get("partition"),
         size = config["scatterplot2d"]["size"],
-        alpha = config["scatterplot2d"]["alpha"]
+        alpha = config["scatterplot2d"]["alpha"],
+        partition=config.get("partition"),
     script:
         "../scripts/plot_2d.R"
 
@@ -50,10 +59,19 @@ rule plot_dimred_metadata:
     input:
         unpack(get_dimred_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_metadata.png'),
-                               caption="../report/dimred_2d_metadata.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+        plot = report(directory(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}_{n_components}','metadata')),
+                      patterns=["{metadata}.png"],
+                      caption="../report/dimred_2d_metadata.rst",
+                      category="{}_{}".format(config["project_name"], module_name),
+                      subcategory="{sample}",
+                      labels={
+                          "method": "{method}",
+                          "parameters": "{parameters}",
+                          "dimensions": "{n_components}",
+                          "type": "metadata",
+                          "content": "{metadata}",
+                      }
+                     ),
     resources:
         mem_mb=config.get("mem", "32000"),
     threads: config.get("threads", 1)
@@ -62,9 +80,9 @@ rule plot_dimred_metadata:
     log:
         os.path.join("logs","rules","plot_metadata_{sample}_{method}_{parameters}_{n_components}.log"),
     params:
-        partition=config.get("partition"),
         size = config["scatterplot2d"]["size"],
-        alpha = config["scatterplot2d"]["alpha"]
+        alpha = config["scatterplot2d"]["alpha"],
+        partition=config.get("partition"),
     script:
         "../scripts/plot_2d.R"
 
@@ -75,18 +93,39 @@ rule plot_pca_diagnostics:
     input:
         unpack(get_dimred_paths)
     output:
-        diagnostics_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_variance.png'),
+        diagnostics_plot = report(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}','diagnostics','variance.png'),
                                caption="../report/pca_diagnostics.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
-        pairs_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_pairs.png'),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{parameters}",
+                                  "dimensions": "-",
+                                  "type": "diagnostics",
+                                  "content": "variance",
+                      }),
+        pairs_plot = report(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}','diagnostics','pairs.png'),
                                caption="../report/pca_diagnostics.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
-        loadings_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_loadings.png'),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{parameters}",
+                                  "dimensions": "-",
+                                  "type": "diagnostics",
+                                  "content": "pairs",
+                      }),
+        loadings_plot = report(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}','diagnostics','loadings.png'),
                                caption="../report/pca_diagnostics.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{parameters}",
+                                  "dimensions": "-",
+                                  "type": "diagnostics",
+                                  "content": "loadings",
+                      }),
     resources:
         mem_mb=config.get("mem", "8000"),
     threads: config.get("threads", 1)
@@ -103,12 +142,19 @@ rule plot_pca_diagnostics:
 # plot UMAP & densMAP diagnostic visualizations
 rule plot_umap_diagnostics:
     input:
-        umap_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{parameters}_object.pickle'),
+        umap_object = os.path.join(result_path,'{sample}','{method}','{method}_{parameters}_object.pickle'),
     output:
-        diagnostics_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_diagnostics.png'),
+        diagnostics_plot = report(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}','diagnostics','diagnostics.png'),
                                caption="../report/umap_diagnostics.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{parameters}",
+                                  "dimensions": "-",
+                                  "type": "diagnostics",
+                                  "content": "diagnostics",
+                      }),
     resources:
         mem_mb=config.get("mem", "32000"),
     threads: config.get("threads", 1)
@@ -125,12 +171,19 @@ rule plot_umap_diagnostics:
 # plot UMAP & densMAP connectivity visualizations
 rule plot_umap_connectivity:
     input:
-        umap_object = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{parameters}_object.pickle'),
+        umap_object = os.path.join(result_path,'{sample}','{method}','{method}_{parameters}_object.pickle'),
     output:
-        connectivity_plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_connectivity.png'),
+        connectivity_plot = report(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}','diagnostics','connectivity.png'),
                                caption="../report/umap_connectivity.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{parameters}",
+                                  "dimensions": "-",
+                                  "type": "diagnostics",
+                                  "content": "connectivity",
+                      }),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -150,7 +203,7 @@ rule plot_dimred_interactive:
     input:
         unpack(get_dimred_paths),
     output:
-        plot = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_interactive.html'),
+        plot = os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}_{n_components}','interactive.html'),
     resources:
         mem_mb=config.get("mem", "8000"),
     threads: config.get("threads", 1)
@@ -165,18 +218,25 @@ rule plot_dimred_interactive:
         alpha = config["scatterplot2d"]["alpha"]
     script:
         "../scripts/plot_interactive.py"
-        
-        
+
+
 ########## HEATMAP PLOTS ##########
 
 rule plot_heatmap:
     input:
         unpack(get_sample_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
+        plot = report(os.path.join(result_path,'{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
                       caption="../report/heatmap.rst",
-                      category="{}_unsupervised_analysis".format(config["project_name"]),
-                      subcategory="{sample}"),
+                      category="{}_{}".format(config["project_name"], module_name),
+                      subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{metric}",
+                                  "dimensions": "-",
+                                  "type": "Heatmap",
+                                  "content": "Heatmap",
+                      }),
     resources:
         # dynamic memory allocation based on input size and attempts (multiple attempts can be triggered with --retries X)
         mem_mb=lambda wildcards, attempt: attempt*int(config.get("mem", "16000")),#lambda wildcards, input, attempt: max(int(config.get("mem", "16000")),((input.size//1000000) * attempt * 70)),#config.get("mem", "16000"),
@@ -201,10 +261,19 @@ rule plot_dimred_clustering:
     input:
         unpack(get_metadata_clustering_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{parameters}_{n_components}_clustering.png'),
-                               caption="../report/dimred_2d_clusterings.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+        plot = report(directory(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}_{n_components}','clustering')),
+                      patterns=["{clustering}.png"],
+                      caption="../report/dimred_2d_clusterings.rst", 
+                      category="{}_{}".format(config["project_name"], module_name),
+                      subcategory="{sample}",
+                      labels={
+                          "method": "{method}",
+                          "parameters": "{parameters}",
+                          "dimensions": "{n_components}",
+                          "type": "clustering",
+                          "content": "{clustering}",
+                      }
+                     ),
     resources:
         mem_mb=config.get("mem", "32000"),
     threads: config.get("threads", 1)

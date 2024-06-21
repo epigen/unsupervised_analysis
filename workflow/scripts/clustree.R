@@ -21,18 +21,6 @@ count_filter <- as.numeric(snakemake@params[["count_filter"]]) # 0
 prop_filter <- as.numeric(snakemake@params[["prop_filter"]]) # 0.1
 layout <- as.character(snakemake@params[["layout"]])  # "tree" or "sugiyama"
 
-
-if (content=="default" | content=="custom"){
-    result_dir <- file.path(dirname(plot_path))
-}else{
-    result_dir <- file.path(plot_path)
-}
-# make result directory if not exist
-if (!dir.exists(result_dir)){
-    dir.create(result_dir, recursive = TRUE)
-}
-
-
 # helper function for labeling catgorical metadata
 categorical_labeler <- function(labels) {
     
@@ -184,7 +172,7 @@ if (content=="default" | content=="custom"){
     ggsave(basename(plot_path),
        plot = clustree_final,
        device = 'png',
-       path = result_dir,
+       path = file.path(dirname(plot_path)),
        scale = 1,
        dpi = 300,
        width = width,
@@ -192,15 +180,16 @@ if (content=="default" | content=="custom"){
        limitsize = FALSE,
       )
 } else{
+    dir.create(plot_path, recursive = TRUE)
     # generate & save metadata/features plots
     for (col in colnames(metadata)){
         
         clustree_final <- plot_clustree(data, col)
         
-        ggsave(paste0("clustree_",content,"_",col,".png"),
+        ggsave(paste0(col,".png"),
            plot = clustree_final,
            device = 'png',
-           path = result_dir,
+           path = file.path(plot_path),
            scale = 1,
            dpi = 300,
            width = width,
@@ -209,4 +198,3 @@ if (content=="default" | content=="custom"){
           )
     }
 }
-

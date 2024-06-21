@@ -13,16 +13,13 @@ index_paths <- snakemake@input
 # output
 plot_path <- snakemake@output[["plot"]]
 
-result_dir <- file.path(dirname(plot_path))
-# make result directory if not exist
-if (!dir.exists(result_dir)){
-    dir.create(result_dir, recursive = TRUE)
-}
-
 indices <- names(index_paths)
 indices <- indices[indices!=""]
 
-heatmaps <- list()
+# make result directory
+dir.create(plot_path, recursive = TRUE)
+
+# heatmaps <- list()
 
 # loop through all proivided index paths and create (clustered) heatmap
 for (idx in indices){
@@ -57,7 +54,7 @@ for (idx in indices){
     }
     
     # Create a heatmap
-    heatmaps[[idx]] <- ggplot(scores_plot, aes(x=metadata, y=clusterings, fill=value)) + 
+    heatmap_tmp <- ggplot(scores_plot, aes(x=metadata, y=clusterings, fill=value)) + 
         geom_tile(color = "white", size = 1) + 
         geom_text(aes(label=round(value, 2)), size=3) +
         theme_minimal() + 
@@ -68,31 +65,43 @@ for (idx in indices){
         theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels by 45 degrees
     
 #     options(repr.plot.width=width, repr.plot.height=height)
-#     print(heatmaps[[idx]])
+#     print(heatmap_tmp)
+
+    # save plot
+    ggsave(paste0(idx,".png"),
+       plot = heatmap_tmp,
+       device = 'png',
+       path = plot_path,
+       scale = 1,
+       dpi = 300,
+       width = width,
+       height = height,
+       limitsize = FALSE,
+      )
 }
 
 # differentiate between internal (one heatmap) and external (panel of six heatmaps) indices
-if(length(heatmaps)==1){
-    heatmap_panel <- heatmaps[[1]]
-    width_panel <- width
-    height_panel <- height
-}else{
-    heatmap_panel <- wrap_plots(heatmaps, ncol=3)
-    width_panel <- 3 * width
-    height_panel <- ceiling(length(indices)/3) * height
-}
+# if(length(heatmaps)==1){
+#     heatmap_panel <- heatmaps[[1]]
+#     width_panel <- width
+#     height_panel <- height
+# }else{
+#     heatmap_panel <- wrap_plots(heatmaps, ncol=3)
+#     width_panel <- 3 * width
+#     height_panel <- ceiling(length(indices)/3) * height
+# }
 
 ### save plot
 # options(repr.plot.width=width_panel, repr.plot.height=height_panel)
 # heatmap_panel
 
-ggsave(basename(plot_path),
-       plot = heatmap_panel,
-       device = 'png',
-       path = result_dir,
-       scale = 1,
-       dpi = 300,
-       width = width_panel,
-       height = height_panel,
-       limitsize = FALSE,
-      )
+# ggsave(basename(plot_path),
+#        plot = heatmap_panel,
+#        device = 'png',
+#        path = plot_path,
+#        scale = 1,
+#        dpi = 300,
+#        width = width_panel,
+#        height = height_panel,
+#        limitsize = FALSE,
+#       )

@@ -4,7 +4,7 @@ rule env_export:
         report(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),
                       caption="../report/software.rst", 
                       category="Software", 
-                      subcategory="{}_unsupervised_analysis".format(config["project_name"])
+                      subcategory="{}_{}".format(config["project_name"], module_name)
                      ),
     conda:
         "../envs/{env}.yaml"
@@ -26,7 +26,7 @@ rule config_export:
         configs = report(os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
-                         subcategory="{}_unsupervised_analysis".format(config["project_name"])
+                         subcategory="{}_{}".format(config["project_name"], module_name)
                         )
     resources:
         mem_mb=1000,
@@ -47,7 +47,7 @@ rule annot_export:
         annot = report(os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_annot.csv'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
-                         subcategory="{}_unsupervised_analysis".format(config["project_name"])
+                         subcategory="{}_{}".format(config["project_name"], module_name)
                         )
     resources:
         mem_mb=1000,

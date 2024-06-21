@@ -32,6 +32,10 @@ results
 */results/*
 results/
 
+test
+*/test/*
+test/
+
 logs
 */logs/*
 logs/

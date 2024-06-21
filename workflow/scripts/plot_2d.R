@@ -1,4 +1,4 @@
-#### load libraries
+#### libraries
 library("ggplot2")
 library("patchwork")
 library("data.table")
@@ -27,12 +27,7 @@ size <- snakemake@params[["size"]]# 0.5
 alpha <- snakemake@params[["alpha"]]# 1
 coord_fixed_flag <- if(as.integer(snakemake@config[["coord_fixed"]])==1) TRUE else FALSE
 
-result_dir <- file.path(dirname(plot_path))
-# make result directory if not exist
-if (!dir.exists(result_dir)){
-    dir.create(result_dir, recursive = TRUE)
-}
-
+dir.create(plot_path, recursive = TRUE)
 
 ### load data
 # data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)[,1:2]
@@ -43,18 +38,18 @@ axes <- data.frame(fread(file.path(axes_path), header=TRUE), row.names=1)[1:2,]
 metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
 # plot specifications
-n_col <- min(10, ncol(metadata))
-width <- 5
+# n_col <- min(10, ncol(metadata))
+width <- 4
 height <- 3
 
-width_panel <- n_col * width
-height_panel <- ceiling(ncol(metadata)/n_col) * height
+# width_panel <- n_col * width
+# height_panel <- ceiling(ncol(metadata)/n_col) * height
 
 # col <- colnames(metadata)[1]
 # col <- colnames(metadata)[2]
 
 ### make plots
-scatter_plots <- list()
+# scatter_plots <- list()
 
 for (col in sort(colnames(metadata))){
     print(col)
@@ -119,23 +114,34 @@ for (col in sort(colnames(metadata))){
         
     }
     
-    scatter_plots[[col]] <- tmp_plot
+#     scatter_plots[[col]] <- tmp_plot
+    
+    ggsave(paste0(col,".png"),
+       plot = tmp_plot,
+       device = 'png',
+       path = plot_path,
+       scale = 1,
+       dpi = 300,
+       width = width,
+       height = height,
+       limitsize = FALSE,
+      )
 }
 
-scatter_plot_panel <- wrap_plots(scatter_plots, ncol = n_col)#, widths=4, heights=4)
+# scatter_plot_panel <- wrap_plots(scatter_plots, ncol = n_col)#, widths=4, heights=4)
 
 ### save plot
 # options(repr.plot.width=width_panel, repr.plot.height=height_panel)
 # scatter_plot_panel
 
 
-ggsave(basename(plot_path),
-       plot = scatter_plot_panel,
-       device = 'png',
-       path = result_dir,
-       scale = 1,
-       dpi = 300,
-       width = width_panel,
-       height = height_panel,
-       limitsize = FALSE,
-      )
+# ggsave(col,
+#        plot = scatter_plot_panel,
+#        device = 'png',
+#        path = plot_path,
+#        scale = 1,
+#        dpi = 300,
+#        width = width_panel,
+#        height = height_panel,
+#        limitsize = FALSE,
+#       )

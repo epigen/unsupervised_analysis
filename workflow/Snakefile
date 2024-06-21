@@ -7,6 +7,9 @@ from snakemake.utils import min_version
 
 min_version("7.15.2")
 
+##### module name #####
+module_name = "unsupervised_analysis"
+
 ##### setup report #####
 report: os.path.join("report", "workflow.rst")
 
@@ -15,6 +18,8 @@ configfile: os.path.join("config", "config.yaml")
 
 # load annotations
 annot = pd.read_csv(config['annotation'], index_col='name')
+
+result_path = os.path.join(config["result_path"],module_name)
 
 # Clustering: Leiden, clustification
 cluster_methods = []
@@ -35,16 +40,17 @@ indices_internal = []
     
 # Dimensionality Reduction: apply PCA, UMAP and densMAP sepcific visualization flags
 umap_content = ['metadata']
+umap_diagnostics = []
 # densmap_content = ['metadata']
 pca_content = ['metadata']
 pca_diagnostics = ['variance','pairs','loadings']
 
 if config["umap"]["connectivity"]==1:
-    umap_content.append('connectivity')
+    umap_diagnostics.append('connectivity')
 #     densmap_content.append('connectivity')
 
 if config["umap"]["diagnostics"]==1:
-    umap_content.append('diagnostics')
+    umap_diagnostics.append('diagnostics')
 #     densmap_content.append('diagnostics')
 
 if len(config["features_to_plot"]) > 0:
@@ -67,32 +73,33 @@ if len(cluster_methods) > 0:
         clustree_content.append('custom')
 
 ruleorder: clustification > aggregate_clustering_results
+ruleorder: clustree_analysis > clustree_analysis_metadata
 
 rule all:
     input:
         # PCA
-        PCA_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','PCA_default_object.pickle'),
+        PCA_objects = expand(os.path.join(result_path,'{sample}','PCA','PCA_default_object.pickle'),
                                 sample=list(annot.index),
                                ),
-        PCA_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_default_2_{content}.png'),
+        PCA_plots = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_default_2','{content}'),
                             sample=list(annot.index),
                             content=pca_content
                           ),
-        PCA_diagnostics = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_default_{content}.png'),
+        PCA_diagnostics = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_default','diagnostics','{content}.png'),
                             sample=list(annot.index),
                             content=pca_diagnostics
                           ),
-        PCA_interactive = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','PCA','plots','PCA_default_{n_components}_interactive.html'),
+        PCA_interactive = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_default_{n_components}','interactive.html'),
                             sample=list(annot.index),
                             n_components=[2,3]
                           ),
         # UMAP & densMAP
-        MAP_graphs = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),
+        MAP_graphs = expand(os.path.join(result_path,'{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),
                               sample=list(annot.index),
                               metric=config["umap"]["metrics"],
                               n_neighbors=config["umap"]["n_neighbors"] #max(config["umap"]["n_neighbors"])
                                ),
-        MAP_objects = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}_object.pickle'),
+        MAP_objects = expand(os.path.join(result_path,'{sample}','{method}','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}_object.pickle'),
                             sample=list(annot.index),
                             method=["UMAP","densMAP"] if config["umap"]["densmap"]==1 else ["UMAP"],
                             metric=config["umap"]["metrics"],
@@ -100,7 +107,7 @@ rule all:
                             min_dist=config["umap"]["min_dist"],
                             n_components=config["umap"]["n_components"]
                                ),
-        MAP_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}_{content}.png'),
+        MAP_plots = expand(os.path.join(result_path,'{sample}','{method}','plots','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}','{content}'),
                             sample=list(annot.index),
                             method=["UMAP","densMAP"] if config["umap"]["densmap"]==1 else ["UMAP"],
                             metric=config["umap"]["metrics"],
@@ -109,7 +116,16 @@ rule all:
                             n_components=2,
                             content=umap_content
                                ) if 2 in config["umap"]["n_components"] else [],
-        MAP_interactive = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','plots','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}_interactive.html'),
+        MAP_diagnostics = expand(os.path.join(result_path,'{sample}','{method}','plots','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}','diagnostics','{content}.png'),
+                            sample=list(annot.index),
+                            method=["UMAP","densMAP"] if config["umap"]["densmap"]==1 else ["UMAP"],
+                            metric=config["umap"]["metrics"],
+                            n_neighbors=config["umap"]["n_neighbors"],
+                            min_dist=config["umap"]["min_dist"],
+                            n_components=2,
+                            content=umap_diagnostics
+                               ) if 2 in config["umap"]["n_components"] else [],
+        MAP_interactive = expand(os.path.join(result_path,'{sample}','{method}','plots','{method}_{metric}_{n_neighbors}_{min_dist}_{n_components}','interactive.html'),
                             sample=list(annot.index),
                             method=["UMAP","densMAP"] if config["umap"]["densmap"]==1 else ["UMAP"],
                             metric=config["umap"]["metrics"],
@@ -118,28 +134,28 @@ rule all:
                             n_components=[dims for dims in config["umap"]["n_components"] if dims in [2,3]]
                                ) if 2 in config["umap"]["n_components"] or 3 in config["umap"]["n_components"] else [],
         # Heatmap
-        heatmap_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
+        heatmap_plots = expand(os.path.join(result_path,'{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
                                sample=list(annot.index),
                                method=config["heatmap"]["hclust_methods"],
                                metric=config["heatmap"]["metrics"],
                           ),
         # clustree
-        clustree_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}.png'),
+        clustree_plots = expand(os.path.join(result_path,'{sample}','clustree','{content}.png'),
                             sample=list(annot.index),
                             content=clustree_content
                           ),
-        clustree_metadata_plots = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}_plots'),
+        clustree_metadata_plots = expand(os.path.join(result_path,'{sample}','clustree','{content}'),
                             sample=list(annot.index),
                             content=clustree_metadata_content
                           ),
         # cluster validation with internal and external indices
-        cluster_validation = expand(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','cluster_validation','{index_type}_indices.png'),
+        cluster_validation = expand(os.path.join(result_path,'{sample}','cluster_validation','plots','{index_type}'),
                                              sample=list(annot.index),
                                              index_type = ["external", "internal"]
                                             ) if len(cluster_methods)>0 else [],
-        envs = expand(os.path.join(config["result_path"],'envs','unsupervised_analysis','{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','leiden','plotly','pymcdm','sklearn','umap']),
-        configs = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_config.yaml'.format(config["project_name"])),
-        annotations = os.path.join(config["result_path"],'configs','unsupervised_analysis','{}_annot.csv'.format(config["project_name"])),
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','leiden','plotly','pymcdm','sklearn','umap']),
+        configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
+        annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
     resources:
         mem_mb=1000,
     threads: config.get("threads", 1)

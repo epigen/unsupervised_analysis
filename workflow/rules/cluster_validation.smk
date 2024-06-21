@@ -4,10 +4,18 @@ rule clustree_analysis:
     input:
         unpack(get_clustree_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}.png'),
+        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','{content}.png'),
                                caption="../report/clustree.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                      labels={
+                          "method": "clustree",
+                          "parameters": "-",
+                          "dimensions": "-",
+                          "type": "clustree",
+                          "content": "{content}",
+                      }
+                     ),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -32,10 +40,19 @@ rule clustree_analysis_metadata:
     input:
         unpack(get_clustree_paths),
     output:
-        plot = report(directory(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','clustree_{content}_plots')),
+        plot = report(directory(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustree','{content}')),
+                      patterns=["{metadata}.png"],
                       caption="../report/clustree.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                      labels={
+                          "method": "clustree",
+                          "parameters": "-",
+                          "dimensions": "-",
+                          "type": "{content}",
+                          "content": "{metadata}",
+                      }
+                     ),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -54,7 +71,6 @@ rule clustree_analysis_metadata:
         custom_metadata = config["metadata_of_interest"],
     script:
         "../scripts/clustree.R"
-
 
 # determine external cluster indices
 rule validation_external:
@@ -119,10 +135,19 @@ rule plot_indices:
     input:
         unpack(get_validation_paths),
     output:
-        plot = report(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','cluster_validation','{type}_indices.png'),
+        plot = report(directory(os.path.join(config["result_path"],'unsupervised_analysis','{sample}','cluster_validation','plots','{type}')),
+                      patterns=["{index}.png"],
                       caption="../report/cluster_validation.rst", 
-                               category="{}_unsupervised_analysis".format(config["project_name"]), 
-                               subcategory="{sample}"),
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                      labels={
+                          "method": "cluster validation",
+                          "parameters": "-",
+                          "dimensions": "-",
+                          "type": "{type}",
+                          "content": "{index}",
+                      }
+                     ),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
