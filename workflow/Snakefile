@@ -151,7 +151,7 @@ rule all:
         # cluster validation with internal and external indices
         cluster_validation = expand(os.path.join(result_path,'{sample}','cluster_validation','plots','{index_type}'),
                                              sample=list(annot.index),
-                                             index_type = ["external", "internal"]
+                                             index_type = ["external", "internal"] if config["sample_proportion"]>0 else ["external"],
                                             ) if len(cluster_methods)>0 else [],
         envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','umap_leiden','plotly','pymcdm','sklearn']),
         configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),

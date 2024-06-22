@@ -70,8 +70,9 @@ clustree:
 
 ##### cluster validation ####
 # Cluster validation using internal cluster indices is computationally very expensive.
-# To reduce complexity and increase performance as proportion of samples can be used for the internal cluster evaluation.
-sample_proportion: 1 # float 0-1, >500 samples should be included.
+# To reduce complexity and increase performance a proportion of samples can be used for the internal cluster evaluation.
+# Internal cluster validation can be skipped with 0.
+sample_proportion: 1 # float (0-1], >500 samples should be included.
 
 ##### categorical metadata column used in the following analyses:
 # - PCA pairs plot (first entry only)
