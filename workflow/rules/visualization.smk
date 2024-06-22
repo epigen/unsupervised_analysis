@@ -5,7 +5,7 @@ rule prep_feature_plot:
     input:
         unpack(get_sample_paths),
     output:
-        os.path.join(result_path,'{sample}','metadata_features.csv'),
+        metadata_features = os.path.join(result_path,'{sample}','metadata_features.csv'),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)

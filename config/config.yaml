@@ -91,8 +91,9 @@ scatterplot2d:
     size: 1
     alpha: 1
 
-# specify features of interest, which values from the data, will be highlgihted in the 2D/3D plots
+# specify features of interest. these features from the data, will be highlighted in the 2D/3D plots
 # motivated by bioinformatics highlighting expression levels of marker genes (eg: ['PTPRC'])
+# use keyword ['ALL'] to plot all features. WARNING: Only useful for relatively low dimensional data, a plot is generated for each feature and method.
 # if not used leave empty []
-features_to_plot: ['pixel_0_0','pixel_0_1','pixel_0_2','pixel_0_3']
+features_to_plot: ['ALL'] #['pixel_0_0','pixel_0_1','pixel_0_2','pixel_0_3']
 

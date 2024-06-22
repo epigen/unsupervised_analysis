@@ -8,19 +8,13 @@ import pandas as pd
 #### configurations
 
 # ipnuts
-data_path = snakemake.input["data"] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/condition_24h_cytokines/counts/CORRECTED_RNA.csv"
+data_path = snakemake.input["data"]
 # outputs
-result_data_path = snakemake.output[0] #"/nobackup/lab_bock/projects/macroIC/results/Lee2020NatGenet/unsupervised_analysis/merged_NORMALIZED/metadata_features.csv"
-
-result_dir = os.path.dirname(result_data_path)
+metadata_features_path = snakemake.output["metadata_features"]
 
 # parameters
-samples_by_features = int(snakemake.params['samples_by_features']) # 0
-features_to_plot = set(snakemake.params["features_to_plot"]) # set(['FCN1', 'TGFBR1', 'TGFBR2', 'TNFRSF1A','IL6R', 'IFNGR1', 'IFNGR2', 'IFNAR1', 'IFNG', 'IFNB1', 'IL6', 'TNF', 'TGFB1', 'TGFB2'])
-
-# make directory if not existing
-if not os.path.exists(result_dir):
-    os.makedirs(result_dir, exist_ok=True)
+samples_by_features = int(snakemake.params['samples_by_features'])
+features_to_plot = set(snakemake.params["features_to_plot"])
 
 ### load data
 
@@ -30,9 +24,13 @@ if samples_by_features == 1:
 else:
     data = pd.read_csv(data_path, index_col=0).T
     
-### check overlap with columns & subset data
-features_to_plot = list(features_to_plot.intersection(set(data.columns)))
+### check if "ALL" features should be plotted and overlap with columns & subset data
+if features_to_plot == {"ALL"}:
+    features_to_plot = list(data.columns)
+else:
+    features_to_plot = list(features_to_plot.intersection(set(data.columns)))
 
+# subset data
 if len(features_to_plot)!=0:
     data = data.loc[:,features_to_plot]
 else:
@@ -40,4 +38,4 @@ else:
     data = data.iloc[:,:10]
 
 # save data
-data.to_csv(result_data_path)
+data.to_csv(metadata_features_path)
