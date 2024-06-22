@@ -8,7 +8,7 @@ rule leiden_cluster:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/leiden.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","leiden_{sample}_{metric}_{n_neighbors}_{partition_type}_{resolution}_clustering.log"),
     params:

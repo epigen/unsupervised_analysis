@@ -1,5 +1,6 @@
 channels:
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
   - umap-learn=0.5.5

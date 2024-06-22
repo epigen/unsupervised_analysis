@@ -153,7 +153,7 @@ rule all:
                                              sample=list(annot.index),
                                              index_type = ["external", "internal"]
                                             ) if len(cluster_methods)>0 else [],
-        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','leiden','plotly','pymcdm','sklearn','umap']),
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','umap_leiden','plotly','pymcdm','sklearn']),
         configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
     resources:

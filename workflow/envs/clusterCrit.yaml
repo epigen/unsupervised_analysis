@@ -3,4 +3,4 @@ channels:
   - defaults
 dependencies:
   - r-clustercrit=1.2.8
-  - r-data.table
+  - r-data.table=1.15.4

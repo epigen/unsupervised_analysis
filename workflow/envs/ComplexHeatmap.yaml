@@ -8,4 +8,4 @@ dependencies:
   - r-rcolorbrewer=1.1_3
   - r-fastcluster=1.2.3
   - r-magick=2.7.3
-  - r-data.table
+  - r-data.table=1.14.8

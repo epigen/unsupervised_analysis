@@ -159,7 +159,7 @@ rule plot_umap_diagnostics:
         mem_mb=config.get("mem", "32000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/umap.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","plot_diagnostics_{sample}_{method}_{parameters}.log"),
     params:
@@ -188,7 +188,7 @@ rule plot_umap_connectivity:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/umap.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","plot_connectivity_{sample}_{method}_{parameters}.log"),
     params:

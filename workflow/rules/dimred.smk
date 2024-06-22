@@ -36,7 +36,7 @@ rule umap_graph:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/umap.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","umap_{sample}_{metric}_{n_neighbors}.log"),
     params:
@@ -60,7 +60,7 @@ rule umap_embed:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/umap.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","umap_{sample}_{metric}_{n_neighbors}_{min_dist}_{n_components}.log"),
     params:
@@ -86,7 +86,7 @@ rule densmap_embed:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/umap.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","densmap_{sample}_{metric}_{n_neighbors}_{min_dist}_{n_components}.log"),
     params:

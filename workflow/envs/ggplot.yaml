@@ -8,4 +8,4 @@ dependencies:
   - r-ggally=2.1.2
   - r-ggrepel=0.9.1
   - r-reshape2=1.4.4
-  - r-data.table
+  - r-data.table=1.15.4
