@@ -30,26 +30,16 @@ coord_fixed_flag <- if(as.integer(snakemake@config[["coord_fixed"]])==1) TRUE el
 dir.create(plot_path, recursive = TRUE)
 
 ### load data
-# data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)[,1:2]
-# axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)[1:2,]
-# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 data <- data.frame(fread(file.path(data_path), header=TRUE), row.names=1)[,1:2]
 axes <- data.frame(fread(file.path(axes_path), header=TRUE), row.names=1)[1:2,]
 metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
 # plot specifications
-# n_col <- min(10, ncol(metadata))
 width <- 4
 height <- 3
-
-# width_panel <- n_col * width
-# height_panel <- ceiling(ncol(metadata)/n_col) * height
-
-# col <- colnames(metadata)[1]
-# col <- colnames(metadata)[2]
+shape <- if(nrow(data)>50000) '.' else 16
 
 ### make plots
-# scatter_plots <- list()
 
 for (col in sort(colnames(metadata))){
     print(col)
@@ -85,7 +75,7 @@ for (col in sort(colnames(metadata))){
     if (!is.numeric(metadata[[col]])){
         # plot categorical data
         tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
-        geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
+        geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha, shape=shape) + 
         {if(coord_fixed_flag) coord_fixed()} +
         xlab(axes[1]) +    
         ylab(axes[2]) +
@@ -103,7 +93,7 @@ for (col in sort(colnames(metadata))){
     }else{
         # plot numerical data
         tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
-        geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha) + 
+        geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha, shape=shape) + 
         {if(coord_fixed_flag) coord_fixed()} +
         scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab") +
         xlab(axes[1]) +    
@@ -114,8 +104,7 @@ for (col in sort(colnames(metadata))){
         
     }
     
-#     scatter_plots[[col]] <- tmp_plot
-    
+    # save plot
     ggsave(paste0(col,".png"),
        plot = tmp_plot,
        device = 'png',
@@ -127,21 +116,3 @@ for (col in sort(colnames(metadata))){
        limitsize = FALSE,
       )
 }
-
-# scatter_plot_panel <- wrap_plots(scatter_plots, ncol = n_col)#, widths=4, heights=4)
-
-### save plot
-# options(repr.plot.width=width_panel, repr.plot.height=height_panel)
-# scatter_plot_panel
-
-
-# ggsave(col,
-#        plot = scatter_plot_panel,
-#        device = 'png',
-#        path = plot_path,
-#        scale = 1,
-#        dpi = 300,
-#        width = width_panel,
-#        height = height_panel,
-#        limitsize = FALSE,
-#       )
