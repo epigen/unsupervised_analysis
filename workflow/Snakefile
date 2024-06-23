@@ -43,7 +43,7 @@ umap_content = ['metadata']
 umap_diagnostics = []
 # densmap_content = ['metadata']
 pca_content = ['metadata']
-pca_diagnostics = ['variance','pairs','loadings']
+pca_diagnostics = ['variance','pairs','loadings','loadings_lollipop']
 
 if config["umap"]["connectivity"]==1:
     umap_diagnostics.append('connectivity')

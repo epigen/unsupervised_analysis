@@ -18,14 +18,13 @@ metadata_path <- snakemake@input[["metadata"]]
 diagnostics_path <- snakemake@output[["diagnostics_plot"]]
 pairs_path <- snakemake@output[["pairs_plot"]]
 loadingsplot_path <- snakemake@output[["loadings_plot"]]
+loadings_lollipop_plot_path <- snakemake@output[["loadings_lollipop_plot"]]
 
-pairs_size <- snakemake@config[["scatterplot2d"]][["size"]]/10 # 0.5
-pairs_alpha <- snakemake@config[["scatterplot2d"]][["alpha"]]/2 # 1
-metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1] # c("target")[1]
+pairs_size <- snakemake@config[["scatterplot2d"]][["size"]]/10
+pairs_alpha <- snakemake@config[["scatterplot2d"]][["alpha"]]/2
+metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1]
 
 ### load data
-# data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
-# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 data <- data.frame(fread(file.path(data_path), header=TRUE), row.names=1)
 metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
@@ -56,9 +55,6 @@ rownames(metadata) <- gsub(pattern= '-' ,replacement = '.', x = rownames(metadat
 # align rows
 data <- data[rownames(metadata),]
 
-# data_axes <- read.csv(file=file.path(axes_path), row.names=1, header=TRUE)
-# data_loadings <- read.csv(file=file.path(loadings_path), row.names=1, header=TRUE)
-# data_var <- read.csv(file=file.path(var_path), row.names=1, header=TRUE)
 data_axes <- data.frame(fread(file.path(axes_path), header=TRUE), row.names=1)
 data_loadings <- data.frame(fread(file.path(loadings_path), header=TRUE), row.names=1)
 
@@ -138,7 +134,6 @@ ggsave(basename(diagnostics_path),
 
 ### pairs plot
 print("Pairs plot")
-n_dim <- min(10, ncol(data))
 
 # convert to categorical if less than 25 unique integer values
 if (is.numeric(metadata[[metadata_col]]) & length(unique(metadata[[metadata_col]]))<=25){
@@ -176,12 +171,13 @@ data <- data[,non_zero_cols]
 data_axes <- data_axes[non_zero_cols,,drop=FALSE]
 
 # options(repr.plot.width=10, repr.plot.height=10)
+n_dim <- min(10, ncol(data))
 
 # make pairs plot
 pairs_plot <- ggpairs(
   data = data,
   mapping = ggplot2::aes(color = metadata[[metadata_col]]),
-  columns = 1:min(n_dim, ncol(data)),
+  columns = 1:n_dim,
   title = paste0("PCA pairs plot colored by ",metadata_col),
   upper = list(continuous = wrap("density", alpha = 0.5, size=0.25)),
   lower = list(continuous = wrap("points", alpha = pairs_alpha, size = pairs_size)),
@@ -190,7 +186,7 @@ pairs_plot <- ggpairs(
   xlab = NULL,
   ylab = NULL,
   axisLabels = c("show", "internal", "none"),
-  columnLabels = data_axes[1:min(n_dim, ncol(data)),'label'],
+  columnLabels = data_axes[1:n_dim,'label'],
   labeller = "label_value",
   switch = NULL,
   showStrips = NULL,
@@ -268,3 +264,52 @@ ggsave(basename(loadingsplot_path),
        height = height_panel,
        limitsize = FALSE,
       )
+
+### loadings lollipop plot
+print("Loadings Lollipop plot")
+                              
+# plot specifications
+n_col <- min(5,n_dim)
+height_panel <- ceiling(n_dim/n_col)*2
+width_panel <- n_col * 3
+                              
+lollipops <- list()
+
+for (i in 1:n_dim) {
+    
+    # determine top 10 features per PC
+#     top_features <- rownames(data_loadings)[order(-(data_loadings[paste0("PC_",i)]^2))][1:10]
+    top_features <- rownames(data_loadings)[order(-abs(data_loadings[paste0("PC_", i)]))][1:10]
+    
+    # subset data
+    tmp_loadings <- data_loadings[top_features, paste0("PC_",i), drop=FALSE]
+    colnames(tmp_loadings) <- c("Loadings")
+    tmp_loadings$Features <- factor(rownames(tmp_loadings), levels=rev(rownames(tmp_loadings)))
+    
+    # make plot
+    lollipops[[i]]  <- ggplot(tmp_loadings, aes(x=Loadings, y=Features)) +
+    geom_point(color="blue") +
+    geom_segment(aes(xend=0, yend=Features), color="black") +
+    theme_bw() +
+    theme(plot.title = element_text(size = 10)) +
+    labs(title=paste("Principal Component ", i), x="Loading", y="Feature")
+}
+
+lollipop_plot_panel <- wrap_plots(lollipops, ncol=n_col)
+
+# save diangostics plot
+# options(repr.plot.width=width_panel, repr.plot.height=height_panel)
+# lollipop_plot_panel
+
+ggsave(basename(loadings_lollipop_plot_path),
+       plot = lollipop_plot_panel,
+       device = 'png',
+       path = dirname(loadings_lollipop_plot_path),
+       scale = 1,
+       dpi = 300,
+       width = width_panel,
+       height = height_panel,
+       limitsize = FALSE,
+      )
+                              
+

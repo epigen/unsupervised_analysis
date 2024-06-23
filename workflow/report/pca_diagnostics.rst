@@ -1,3 +1,3 @@
 Principal Component Analysis (PCA) variance-explained plots (scree/elbow-plot and cumulative explained variance-plot) of all and top 10% Principal Components of {{snakemake.wildcards["sample"]}}.
 Pairwise plots of the first 10 PCs colored by {{snakemake.config["metadata_of_interest"]}}.
-Loading plots visualizing the top 10 loadings of each PC combination of the first 10 PCs.
+Loading plots visualizing the top 10 loadings of each PC combination of the first 10 PCs and top loadings as lollipop plot per PC.

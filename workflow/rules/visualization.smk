@@ -126,6 +126,17 @@ rule plot_pca_diagnostics:
                                   "type": "diagnostics",
                                   "content": "loadings",
                       }),
+        loadings_lollipop_plot = report(os.path.join(result_path,'{sample}','{method}','plots','{method}_{parameters}','diagnostics','loadings_lollipop.png'),
+                               caption="../report/pca_diagnostics.rst", 
+                               category="{}_{}".format(config["project_name"], module_name),
+                               subcategory="{sample}",
+                                 labels={
+                                  "method": "{method}",
+                                  "parameters": "{parameters}",
+                                  "dimensions": "-",
+                                  "type": "diagnostics",
+                                  "content": "loadings lollipop",
+                      }),
     resources:
         mem_mb=config.get("mem", "8000"),
     threads: config.get("threads", 1)
