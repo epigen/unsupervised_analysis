@@ -62,7 +62,7 @@ The outlined analyses were performed using the programming languages R (ver) [re
 **Dimensionality Reduction**
 
 **Principal Component Analysis (PCA)**
-We used Principal Component Analysis (PCA) [ref] from scikit-learn (ver) [ref] as the linear approach. We visualized [n_components] principal components and kept [X/all] components for downstream analyses. For diagnostic purposes we visualized the variance explained of all and the top 10% of principal components (PCs) using elbow- and cumulative-variance-plots, sequential pair-wise PCs for up to 10 PCs using scatter-, and density-plots (colored by [metadata_of_interest]), and finally loadings plots showing the magnitude and direction of the 10 most influential features for each PC combination. The R packages ggally (ver) [ref] and ggrepel (ver) [ref] were used to improve the diagnostic visualizations.
+We used Principal Component Analysis (PCA) [ref] from scikit-learn (ver) [ref] as the linear approach. We visualized [n_components] principal components and kept [X/all] components for downstream analyses. For diagnostic purposes we visualized the variance explained of all and the top 10% of principal components (PCs) using elbow- and cumulative-variance-plots, sequential pair-wise PCs for up to 10 PCs using scatter-, and density-plots (colored by [metadata_of_interest]), and finally loadings plots showing the magnitude and direction of the 10 most influential features for each PC as lollipop plot and biplot for sequential combinations of PCs. The R packages ggally (ver) [ref] and ggrepel (ver) [ref] were used to improve the diagnostic visualizations.
 
 **Uniform Manifold Approximation and Projection (UMAP)**
 Uniform Manifold Approximation projection (UMAP) from umap-learn (ver) [ref] was used as the non-linear approach. The metric [metric] and number of neighbors [n_neighbors] were used for the generation of a shared k-nearest-neighbor graph. The graph was embedded in [n_components] dimensions with minimum distance parameter [min_dist].
@@ -99,11 +99,13 @@ We performed internal cluster validation using six complementary indices: Silhou
 The workflow perfroms the following analyses on each dataset provided in the annotation file. A result folder "unsupervised_analysis" is generated containing a folder for each dataset.
 
 ## Dimensionality Reduction
+> _"High-dimensional spaces are where intuition goes to die and dimensionality reduction becomes the antidote to the curse of dimensionality."_ from Anonymous
 - Principal Component Anlaysis (PCA) keeping all components (.pickle and .CSV)
   - diagnostics (.PNG):
       - variance: scree-plot and cumulative explained variance-plot of all and top 10% principal components
       - pairs: sequential pair-wise PCs for up to 10 PCs using scatter- and density-plots colored by [metadata_of_interest]
-      - loadings: showing the magnitude and direction of the 10 most influential features for each PC combination
+      - loadings: showing the magnitude and direction of the 10 most influential features for each Principal Component combination (Biplot, but without the data)
+      - loadings lolliplot: showing the magnitude of the 10 most influential features for each Principal Component
 - Uniform Manifold Approximation & Projection (UMAP)
   - k-nearest-neighbor graph (.pickle): generated using the [n_neighbors] parameter together with the provided [metrics].
     - fix any pickle load issue by specifying Python version to 3.9 (in case you want to use the graph downstream)
@@ -172,27 +174,26 @@ The workflow perfroms the following analyses on each dataset provided in the ann
 Here are some tips for the usage of this workflow:
 - Start with minimal parameter combinations and without UMAP diagnostics and connectivity plots (they are computational expensive and slow).
 - Heatmaps require **a lot** of memory, hence the memory allocation is solved dynamically based on retries. If a out-of-memory exception occurs the flag `--retries X` can be used to trigger automatic resubmission X time upon failure with X times the memory.
-- Clustification performance scales with available cores, i.e., more cores faster internal parallelization of RF training & testing.
-- Cluster indices are extremely compute intense and scale linearly with every additional clustering result and specified metadata.
-
+- Clustification performance scales with available cores, i.e., more cores faster internal parallelization of Random Forest training & testing.
+- Cluster indices are extremely compute intense and scale linearly with every additional clustering result and specified metadata (can be skipped).
 
 # Configuration
 Detailed specifications can be found here [./config/README.md](./config/README.md)
 
 # Examples
-We provide a minimal example of the analysis of the [UCI ML hand-written digits datasets](https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits) imported from [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) in the [test folder](.test/):
+We provide a minimal example of the analysis of the [UCI ML hand-written digits datasets](https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits) imported from [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) in the [test folder](./test/):
 - config
     - configuration: config/config.yaml
     - sample annotation: digits_unsupervised_analysis_annotation.csv
 - data
     - dataset (1797 observations, 64 features): digits_data.csv
     - metadata (consisting of the ground truth label "target"): digits_labels.csv
-- results will be generated in a subfolder .test/results/
+- results will be generated in the configured subfolder `./test/results/`
 - performance: on an HPC it took less than 5 minutes to complete a full run (with up to 32GB of memory per task)
 
 # single-cell RNA sequencing (scRNA-seq) data analysis
 Unsupervised analyses, dimensionality reduction and cluster analysis, are corner stones of scRNA-seq data analyses.
-A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory, with 8 cores for clustification, ).
+A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory and 8 cores for clustification).
 Below are configurations of the two most commonly used frameworks, [scanpy](https://scanpy.readthedocs.io/en/stable/index.html) (Python) and [Seurat](https://satijalab.org/seurat/) (R), and the original package's defaults as comparison and to facilitate reproducibility:
 
 UMAP for dimensionality reduction
@@ -236,7 +237,9 @@ Leiden algorithm for clustering
 - Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules
   - for upstream processing:
     - [ATAC-seq Processing](https://github.com/epigen/atacseq_pipeline) to quantify  chromatin accessibility.
-    - [Split, Filter, Normalize and Integrate Sequencing Data](https://github.com/epigen/spilterlize_integrate) process sequencing data.
+    - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing and preparing single cell data as input.
+    - [Split, Filter, Normalize and Integrate Sequencing Data](https://github.com/epigen/spilterlize_integrate) process and preapre sequencing data as input.
+    - [Perturbation Analysis using Mixscape from Seurat](https://github.com/epigen/mixscape_seurat) to identify perturbed cells from pooled (multimodal) CRISPR screens with sc/snRNA-seq read-out (scCRISPR-seq) as input.
 - [Reichl, S. (2018). Mathematical methods in single cell RNA sequencing analysis with an emphasis on the validation of clustering results [Diploma Thesis, Technische Universität Wien]](https://doi.org/10.34726/hss.2018.49662)
 
 # Publications

@@ -30,8 +30,6 @@ if (!dir.exists(result_dir)){
 }
 
 ### load data
-# data <- read.csv(file=file.path(data_path), row.names=1, header=TRUE)
-# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
 data <- data.frame(fread(file.path(data_path), header=TRUE), row.names=1)
 metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 
