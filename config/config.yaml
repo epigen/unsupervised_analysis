@@ -12,10 +12,13 @@ result_path: test/results/
 project_name: digits
 
 ##### PCA #####
-# (no configuration necessary)
+# https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+pca:
+    n_components: 0.9 # variance as float (0-1], number of components as int e.g., 50, or 'mle'
+    svd_solver: 'auto' # options: ‘auto’, ‘full’, ‘covariance_eigh’, ‘arpack’, ‘randomized’
 
 ##### UMAP & densMAP #####
-# information on the various parameters: https://umap-learn.readthedocs.io/en/latest/parameters.html
+# https://umap-learn.readthedocs.io/en/latest/parameters.html
 # umap knn-graph will be generated for each metric once with the max(n_neighbors)
 # knn-graph parameters: metrics (default: euclidean), n_neighbors (default: 15)
 # embedding parameters: min_dist  (default: 0.1), n_components (default: 2)

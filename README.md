@@ -62,7 +62,7 @@ The outlined analyses were performed using the programming languages R (ver) [re
 **Dimensionality Reduction**
 
 **Principal Component Analysis (PCA)**
-We used Principal Component Analysis (PCA) [ref] from scikit-learn (ver) [ref] as the linear approach. We visualized [n_components] principal components and kept [X/all] components for downstream analyses. For diagnostic purposes we visualized the variance explained of all and the top 10% of principal components (PCs) using elbow- and cumulative-variance-plots, sequential pair-wise PCs for up to 10 PCs using scatter-, and density-plots (colored by [metadata_of_interest]), and finally loadings plots showing the magnitude and direction of the 10 most influential features for each PC as lollipop plot and biplot for sequential combinations of PCs. The R packages ggally (ver) [ref] and ggrepel (ver) [ref] were used to improve the diagnostic visualizations.
+We used Principal Component Analysis (PCA) [ref] from scikit-learn (ver) [ref] as the linear approach with the solver [svd_solver]. We visualized [dimensions] principal components and kept [n_components/all] components for downstream analyses. For diagnostic purposes we visualized the variance explained of all and the top 10% of principal components (PCs) using elbow- and cumulative-variance-plots, sequential pair-wise PCs for up to 10 PCs using scatter-, and density-plots (colored by [metadata_of_interest]), and finally loadings plots showing the magnitude and direction of the 10 most influential features for each PC as lollipop plot and biplot for sequential combinations of PCs. The R packages ggally (ver) [ref] and ggrepel (ver) [ref] were used to improve the diagnostic visualizations.
 
 **Uniform Manifold Approximation and Projection (UMAP)**
 Uniform Manifold Approximation projection (UMAP) from umap-learn (ver) [ref] was used as the non-linear approach. The metric [metric] and number of neighbors [n_neighbors] were used for the generation of a shared k-nearest-neighbor graph. The graph was embedded in [n_components] dimensions with minimum distance parameter [min_dist].
@@ -90,7 +90,7 @@ We performed cluster analysis and visualization using the Clustree package (ver)
 We validated/analyzed the clustering results by comparing them with all categorical metadata using external cluster indices. The complementary indices used were Adjusted Mutual Information (AMI) [ref], Adjusted Rand Index (ARI) [ref], Fowlkes-Mallows Index (FMI) [ref], Homogeneity, Completeness, and V-Measure [ref] from scikit-learn (ver) [ref]. The indices were calculated for each clustering result and each categorical metadata, and visualized using hierarchically clustered heatmaps.
 
 **Cluster Validation - Internal Indices & MCDM using TOPSIS**
-We performed internal cluster validation using six complementary indices: Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score from the clusterCrit package (ver) [ref], and a weighted Bayesian Information Criterion (BIC) approach as described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488). Due to computational cost, PCA results representing 90% of variance explained were used as input, and only a random sample proportion of [sample_proportion] was used. These internal cluster indices are linear, using Euclidean distance metrics. To rank all clustering results and [metadata_of_interest] from best to worst, we applied the Multiple-criteria decision-making (MCDM) method TOPSIS from the the Python package pymcdm (ver) [ref] to the internal cluster indices, as described in [Reichl 2018 - Chapter 4.3.1 - The Favorite Approach](https://repositum.tuwien.at/handle/20.500.12708/3488).
+We performed internal cluster validation using six complementary indices: Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score from the clusterCrit package (ver) [ref], and a weighted Bayesian Information Criterion (BIC) approach as described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488). To reduce computational cost, PCA results from before were used as input, and only a random sample proportion of [sample_proportion] was used. These internal cluster indices are linear, using Euclidean distance metrics. To rank all clustering results and [metadata_of_interest] from best to worst, we applied the Multiple-criteria decision-making (MCDM) method TOPSIS from the the Python package pymcdm (ver) [ref] to the internal cluster indices, as described in [Reichl 2018 - Chapter 4.3.1 - The Favorite Approach](https://repositum.tuwien.at/handle/20.500.12708/3488).
 
 **The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 
@@ -100,7 +100,8 @@ The workflow perfroms the following analyses on each dataset provided in the ann
 
 ## Dimensionality Reduction
 > _"High-dimensional spaces are where intuition goes to die and dimensionality reduction becomes the antidote to the curse of dimensionality."_ from Anonymous
-- Principal Component Anlaysis (PCA) keeping all components (.pickle and .CSV)
+- Principal Component Anlaysis (PCA) using [scikit-learn](https://scikit-learn.org) (.pickle and .CSV)
+  - Supporting two configurations that greatly influence performance: [n_components] and [svd_solver] as described in the [documentation](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html).
   - diagnostics (.PNG):
       - variance: scree-plot and cumulative explained variance-plot of all and top 10% principal components
       - pairs: sequential pair-wise PCs for up to 10 PCs using scatter- and density-plots colored by [metadata_of_interest]
@@ -158,7 +159,7 @@ The workflow perfroms the following analyses on each dataset provided in the ann
         - 6 complementary indices are used
             - 5 from the package [clusterCrit](https://rdrr.io/cran/clusterCrit/man/intCriteria.html): Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score.
             - 1 weighted Bayesian Information Criterion (BIC) approach, previously described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488) 
-        - Due to the comutational cost PCA results, representing 90% of variance explained, are used for as input and a [sample_proportion] can be configured.
+        - Due to the comutational cost PCA results are used as input and a [sample_proportion] can be configured.
         - Caveat: internal cluster indices are linear i.e., using Euclidean distance metrics.
     - Multiple-criteria decision-making (MCDM) using TOPSIS for ranking clustering results
         - The MCDM method TOPSIS is applied to the internal cluster indices to rank all clustering results (and [metadata_of_interest]) from best to worst.

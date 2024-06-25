@@ -35,25 +35,22 @@ sample_proportion <- as.numeric(snakemake@params['sample_proportion']) #0.1
 metadata_of_interest <- unlist(c(snakemake@params['metadata_of_interest']))
 
 ### load data
-# metadata <- read.csv(file=file.path(metadata_path), row.names=1, header=TRUE)
-# clusterings <- read.csv(file=file.path(clusterings_path), row.names=1, header=TRUE)
-# pca_var <- read.csv(file=file.path(pca_var_path), row.names=1, header=TRUE)
 metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
 clusterings <- data.frame(fread(file.path(clusterings_path), header=TRUE), row.names=1)
 pca_var <- data.frame(fread(file.path(pca_var_path), header=TRUE), row.names=1)
+pca <- data.frame(fread(file.path(pca_path), header=TRUE), row.names=1)
 
-
-# load PCs that explain >90% of the variance in the data
-# Find the first row where the cumulative sum is greater than 0.9
-cumulative_sum <- cumsum(pca_var[,1])
-PCn <- which(cumulative_sum > 0.9)[1]
-# Get the column classes of the full dataframe, select cols to load and set classes of the columns not to load to "NULL"
-full_classes <- sapply(read.csv(file.path(pca_path), nrows = 1), class)
-cols_to_load <- names(full_classes)[1:PCn+1]
-classes <- ifelse(names(full_classes) %in% c("sample_name", cols_to_load), full_classes, "NULL")
+### USED BEFORE when PCA was not configurable
+# # load PCs that explain >90% of the variance in the data
+# # Find the first row where the cumulative sum is greater than 0.9
+# cumulative_sum <- cumsum(pca_var[,1])
+# PCn <- which(cumulative_sum > 0.9)[1]
+# # Get the column classes of the full dataframe, select cols to load and set classes of the columns not to load to "NULL"
+# full_classes <- sapply(read.csv(file.path(pca_path), nrows = 1), class)
+# cols_to_load <- names(full_classes)[1:PCn+1]
+# classes <- ifelse(names(full_classes) %in% c("sample_name", cols_to_load), full_classes, "NULL")
 # load the selected PCs only (slow)
-# pca <- read.csv(file.path(pca_path), colClasses = classes, row.names=1, header=TRUE)
-pca <- data.frame(fread(file.path(pca_path), colClasses = classes, header=TRUE), row.names=1)
+# pca <- data.frame(fread(file.path(pca_path), colClasses = classes, header=TRUE), row.names=1)
 
 # subset metadata to metadata_of_interest
 if(length(metadata_of_interest)==0){

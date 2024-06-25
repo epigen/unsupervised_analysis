@@ -78,20 +78,28 @@ ruleorder: clustree_analysis > clustree_analysis_metadata
 rule all:
     input:
         # PCA
-        PCA_objects = expand(os.path.join(result_path,'{sample}','PCA','PCA_default_object.pickle'),
+        PCA_objects = expand(os.path.join(result_path,'{sample}','PCA','PCA_{svd_solver}_{n_components}_object.pickle'),
                                 sample=list(annot.index),
+                             svd_solver=config["pca"]["svd_solver"],
+                             n_components=config["pca"]["n_components"],
                                ),
-        PCA_plots = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_default_2','{content}'),
+        PCA_plots = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_{svd_solver}_{n_components}_2','{content}'),
                             sample=list(annot.index),
-                            content=pca_content
+                           svd_solver=config["pca"]["svd_solver"],
+                             n_components=config["pca"]["n_components"],
+                            content=pca_content,
                           ),
-        PCA_diagnostics = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_default','diagnostics','{content}.png'),
+        PCA_diagnostics = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_{svd_solver}_{n_components}','diagnostics','{content}.png'),
                             sample=list(annot.index),
-                            content=pca_diagnostics
+                                 svd_solver=config["pca"]["svd_solver"],
+                             n_components=config["pca"]["n_components"],
+                            content=pca_diagnostics,
                           ),
-        PCA_interactive = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_default_{n_components}','interactive.html'),
+        PCA_interactive = expand(os.path.join(result_path,'{sample}','PCA','plots','PCA_{svd_solver}_{n_components}_{dim}','interactive.html'),
                             sample=list(annot.index),
-                            n_components=[2,3]
+                                 svd_solver=config["pca"]["svd_solver"],
+                             n_components=config["pca"]["n_components"],
+                            dim=[2,3]
                           ),
         # UMAP & densMAP
         MAP_graphs = expand(os.path.join(result_path,'{sample}','UMAP','UMAP_{metric}_{n_neighbors}_graph.pickle'),

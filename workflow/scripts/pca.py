@@ -13,6 +13,7 @@ from sklearn.decomposition import PCA
 
 # ipnuts
 data_path = snakemake.input["data"]
+
 # outputs
 result_object_path = snakemake.output["result_object"]
 result_data_path = snakemake.output["result_data"]
@@ -22,14 +23,10 @@ result_loadings_small_path = snakemake.output["result_loadings_small"]
 result_var_path = snakemake.output["result_var"]
 result_axes_path = snakemake.output["result_axes"]
 
-result_dir = os.path.dirname(result_object_path)
-
 # parameters
 samples_by_features = int(snakemake.params['samples_by_features']) #0
-
-# make directory if not existing
-if not os.path.exists(result_dir):
-    os.makedirs(result_dir, exist_ok=True)
+n_components = snakemake.config["pca"]["n_components"]
+svd_solver = snakemake.config["pca"]["svd_solver"]
 
 ### load data
 
@@ -42,10 +39,10 @@ else:
 ### transform data
     
 # unsupervised PCA to yield all components
-pca_obj = PCA(n_components=None, # all components are kept
+pca_obj = PCA(n_components=n_components,
               copy=True, 
               whiten=False, 
-              svd_solver='full', # run exact full SVD
+              svd_solver=svd_solver,
               tol=0.0, 
               iterated_power='auto', 
               random_state=42
