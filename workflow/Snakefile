@@ -142,7 +142,12 @@ rule all:
                             n_components=[dims for dims in config["umap"]["n_components"] if dims in [2,3]]
                                ) if 2 in config["umap"]["n_components"] or 3 in config["umap"]["n_components"] else [],
         # Heatmap
-        heatmap_plots = expand(os.path.join(result_path,'{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
+#         distance_matrices = expand(os.path.join(result_path,'{sample}','Heatmap','DistanceMatrix_{metric}_{type}.csv'),
+#                                sample=list(annot.index),
+#                                metric=config["heatmap"]["metrics"],
+#                                type=["observations","features"],
+#                           ),
+        heatmap_plots = expand(os.path.join(result_path,'{sample}','Heatmap','plots','Heatmap_{metric}_{method}.png'),
                                sample=list(annot.index),
                                method=config["heatmap"]["hclust_methods"],
                                metric=config["heatmap"]["metrics"],
@@ -161,7 +166,7 @@ rule all:
                                              sample=list(annot.index),
                                              index_type = ["external", "internal"] if config["sample_proportion"]>0 else ["external"],
                                             ) if len(cluster_methods)>0 else [],
-        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','umap_leiden','plotly','pymcdm','sklearn']),
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','umap_leiden','plotly','pymcdm']),
         configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
     resources:

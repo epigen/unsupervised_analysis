@@ -10,7 +10,7 @@ rule prep_feature_plot:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/sklearn.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","prep_feature_plot_{sample}.log"),
     params:
@@ -232,12 +232,11 @@ rule plot_dimred_interactive:
 
 
 ########## HEATMAP PLOTS ##########
-
 rule plot_heatmap:
     input:
-        unpack(get_sample_paths),
+        unpack(get_heatmap_paths),
     output:
-        plot = report(os.path.join(result_path,'{sample}','Heatmap','plots','Heatmap_{method}_{metric}.png'),
+        plot = report(os.path.join(result_path,'{sample}','Heatmap','plots','Heatmap_{metric}_{method}.png'),
                       caption="../report/heatmap.rst",
                       category="{}_{}".format(config["project_name"], module_name),
                       subcategory="{sample}",
@@ -255,12 +254,10 @@ rule plot_heatmap:
     conda:
         "../envs/ComplexHeatmap.yaml"
     log:
-        os.path.join("logs","rules","plot_heatmap_{sample}_{method}_{metric}.log"),
+        os.path.join("logs","rules","plot_heatmap_{sample}_{metric}_{method}.log"),
     params:
         partition = config.get("partition"),
         samples_by_features = get_data_orientation,
-        metric = lambda w: "{}".format(w.metric),
-        cluster_method = lambda w: "{}".format(w.method)
     script:
         "../scripts/plot_heatmap.R"
         

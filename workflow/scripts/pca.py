@@ -24,7 +24,7 @@ result_var_path = snakemake.output["result_var"]
 result_axes_path = snakemake.output["result_axes"]
 
 # parameters
-samples_by_features = int(snakemake.params['samples_by_features']) #0
+samples_by_features = int(snakemake.params['samples_by_features'])
 n_components = snakemake.config["pca"]["n_components"]
 svd_solver = snakemake.config["pca"]["svd_solver"]
 
@@ -38,7 +38,7 @@ else:
     
 ### transform data
     
-# unsupervised PCA to yield all components
+# unsupervised PCA
 pca_obj = PCA(n_components=n_components,
               copy=True, 
               whiten=False, 
@@ -75,5 +75,5 @@ axes_info_df.to_csv(result_var_path)
 
 # save axes information for visualization
 axes_info_df.columns = ['label']
-axes_info_df['label'] = ["PC{} ({}%)".format(idx+1, round(100*var,2)) for idx, var in axes_info_df['label'].iteritems()]
+axes_info_df['label'] = ["PC{} ({}%)".format(idx+1, round(100*var,2)) for idx, var in axes_info_df['label'].items()]
 axes_info_df.to_csv(result_axes_path)

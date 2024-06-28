@@ -32,7 +32,7 @@ rule clustification:
         mem_mb=config.get("mem", "16000"),
     threads: 8#config.get("threads", 1)
     conda:
-        "../envs/sklearn.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","clustification_{sample}_clusterings.log"),
     params:

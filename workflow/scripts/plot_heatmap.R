@@ -3,6 +3,7 @@ library("ComplexHeatmap")
 library("circlize")
 library("RColorBrewer")
 library("data.table")
+library("fastcluster")
 #library("dendsort")
 
 ### configurations
@@ -12,38 +13,57 @@ ht_opt(fast_hclust = TRUE)
 # inputs
 data_path <- snakemake@input[["data"]]
 metadata_path <- snakemake@input[["metadata"]]
+observations_distance_path <- snakemake@input[["observations_distance"]]
+features_distance_path <- snakemake@input[["features_distance"]]
 
 # output
 plot_path <- snakemake@output[["plot"]]
 
 # parameters
-samples_by_features <- as.integer(snakemake@params['samples_by_features']) #1
-metric <- snakemake@params[["metric"]]# "pearson"
-cluster_method <- snakemake@params[["cluster_method"]]# "complete"
+samples_by_features <- as.integer(snakemake@params['samples_by_features'])
+metric <- snakemake@wildcards[["metric"]]
+cluster_method <- snakemake@wildcards[["method"]]
 metadata_col <- c(snakemake@config[["metadata_of_interest"]])[1]
-
-
-result_dir <- file.path(dirname(plot_path))
-# make result directory if not exist
-if (!dir.exists(result_dir)){
-    dir.create(result_dir, recursive = TRUE)
-}
 
 ### load data
 data <- data.frame(fread(file.path(data_path), header=TRUE), row.names=1)
 metadata <- data.frame(fread(file.path(metadata_path), header=TRUE), row.names=1)
+observations_distance <- fread(file.path(observations_distance_path), header=TRUE)
+features_distance <- fread(file.path(features_distance_path), header=TRUE)
+
+### prepare distance matrices
+# Remove rownames and convert to matrix
+observations_distance <- as.matrix(observations_distance[ , -1, with = FALSE])
+features_distance <- as.matrix(features_distance[ , -1, with = FALSE])
+# add rownames
+rownames(observations_distance) <- colnames(observations_distance)
+rownames(features_distance) <- colnames(features_distance)
 
 # check and fix orientation
 if(samples_by_features==0){
     data <- t(data)
 }
 
+# filter data and metadata in case of downsampled observations and features
+data <- data[colnames(observations_distance), colnames(features_distance)]
+metadata <- metadata[colnames(observations_distance),, drop=FALSE]
+
 # scale data
 data <- scale(data)
 
-# remove NA columns & replace NA
+# remove complete NA columns & replace remaining NA values
 data <- data[,colSums(is.na(data))<nrow(data)]
 data[is.na(data)] <- 0
+
+# filter by data
+observations_distance <- observations_distance[rownames(data),rownames(data)]
+features_distance <- features_distance[colnames(data),colnames(data)]
+# Check for NaN values and replace them with a large number
+observations_distance[is.na(observations_distance)] <- max(observations_distance, na.rm = TRUE) * 10
+features_distance[is.na(features_distance)] <- max(features_distance, na.rm = TRUE) * 10
+# Ensure the matrices are interpreted as distance matrices
+observations_distance <- as.dist(observations_distance)
+features_distance <- as.dist(features_distance)
 
 # prepare metadata
 if(is.null(metadata_col)){ #|!(metadata_col %in% colnames(metadata))){
@@ -83,6 +103,12 @@ if (any(is.na(metadata[[metadata_col]]))){
     }
 }
 
+# perform hierarchical clustering of prpared observation and feature distance matrices using fastcluster
+obs_hc <- fastcluster::hclust(observations_distance, method = cluster_method)
+feat_hc <- fastcluster::hclust(features_distance, method = cluster_method)
+# Convert to dendrograms
+obs_dend <- as.dendrogram(obs_hc)
+feat_dend <- as.dendrogram(feat_hc)
 
 # plot specifications
 
@@ -143,10 +169,12 @@ Heatmap(data,
         left_annotation = row_annot,
         show_row_names = show_row_names,
         show_column_names = show_column_names,
-        clustering_distance_rows = metric,
-        clustering_method_rows = cluster_method,
-        clustering_distance_columns = metric,
-        clustering_method_columns = cluster_method,
+        cluster_rows = as.dendrogram(obs_hc),
+        cluster_columns = as.dendrogram(feat_hc),
+#         clustering_distance_rows = metric,
+#         clustering_method_rows = cluster_method,
+#         clustering_distance_columns = metric,
+#         clustering_method_columns = cluster_method,
         row_dend_reorder = TRUE,
         column_dend_reorder = TRUE,
         use_raster = TRUE,

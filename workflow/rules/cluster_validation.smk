@@ -82,7 +82,7 @@ rule validation_external:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/sklearn.yaml"
+        "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","validation_external_{sample}.log"),
     params:
