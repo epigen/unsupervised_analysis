@@ -134,8 +134,7 @@ def get_external_validation_paths(wildcards):
 
 # get paths to determine internal cluster indices
 def get_internal_validation_paths(wildcards):
-    return {#'data': annot.loc[wildcards.sample,'data'],
-            'metadata': annot.loc[wildcards.sample,"metadata"],
+    return {'metadata': annot.loc[wildcards.sample,"metadata"],
             'clusterings': os.path.join(result_path,wildcards.sample, "metadata_clusterings.csv"),
             'pca': os.path.join(result_path,wildcards.sample,'PCA','PCA_{}_{}_data.csv'.format(config["pca"]["svd_solver"],config["pca"]["n_components"])),
             'pca_var': os.path.join(result_path,wildcards.sample,'PCA','PCA_{}_{}_var.csv'.format(config["pca"]["svd_solver"],config["pca"]["n_components"]))

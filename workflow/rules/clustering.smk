@@ -83,7 +83,6 @@ rule aggregate_all_clustering_results:
         # read each clustering result and add to data dict
         for filename in input:
             agg_clust.append(pd.read_csv(filename, header=0, index_col=0))
-
         
         # convert the dictionary to a DataFrame
         agg_clust_df = pd.concat(agg_clust, axis=1)

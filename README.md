@@ -3,7 +3,7 @@
 # Unsupervised Analysis Workflow
 A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) and visualizations of high-dimensional data.
 
-This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository. Please consider **starring** and sharing modules that are interesting or useful to you, this helps others to find and benefit from the effort and me to prioritize my efforts!
+This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository. Please consider **starring** and sharing modules that are interesting or useful to you, this helps others find and benefit from the effort and me to prioritize my efforts!
 
 **If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 
@@ -38,6 +38,7 @@ This project wouldn't be possible without the following software and their depen
 | clustree       | https://doi.org/10.1093/gigascience/giy083        |
 | ComplexHeatmap | https://doi.org/10.1093/bioinformatics/btw313     |
 | densMAP        | https://doi.org/10.1038/s41587-020-00801-7        |
+| fastcluster    | https://doi.org/10.18637/jss.v053.i09             |
 | ggally         | https://CRAN.R-project.org/package=GGally         |
 | ggplot2        | https://ggplot2.tidyverse.org/                    |
 | ggrepel        | https://CRAN.R-project.org/package=ggrepel        |
@@ -69,7 +70,7 @@ Uniform Manifold Approximation projection (UMAP) from umap-learn (ver) [ref] was
 (Optional) We used the density preserving regularization option, densMAP [ref], during the embedding step, with default parameters to account for varying local density of the data within its original high dimensional space.
 
 **Hierarchically Clustered Heatmap**
-Hierarchically clustered heatmaps of scaled data (z-score) were generated using the R package ComplexHeatmap (ver) [ref]. The distance metric [metric] and clustering method [clustering_method] were used to determine the hierarchical clustering of observations (rows) and features (columns), respectively. The heatmap was annotated with metadata [metadata_of_interest]. The values were colored by the top percentiles (0.01/0.99) of the data to avoid shifts in the coloring scheme caused by outliers.
+Hierarchically clustered heatmaps of scaled data (z-score) were generated using the Python package scipy's (ver) [ref] function pdist for distance matrix calculation (for observation and features), fastcluster's R implementation (ver) [ref] for hierarchical clustering and the R package ComplexHeatmap (ver) [ref] for visualization. (optional) To reduce computational cost the observations were downsampled to [heatmap:n_observations] and top [n_features] features selected by high variance. The distance metric [metric] and clustering method [clustering_method] were used to determine the hierarchical clustering of observations (rows) and features (columns), respectively. The heatmap was annotated with metadata [metadata_of_interest]. The values were colored by the top percentiles (0.01/0.99) of the data to avoid shifts in the coloring scheme caused by outliers.
 
 **Visualization**
 The R-packages ggplot2 (ver) [ref] and patchwork (ver) [ref] were used to generate all 2D visualizations colored by metadata [metadata], feature(s) [features_to_plot], and/or clustering results.
@@ -115,7 +116,12 @@ The workflow perfroms the following analyses on each dataset provided in the ann
   - diagnostics (.PNG): 2D embedding colored by PCA coordinates, vector quantization coordinates, approximated local dimension, neighborhood Jaccard index
   - connectivity (.PNG): graph/network-connectivity plot with edge-bundling (hammer algorithm variant)
 - Hierarchically Clustered Heatmap (.PNG)
-    - hierarchically clustered heatmaps of scaled data (z-score) with configured distance [metrics] and clustering methods ([hclust_methods]). All combinations are computed, and annotated with [metadata_of_interest].
+    - Hierarchically clustered heatmaps of scaled data (z-score) with configured distances ([metrics]) and clustering methods ([hclust_methods]).
+    - Distance matrices of observations and features are precomputed using scipy's dist function.
+    - Hierarchical clustering is performed by the R implementation of fastcluster.
+    - The observations can be randomly downsampled by proportion or absolute number ([n_observations]) to reduce computational cost.
+    - The number of features can be reduced to a proportion or an absolute number of the top variable features ([n_features]) to reduce computational cost.
+    - All combinations are computed, and annotated with [metadata_of_interest].
 - Visualization
   -  2D metadata and feature plots (.PNG) of the first 2 principal components and all 2D embeddings, respectively.
   -  interactive 2D and 3D visualizations as self contained HTML files of all projections/embeddings.
@@ -174,7 +180,7 @@ The workflow perfroms the following analyses on each dataset provided in the ann
 # Usage
 Here are some tips for the usage of this workflow:
 - Start with minimal parameter combinations and without UMAP diagnostics and connectivity plots (they are computational expensive and slow).
-- Heatmaps require **a lot** of memory, hence the memory allocation is solved dynamically based on retries. If a out-of-memory exception occurs the flag `--retries X` can be used to trigger automatic resubmission X time upon failure with X times the memory.
+- Heatmaps require **a lot** of memory, hence options to reduce computational cost are provided and the memory allocation is solved dynamically based on retries. If an out-of-memory exception occurs the flag `--retries X` can be used to trigger automatic resubmission X times upon failure with X times the memory.
 - Clustification performance scales with available cores, i.e., more cores faster internal parallelization of Random Forest training & testing.
 - Cluster indices are extremely compute intense and scale linearly with every additional clustering result and specified metadata (can be skipped).
 
@@ -185,12 +191,12 @@ Detailed specifications can be found here [./config/README.md](./config/README.m
 We provide a minimal example of the analysis of the [UCI ML hand-written digits datasets](https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits) imported from [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) in the [test folder](./test/):
 - config
     - configuration: config/config.yaml
-    - sample annotation: digits_unsupervised_analysis_annotation.csv
+    - sample annotation: test/config/digits_unsupervised_analysis_annotation.csv
 - data
     - dataset (1797 observations, 64 features): digits_data.csv
     - metadata (consisting of the ground truth label "target"): digits_labels.csv
 - results will be generated in the configured subfolder `./test/results/`
-- performance: on an HPC it took less than 5 minutes to complete a full run (with up to 32GB of memory per task)
+- performance: on an HPC it took less than 7 minutes to complete a full run (with up to 32GB of memory per task)
 
 # single-cell RNA sequencing (scRNA-seq) data analysis
 Unsupervised analyses, dimensionality reduction and cluster analysis, are corner stones of scRNA-seq data analyses.

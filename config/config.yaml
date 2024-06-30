@@ -13,6 +13,7 @@ project_name: digits
 
 ##### PCA #####
 # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+# especially relevant for large data
 pca:
     n_components: 0.9 # variance as float (0-1], number of components as int e.g., 50, or 'mle'
     svd_solver: 'auto' # options: ‘auto’, ‘full’, ‘covariance_eigh’, ‘arpack’, ‘randomized’
@@ -36,13 +37,13 @@ umap:
 ##### HEATMAP #####
 # information on the ComplexHeatmap parameters: https://jokergoo.github.io/ComplexHeatmap-reference/book/index.html
 # distance metrics: for rows and columns. all metrics that are supported by scipy.spatial.distance.pdist (https://docs.scipy.org/doc/scipy-1.14.0/reference/generated/scipy.spatial.distance.pdist.html)
-# clustering methods: methods for hierarchical clustering that are supported by stats::hclust() (https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust)
+# clustering methods: methods for hierarchical clustering that are supported by fastcluster's R implementation (https://danifold.net/fastcluster.html)
 # it is the most resource (memory) intensive method, leave empty [] if not required
 heatmap:
     metrics: ['correlation','cosine']
     hclust_methods: ['complete']
-    n_observations: 1000 # random sampled proportion float [0-1] or absolute number as integer
-    n_features: 0.5 # highly variable features percentate float [0-1] or absolute number as integer
+    n_observations: 1000 # random sampled proportion float (0-1] or absolute number as integer
+    n_features: 0.5 # highly variable features proportion float (0-1] or absolute number as integer
     
 ##### LEIDEN #####
 # Leiden clustering applied on UMAP KNN graphs specified by the respective parameters (metric, n_neighbors).
