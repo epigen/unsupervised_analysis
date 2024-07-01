@@ -32,14 +32,14 @@ if (samples_by_features == 0 and data_or_feature == "observations") or (samples_
 # retain only highly variable features
 if data_or_feature == "features":
     variances = data.var(axis=1)
-    if isinstance(n_features, float):
+    if isinstance(n_features, float) or n_features==1:
         n_features = int(math.floor(n_features * data.shape[0]))
     top_features = variances.nlargest(n_features).index
     data = data.loc[top_features,:]
 
 # downsample observations
 if data_or_feature == "observations":
-    if isinstance(n_observations, float):
+    if isinstance(n_observations, float) or n_observations==1:
         n_observations = int(math.floor(n_observations * data.shape[0]))
     data = data.sample(n=n_observations, random_state=42)
     
