@@ -161,9 +161,9 @@ rule all:
                                              sample=list(annot.index),
                                              index_type = ["external", "internal"] if config["sample_proportion"]>0 else ["external"],
                                             ) if len(cluster_methods)>0 else [],
-        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','umap_leiden','plotly','pymcdm']),
-        configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
-        annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
+        envs = expand(os.path.join(result_path,'envs','{env}.yaml'),env=['clusterCrit','clustree','ComplexHeatmap','ggplot','umap_leiden','plotly','pymcdm']),
+        configs = os.path.join(result_path,'configs','{}_config.yaml'.format(config["project_name"])),
+        annotations = os.path.join(result_path,'configs','{}_annot.csv'.format(config["project_name"])),
     resources:
         mem_mb=1000,
     threads: config.get("threads", 1)
