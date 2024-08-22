@@ -170,36 +170,41 @@ non_zero_cols <- unname(apply(data, 2, function(x) !all(x==0)))
 data <- data[,non_zero_cols]
 data_axes <- data_axes[non_zero_cols,,drop=FALSE]
 
-# options(repr.plot.width=10, repr.plot.height=10)
-n_dim <- min(10, ncol(data))
-
 # make pairs plot
-pairs_plot <- ggpairs(
-  data = data,
-  mapping = ggplot2::aes(color = metadata[[metadata_col]]),
-  columns = 1:n_dim,
-  title = paste0("PCA pairs plot colored by ",metadata_col),
-  upper = list(continuous = wrap("density", alpha = 0.5, size=0.25)),
-  lower = list(continuous = wrap("points", alpha = pairs_alpha, size = pairs_size)),
-  diag = list(continuous = wrap("densityDiag", alpha = 0.5, size=0.25)),
-  params = NULL,
-  xlab = NULL,
-  ylab = NULL,
-  axisLabels = c("show", "internal", "none"),
-  columnLabels = data_axes[1:n_dim,'label'],
-  labeller = "label_value",
-  switch = NULL,
-  showStrips = NULL,
-  legend = legend,
-  cardinality_threshold = 15,
-  progress = NULL,
-  proportions = NULL
-)+  
-theme(legend.position = "bottom") + 
-labs(fill = metadata_col)
+if(nrow(data)>0){
+    # options(repr.plot.width=10, repr.plot.height=10)
+    n_dim <- min(10, ncol(data))
+    
+    pairs_plot <- ggpairs(
+      data = data,
+      mapping = ggplot2::aes(color = metadata[[metadata_col]]),
+      columns = 1:n_dim,
+      title = paste0("PCA pairs plot colored by ",metadata_col),
+      upper = list(continuous = wrap("density", alpha = 0.5, size=0.25)),
+      lower = list(continuous = wrap("points", alpha = pairs_alpha, size = pairs_size)),
+      diag = list(continuous = wrap("densityDiag", alpha = 0.5, size=0.25)),
+      params = NULL,
+      xlab = NULL,
+      ylab = NULL,
+      axisLabels = c("show", "internal", "none"),
+      columnLabels = data_axes[1:n_dim,'label'],
+      labeller = "label_value",
+      switch = NULL,
+      showStrips = NULL,
+      legend = legend,
+      cardinality_threshold = 15,
+      progress = NULL,
+      proportions = NULL
+    )+  
+    theme(legend.position = "bottom") + 
+    labs(fill = metadata_col)
 
-if (is.numeric(metadata[[metadata_col]])){
-    pairs_plot <- pairs_plot + scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab")
+    if (is.numeric(metadata[[metadata_col]])){
+        pairs_plot <- pairs_plot + scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab")
+    }
+}else{
+    pairs_plot <- ggplot() + annotate("text", x = 0.5, y = 0.5, label = "No group with more than 2 members in the data.") + theme_void()
+    n_dim <- 5
 }
 
 # save pairs plot
