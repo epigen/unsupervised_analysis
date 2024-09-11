@@ -18,7 +18,6 @@ rule pca:
     log:
         os.path.join("logs","rules","PCA_{sample}_{parameters}.log"),
     params:
-        partition = config.get("partition"),
         samples_by_features = get_data_orientation,
     script:
         "../scripts/pca.py"
@@ -40,7 +39,6 @@ rule umap_graph:
     log:
         os.path.join("logs","rules","umap_{sample}_{metric}_{n_neighbors}.log"),
     params:
-        partition=config.get("partition"),
         samples_by_features = get_data_orientation,
         metric = lambda w: "{}".format(w.metric),
         n_neighbors = lambda w: "{}".format(w.n_neighbors),
@@ -64,7 +62,6 @@ rule umap_embed:
     log:
         os.path.join("logs","rules","umap_{sample}_{metric}_{n_neighbors}_{min_dist}_{n_components}.log"),
     params:
-        partition=config.get("partition"),
         samples_by_features = get_data_orientation,
         metric = lambda w: "{}".format(w.metric),
         n_neighbors = lambda w: "{}".format(w.n_neighbors),
@@ -90,7 +87,6 @@ rule densmap_embed:
     log:
         os.path.join("logs","rules","densmap_{sample}_{metric}_{n_neighbors}_{min_dist}_{n_components}.log"),
     params:
-        partition=config.get("partition"),
         samples_by_features = get_data_orientation,
         metric = lambda w: "{}".format(w.metric),
         n_neighbors = lambda w: "{}".format(w.n_neighbors),
@@ -115,7 +111,6 @@ rule distance_matrix:
     log:
         os.path.join("logs","rules","DistanceMatrix_{sample}_{metric}_{type}.log"),
     params:
-        partition = config.get("partition"),
         samples_by_features = get_data_orientation,
     script:
         "../scripts/distance_matrix.py"

@@ -12,7 +12,6 @@ rule leiden_cluster:
     log:
         os.path.join("logs","rules","leiden_{sample}_{metric}_{n_neighbors}_{partition_type}_{resolution}_clustering.log"),
     params:
-        partition=config.get("partition"),
         samples_by_features = get_data_orientation,
         metric = lambda w: "{}".format(w.metric),
         n_neighbors = lambda w: "{}".format(w.n_neighbors),
@@ -30,13 +29,12 @@ rule clustification:
         clustering = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','clustification','clustification_clusterings.csv'),
     resources:
         mem_mb=config.get("mem", "16000"),
-    threads: 8#config.get("threads", 1)
+    threads: 8 #config.get("threads", 1)
     conda:
         "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","clustification_{sample}_clusterings.log"),
     params:
-        partition=config.get("partition"),
         samples_by_features = get_data_orientation,
     script:
         "../scripts/clustification.py"
@@ -47,10 +45,10 @@ rule aggregate_clustering_results:
         get_clustering_paths,
     output:
         aggregated_clusterings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','{method}','{method}_clusterings.csv'),
+    resources:
+        mem_mb=config.get("mem", "16000"),
     log:
         os.path.join("logs","rules","aggregate_clustering_results_{sample}_{method}.log"),
-    params:
-        partition=config.get("partition"),
     run:
         # list to hold the individual clusterings
         agg_clust = []
@@ -72,10 +70,10 @@ rule aggregate_all_clustering_results:
         get_aggregated_clustering_paths,
     output:
         metadata_clusterings = os.path.join(config["result_path"],'unsupervised_analysis','{sample}','metadata_clusterings.csv'),
+    resources:
+        mem_mb=config.get("mem", "16000"),
     log:
         os.path.join("logs","rules","aggregate_all_clustering_results_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     run:
         # list to hold the data
         agg_clust = []

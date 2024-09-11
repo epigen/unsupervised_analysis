@@ -81,7 +81,7 @@ Interactive visualizations in self-contained HTML files of all 2D and 3D project
 **Leiden Clustering**
 We applied the Leiden algorithm (ver) [ref] to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors). The adjacency matrix of the KNN graph was converted to a weighted undirected graph using igraph (ver) [ref]. The Leiden algorithm was then applied to this graph, using the specified partition type [partition_types], resolution [resolutions], and number of iterations [n_iterations]. All clustering results were visualized as described above as 2D and interactive 2D and 3D plots for all available embedings/projections.
 
-**Clustification Approach**
+**Clustification Approach (beta)**
 We developed/employed an iterative clustering approach, termed Clustification, that merges clusters based on misclassification. The method was initialized with the clustering result that had the highest resolution (i.e., the most clusters). We then performed iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged. This involved a stratified 5-fold cross-validation and a Random Forest classifier with default parameters (e.g., 100 trees). The predicted labels were retained for each iteration. Clusters were merged based on a normalized confusion matrix built using the predicted labels. This matrix was made symmetric and upper triangular, resulting in a similarity graph, such that each edge weight ranges from 0 to 1, where 0 means that the classifier was able to distinguish all observations between the two respective clusters. The stopping criterion was set such that if the maximum edge weight was less than 2.5% (i.e., 0.025 – less than 5% of observations are misclassified between any two clusters), the process would stop and return the current cluster labels. Otherwise, the two clusters connected by the maximum edge weight were merged. This process was repeated until the stopping criterion was met.
 
 **Clustree Analysis & Visualization**
@@ -136,7 +136,7 @@ The workflow perfroms the following analyses on each dataset provided in the ann
     - Leiden algorithm
         - Applied to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors).
         - All algorithm specific parameters are supported: [partition_types], [resolutions], and [n_iterations].
-    - Clustification: an ML-based clustering approach that iteratively merges clusters based on misclassification
+    - Clustification: an ML-based clustering approach that iteratively merges clusters based on misclassification (beta)
         0. User: Specify a clustering method [method].
         1. Chose the clustering with the most clusters as starting point (i.e., overclustered).
         2. Iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged.

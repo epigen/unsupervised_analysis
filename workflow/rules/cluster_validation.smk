@@ -24,7 +24,6 @@ rule clustree_analysis:
     log:
         os.path.join("logs","rules","clustree_{sample}_{content}.log"),
     params:
-        partition=config.get("partition"),
         content = lambda w: "{}".format(w.content),
         count_filter = config["clustree"]["count_filter"],
         prop_filter = config["clustree"]["prop_filter"],
@@ -61,7 +60,6 @@ rule clustree_analysis_metadata:
     log:
         os.path.join("logs","rules","clustree_{sample}_{content}.log"),
     params:
-        partition=config.get("partition"),
         content = lambda w: "{}".format(w.content),
         count_filter = config["clustree"]["count_filter"],
         prop_filter = config["clustree"]["prop_filter"],
@@ -85,8 +83,6 @@ rule validation_external:
         "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","validation_external_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/validation_external.py"
         
@@ -104,7 +100,6 @@ rule validation_internal:
     log:
         os.path.join("logs","rules","validation_internal_{internal_index}_{sample}.log"),
     params:
-        partition=config.get("partition"),
         internal_index = lambda w: "{}".format(w.internal_index),
         sample_proportion = config["sample_proportion"],
         metadata_of_interest = config["metadata_of_interest"],
@@ -124,8 +119,6 @@ rule aggregate_rank_internal:
         "../envs/pymcdm.yaml"
     log:
         os.path.join("logs","rules","rank_internal_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/mcdm_topsis.py"
 
@@ -155,7 +148,5 @@ rule plot_indices:
         "../envs/ggplot.yaml"
     log:
         os.path.join("logs","rules","plot_{type}_indices_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/plot_indices.R"

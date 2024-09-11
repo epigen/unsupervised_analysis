@@ -14,7 +14,6 @@ rule prep_feature_plot:
     log:
         os.path.join("logs","rules","prep_feature_plot_{sample}.log"),
     params:
-        partition = config.get("partition"),
         samples_by_features = get_data_orientation,
         features_to_plot = config["features_to_plot"],
     script:
@@ -48,7 +47,6 @@ rule plot_dimred_features:
     params:
         size = config["scatterplot2d"]["size"],
         alpha = config["scatterplot2d"]["alpha"],
-        partition=config.get("partition"),
     script:
         "../scripts/plot_2d.R"
 
@@ -82,7 +80,6 @@ rule plot_dimred_metadata:
     params:
         size = config["scatterplot2d"]["size"],
         alpha = config["scatterplot2d"]["alpha"],
-        partition=config.get("partition"),
     script:
         "../scripts/plot_2d.R"
 
@@ -144,8 +141,6 @@ rule plot_pca_diagnostics:
         "../envs/ggplot.yaml"
     log:
         os.path.join("logs","rules","plot_{method}_diagnostics_{sample}_{parameters}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/plot_pca.R"
         
@@ -173,8 +168,6 @@ rule plot_umap_diagnostics:
         "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","plot_diagnostics_{sample}_{method}_{parameters}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/plot_umap_diagnostics.py"
         
@@ -202,8 +195,6 @@ rule plot_umap_connectivity:
         "../envs/umap_leiden.yaml"
     log:
         os.path.join("logs","rules","plot_connectivity_{sample}_{method}_{parameters}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/plot_umap_connectivity.py"
 
@@ -223,7 +214,6 @@ rule plot_dimred_interactive:
     log:
         os.path.join("logs","rules","plot_interactive_{sample}_{method}_{parameters}_{n_components}.log"),
     params:
-        partition=config.get("partition"),
         n_components = lambda w: "{}".format(w.n_components),
         size = config["scatterplot2d"]["size"],
         alpha = config["scatterplot2d"]["alpha"]
@@ -256,7 +246,6 @@ rule plot_heatmap:
     log:
         os.path.join("logs","rules","plot_heatmap_{sample}_{metric}_{method}.log"),
     params:
-        partition = config.get("partition"),
         samples_by_features = get_data_orientation,
     script:
         "../scripts/plot_heatmap.R"
@@ -290,7 +279,6 @@ rule plot_dimred_clustering:
     log:
         os.path.join("logs","rules","plot_clustering_{sample}_{method}_{parameters}_{n_components}.log"),
     params:
-        partition=config.get("partition"),
         size = config["scatterplot2d"]["size"],
         alpha = config["scatterplot2d"]["alpha"]
     script:

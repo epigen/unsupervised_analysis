@@ -5,7 +5,7 @@ import pandas as pd
 import yaml
 from snakemake.utils import min_version
 
-min_version("7.15.2")
+min_version("8.20.1")
 
 ##### module name #####
 module_name = "unsupervised_analysis"
@@ -169,8 +169,7 @@ rule all:
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","all.log"),
-    params:
-        partition=config.get("partition"),
+
 
         
 ##### load rules #####
