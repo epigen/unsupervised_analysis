@@ -1,3 +1,6 @@
+
+conda: "envs/global.yaml"
+
 ##### libraries #####
 import os
 import sys

@@ -51,7 +51,7 @@ This project wouldn't be possible without the following software and their depen
 | pymcdm         | https://doi.org/10.1016/j.softx.2023.101368       |
 | scikit-learn   | http://jmlr.org/papers/v12/pedregosa11a.html      |
 | scipy          |  https://doi.org/10.1038/s41592-019-0686-2        |
-| Snakemake      | https://doi.org/10.12688/f1000research.29032.2    |
+| Snakemake (v8.20.1)      | https://doi.org/10.12688/f1000research.29032.2    |
 | umap-learn     | https://doi.org/10.21105/joss.00861               |
 
 
