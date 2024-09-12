@@ -8,6 +8,7 @@ import pandas as pd
 import yaml
 from snakemake.utils import min_version
 
+##### set minimum Snakemake version #####
 min_version("8.20.1")
 
 ##### module name #####
