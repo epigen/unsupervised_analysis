@@ -3,7 +3,9 @@
 [![](https://tokei.rs/b1/github/epigen/unsupervised_analysis?category=code)]() 
 [![](https://tokei.rs/b1/github/epigen/unsupervised_analysis?category=files)]()
 [![GitHub license](https://img.shields.io/github/license/epigen/unsupervised_analysis)](https://github.com/epigen/unsupervised_analysis/blob/master/LICENSE)
+![GitHub Release](https://img.shields.io/github/v/release/epigen/unsupervised_analysis)
 [![Snakemake](https://img.shields.io/badge/Snakemake->=8-green)](https://snakemake.readthedocs.io/en/stable/)
+
 
 # Unsupervised Analysis Workflow
 A general purpose [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) on and visualizations of high-dimensional data.
