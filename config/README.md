@@ -9,4 +9,4 @@ You need one configuration file to configure the analyses and one annotation fil
     -  metadata: Path to the metadata as a comma-separated table (CSV) with the first column being the index/identifier of each observation/sample and every other column metadata for the respective observation (either numeric or categorical, not mixed). **No NaN or empty values allowed.**
     -  samples_by_features: Boolean indicator if the data matrix is observations/samples (rows) x features (columns): 0==no, 1==yes.
 
-Specify workflow-specific `resources` or command line arguments (CLI) in the workflow profile `workflow/profiles/default.config.yaml`, which supersedes global Snakemake profiles.
+Set workflow-specific `resources` or command line arguments (CLI) in the workflow profile `workflow/profiles/default.config.yaml`, which supersedes global Snakemake profiles.
