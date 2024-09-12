@@ -1,35 +1,29 @@
+[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
 [![DOI](https://zenodo.org/badge/475465311.svg)](https://zenodo.org/badge/latestdoi/475465311)
+[![](https://tokei.rs/b1/github/epigen/unsupervised_analysis?category=code)]() 
+[![](https://tokei.rs/b1/github/epigen/unsupervised_analysis?category=files)]()
+[![GitHub license](https://img.shields.io/github/license/epigen/unsupervised_analysis)](https://github.com/epigen/unsupervised_analysis/blob/master/LICENSE)
+[![Snakemake](https://img.shields.io/badge/Snakemake->=8-green)](https://snakemake.readthedocs.io/en/stable/)
 
 # Unsupervised Analysis Workflow
-A general purpose [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) and visualizations of high-dimensional data.
+A general purpose [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) on and visualizations of high-dimensional data.
 
-This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository. Please consider **starring** and sharing modules that are interesting or useful to you, this helps others find and benefit from the effort and me to prioritize my efforts!
+> [!NOTE]  
+> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+>
+> ⭐️ **Star and share modules you find valuable** 📤 — help others discover them, and guide our focus for future work!
 
-**If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
+> [!IMPORTANT]  
+> **If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 
 ![Workflow Rulegraph](./workflow/dags/rulegraph.svg)
 
-Table of contents
-----------------
-  * [Authors](#authors)
-  * [Software](#software)
-  * [Methods](#methods)
-  * [Features](#features)
-  * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Examples](#examples)
-  * [scRNA-seq Analysis](#single-cell-RNA-sequencing-(scRNA-seq)-data-analysis)
-  * [Links](#links)
-  * [Resources](#resources)
-  * [Publications](#publications)
-
-
-# Authors
+# 🖋️ Authors
 - [Stephan Reichl](https://github.com/sreichl)
 - [Raphael Bednarsky](https://github.com/bednarsky)
 - [Christoph Bock](https://github.com/chrbock)
 
-# Software
+# 💿 Software
 This project wouldn't be possible without the following software and their dependencies
 
 | Software       | Reference (DOI)                                   |
@@ -51,12 +45,12 @@ This project wouldn't be possible without the following software and their depen
 | pymcdm         | https://doi.org/10.1016/j.softx.2023.101368       |
 | scikit-learn   | http://jmlr.org/papers/v12/pedregosa11a.html      |
 | scipy          |  https://doi.org/10.1038/s41592-019-0686-2        |
-| Snakemake (v8.20.1)      | https://doi.org/10.12688/f1000research.29032.2    |
+| Snakemake      | https://doi.org/10.12688/f1000research.29032.2    |
 | umap-learn     | https://doi.org/10.21105/joss.00861               |
 
 
-# Methods
-This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (.yaml file) or post execution. Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g. [X].
+# 🔬 Methods
+This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (`workflow/envs/*.yaml file`) or post-execution in the result directory (`unsupervised_analysis/envs/*.yaml`). Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g. [X].
 
 The outlined analyses were performed using the programming languages R (ver) [ref] and Python (ver) [ref] unless stated otherwise. We applied both linear and non-linear unsupervised analysis methods for dimensionality reduction on normalized data for downstream analyses (e.g., clustering) and to visualize emerging patterns in lower dimensional embeddings.
 
@@ -79,13 +73,13 @@ Interactive visualizations in self-contained HTML files of all 2D and 3D project
 **Cluster Analysis**
 
 **Leiden Clustering**
-We applied the Leiden algorithm (ver) [ref] to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors). The adjacency matrix of the KNN graph was converted to a weighted undirected graph using igraph (ver) [ref]. The Leiden algorithm was then applied to this graph, using the specified partition type [partition_types], resolution [resolutions], and number of iterations [n_iterations]. All clustering results were visualized as described above as 2D and interactive 2D and 3D plots for all available embedings/projections.
+We applied the Leiden algorithm (ver) [ref] to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors). The adjacency matrix of the KNN graph was converted to a weighted undirected graph using igraph (ver) [ref]. The Leiden algorithm was then applied to this graph, using the specified partition type [partition_types], resolution [resolutions], and number of iterations [n_iterations]. All clustering results were visualized as described above as 2D and interactive 2D and 3D plots for all available embeddings/projections.
 
 **Clustification Approach (beta)**
 We developed/employed an iterative clustering approach, termed Clustification, that merges clusters based on misclassification. The method was initialized with the clustering result that had the highest resolution (i.e., the most clusters). We then performed iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged. This involved a stratified 5-fold cross-validation and a Random Forest classifier with default parameters (e.g., 100 trees). The predicted labels were retained for each iteration. Clusters were merged based on a normalized confusion matrix built using the predicted labels. This matrix was made symmetric and upper triangular, resulting in a similarity graph, such that each edge weight ranges from 0 to 1, where 0 means that the classifier was able to distinguish all observations between the two respective clusters. The stopping criterion was set such that if the maximum edge weight was less than 2.5% (i.e., 0.025 – less than 5% of observations are misclassified between any two clusters), the process would stop and return the current cluster labels. Otherwise, the two clusters connected by the maximum edge weight were merged. This process was repeated until the stopping criterion was met.
 
 **Clustree Analysis & Visualization**
-We performed cluster analysis and visualization using the Clustree package (ver) [ref] with the parameters [count_filter], [prop_filter], and [layout]. The default analysis produced a standard Clustree visualization, ordered by the number of clusters and annotated accordingly. For the custom analysis, we extended the default behaviour by adding [metadata_of_interest] as additional "clusterings". Metadata and features, specified in the configuration, were highlighted on top of the clusterings using aggregation functions. For numerical data, we used the [numerical_aggregation_option] function , and for categorical data, we used the [categorical_label_option] function.
+We performed cluster analysis and visualization using the Clustree package (ver) [ref] with the parameters [count_filter], [prop_filter], and [layout]. The default analysis produced a standard Clustree visualization, ordered by the number of clusters and annotated accordingly. For the custom analysis, we extended the default behavior by adding [metadata_of_interest] as additional "clusterings". Metadata and features, specified in the configuration, were highlighted on top of the clusterings using aggregation functions. For numerical data, we used the [numerical_aggregation_option] function, and for categorical data, we used the [categorical_label_option] function.
 
 **Cluster Validation - External Indices**
 We validated/analyzed the clustering results by comparing them with all categorical metadata using external cluster indices. The complementary indices used were Adjusted Mutual Information (AMI) [ref], Adjusted Rand Index (ARI) [ref], Fowlkes-Mallows Index (FMI) [ref], Homogeneity, Completeness, and V-Measure [ref] from scikit-learn (ver) [ref]. The indices were calculated for each clustering result and each categorical metadata, and visualized using hierarchically clustered heatmaps.
@@ -96,7 +90,7 @@ We performed internal cluster validation using six complementary indices: Silhou
 **The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [10.5281/zenodo.8405360](https://doi.org/10.5281/zenodo.8405360).**
 
 
-# Features
+# 🚀 Features
 The workflow perfroms the following analyses on each dataset provided in the annotation file. A result folder "unsupervised_analysis" is generated containing a folder for each dataset.
 
 ## Dimensionality Reduction
@@ -165,7 +159,7 @@ The workflow perfroms the following analyses on each dataset provided in the ann
         - 6 complementary indices are used
             - 5 from the package [clusterCrit](https://rdrr.io/cran/clusterCrit/man/intCriteria.html): Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score.
             - 1 weighted Bayesian Information Criterion (BIC) approach, previously described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488) 
-        - Due to the comutational cost PCA results are used as input and a [sample_proportion] can be configured.
+        - Due to the computational cost PCA results are used as input and a [sample_proportion] can be configured.
         - Caveat: internal cluster indices are linear i.e., using Euclidean distance metrics.
     - Multiple-criteria decision-making (MCDM) using TOPSIS for ranking clustering results
         - The MCDM method TOPSIS is applied to the internal cluster indices to rank all clustering results (and [metadata_of_interest]) from best to worst.
@@ -177,17 +171,17 @@ The workflow perfroms the following analyses on each dataset provided in the ann
     - internal cluster indices as one heatmap with clusterings (and [metadata_of_interest]) sorted by TOPSIS ranking from top to bottom and split cluster indices split by type (cost/benefit functions to be minimized/maximized).
 
 
-# Usage
+# 🛠️ Usage
 Here are some tips for the usage of this workflow:
 - Start with minimal parameter combinations and without UMAP diagnostics and connectivity plots (they are computational expensive and slow).
 - Heatmaps require **a lot** of memory, hence options to reduce computational cost are provided and the memory allocation is solved dynamically based on retries. If an out-of-memory exception occurs the flag `--retries X` can be used to trigger automatic resubmission X times upon failure with X times the memory.
 - Clustification performance scales with available cores, i.e., more cores faster internal parallelization of Random Forest training & testing.
-- Cluster indices are extremely compute intense and scale linearly with every additional clustering result and specified metadata (can be skipped).
+- Cluster indices are extremely compute-intense and scale linearly with every additional clustering result and specified metadata (can be skipped).
 
-# Configuration
+# ⚙️ Configuration
 Detailed specifications can be found here [./config/README.md](./config/README.md)
 
-# Examples
+# 📖 Examples
 We provide a minimal example of the analysis of the [UCI ML hand-written digits datasets](https://archive.ics.uci.edu/ml/datasets/Optical+Recognition+of+Handwritten+Digits) imported from [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html) in the [test folder](./test/):
 - config
     - configuration: config/config.yaml
@@ -198,8 +192,8 @@ We provide a minimal example of the analysis of the [UCI ML hand-written digits 
 - results will be generated in the configured subfolder `./test/results/`
 - performance: on an HPC it took less than 7 minutes to complete a full run (with up to 32GB of memory per task)
 
-# single-cell RNA sequencing (scRNA-seq) data analysis
-Unsupervised analyses, dimensionality reduction and cluster analysis, are corner stones of scRNA-seq data analyses.
+# 🧬 single-cell RNA sequencing (scRNA-seq) data analysis
+Unsupervised analyses, dimensionality reduction, and cluster analysis are cornerstones of scRNA-seq data analyses.
 A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory and 8 cores for clustification).
 Below are configurations of the two most commonly used frameworks, [scanpy](https://scanpy.readthedocs.io/en/stable/index.html) (Python) and [Seurat](https://satijalab.org/seurat/) (R), and the original package's defaults as comparison and to facilitate reproducibility:
 
@@ -225,7 +219,7 @@ Leiden algorithm for clustering
 - [leidenalg](https://leidenalg.readthedocs.io/en/stable/reference.html)
     - no defaults
 - [scanpy](https://scanpy.readthedocs.io/en/stable/generated/scanpy.tl.leiden.html)
-    - input: batch balanced UMAP KNN graph
+    - input: batch-balanced UMAP KNN graph
     - partition type: RBConfigurationVertexPartition
     - resolution: 1
 - [Seurat](https://github.com/satijalab/seurat/blob/763259d05991d40721dee99c9919ec6d4491d15e/R/clustering.R#L344)
@@ -234,21 +228,26 @@ Leiden algorithm for clustering
     - resolution: 0.8
   
 
-# Links
+# 🔗 Links
 - [GitHub Repository](https://github.com/epigen/unsupervised_analysis/)
 - [GitHub Page](https://epigen.github.io/unsupervised_analysis/)
 - [Zenodo Repository](https://doi.org/10.5281/zenodo.8405360)
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/unsupervised_analysis)
 
-# Resources
-- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules
-  - for upstream processing:
+# 📚 Resources
+- Recommended compatible [MR.PARETO Modules](https://github.com/epigen/mr.pareto/#-modules) for upstream analyses:
     - [ATAC-seq Processing](https://github.com/epigen/atacseq_pipeline) to quantify  chromatin accessibility.
-    - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing and preparing single cell data as input.
-    - [Split, Filter, Normalize and Integrate Sequencing Data](https://github.com/epigen/spilterlize_integrate) process and preapre sequencing data as input.
-    - [Perturbation Analysis using Mixscape from Seurat](https://github.com/epigen/mixscape_seurat) to identify perturbed cells from pooled (multimodal) CRISPR screens with sc/snRNA-seq read-out (scCRISPR-seq) as input.
+    - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing (multimodal) single-cell transcriptome data.
+    - [<ins>Sp</ins>lit, F<ins>ilter</ins>, Norma<ins>lize</ins> and <ins>Integrate</ins> Sequencing Data](https://github.com/epigen/spilterlize_integrate/) after count quantification.
+    - [Differential Analysis with limma](https://github.com/epigen/dea_limma) to identify and visualize statistically significantly different features (e.g., genes or genomic regions) between sample groups.
+    - [Perturbation Analysis using Mixscape from Seurat](https://github.com/epigen/mixscape_seurat) to identify perturbed cells from pooled (multimodal) CRISPR screens with sc/snRNA-seq read-out (scCRISPR-seq).
 - [Reichl, S. (2018). Mathematical methods in single cell RNA sequencing analysis with an emphasis on the validation of clustering results [Diploma Thesis, Technische Universität Wien]](https://doi.org/10.34726/hss.2018.49662)
 
-# Publications
+# 📑 Publications
 The following publications successfully used this module for their analyses.
+- [FirstAuthors et al. (202X) Journal Name - Paper Title.](https://doi.org/10.XXX/XXXX)
 - ...
+
+# ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=epigen/unsupervised_analysis&type=Date)](https://star-history.com/#epigen/unsupervised_analysis&Date)
