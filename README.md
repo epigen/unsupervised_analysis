@@ -1,4 +1,4 @@
-[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
+[![MrBiomics](https://img.shields.io/badge/MrBiomics-red)](https://github.com/epigen/MrBiomics/)
 [![DOI](https://zenodo.org/badge/475465311.svg)](https://zenodo.org/badge/latestdoi/475465311)
 [![](https://tokei.rs/b1/github/epigen/unsupervised_analysis?category=code)]() 
 [![](https://tokei.rs/b1/github/epigen/unsupervised_analysis?category=files)]()
@@ -11,7 +11,7 @@
 A general purpose [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow to perform unsupervised analyses (dimensionality reduction and cluster analysis) on and visualizations of high-dimensional data.
 
 > [!NOTE]  
-> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+> This workflow adheres to the module specifications of [MrBiomics](https://github.com/epigen/MrBiomics), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
 >
 > ⭐️ **Star and share modules you find valuable** 📤 — help others discover them, and guide our focus for future work!
 
@@ -237,7 +237,7 @@ Leiden algorithm for clustering
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/unsupervised_analysis)
 
 # 📚 Resources
-- Recommended compatible [MR.PARETO Modules](https://github.com/epigen/mr.pareto/#-modules) for upstream analyses:
+- Recommended compatible [MrBiomics Modules](https://github.com/epigen/MrBiomics/#-modules) for upstream analyses:
     - [ATAC-seq Processing](https://github.com/epigen/atacseq_pipeline) to quantify  chromatin accessibility.
     - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing (multimodal) single-cell transcriptome data.
     - [<ins>Sp</ins>lit, F<ins>ilter</ins>, Norma<ins>lize</ins> and <ins>Integrate</ins> Sequencing Data](https://github.com/epigen/spilterlize_integrate/) after count quantification.
