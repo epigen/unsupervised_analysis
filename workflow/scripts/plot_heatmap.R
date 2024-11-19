@@ -116,6 +116,10 @@ feat_dend <- as.dendrogram(feat_hc)
 limit <- ceiling(max(abs(quantile(data, c(0.01, 0.99)))))
 col_fun <- colorRamp2(c(-limit, 0, limit), c("blue", "white", "red"))
 
+randomColor <- function() {
+  paste0("#", paste0(sample(c(0:9, letters[1:6]), size = 6, replace = TRUE), collapse = ""))
+}
+
 # make color mapping
 if (is.numeric(metadata[[metadata_col]])){
     #check if divergent or sequential?
@@ -124,7 +128,14 @@ if (is.numeric(metadata[[metadata_col]])){
 }else{
     n_cat <- length(unique(metadata[[metadata_col]]))
     qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-    colors <- sample(unique(unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))),n_cat)
+    all_brewer_colors <- unique(unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals))))
+    if (n_cat <= length(all_brewer_colors)){
+        # get nice colors
+        colors <- sample(all_brewer_colors, n_cat)
+    }else{
+        # too many groups, get random colors
+        colors <- replicate(n_cat, randomColor())
+    }
     names(colors) <- unique(metadata[[metadata_col]])
     colors_list <- list()
     colors_list[[metadata_col]] <- colors# put here the mapped colors
