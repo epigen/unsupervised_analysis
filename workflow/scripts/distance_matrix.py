@@ -41,7 +41,8 @@ if data_or_feature == "features":
 if data_or_feature == "observations":
     if isinstance(n_observations, float) or n_observations==1:
         n_observations = int(math.floor(n_observations * data.shape[0]))
-    data = data.sample(n=n_observations, random_state=42)
+    if n_observations < data.shape[0]:
+        data = data.sample(n=n_observations, random_state=42)
     
 # Convert DataFrame to NumPy array
 # data_np = data.to_numpy()
