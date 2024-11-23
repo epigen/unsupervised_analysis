@@ -7,6 +7,7 @@ import os
 import sys
 import pandas as pd
 import yaml
+import re
 from snakemake.utils import min_version
 
 ##### set minimum Snakemake version #####
@@ -23,6 +24,9 @@ configfile: os.path.join("config", "config.yaml")
 
 # load annotations
 annot = pd.read_csv(config['annotation'], index_col='name')
+# make sure the index does not contain any special characters, otherwise weird downstream errors
+pattern = re.compile(r'[^a-zA-Z0-9_]')
+assert all([pattern.match(name) is None for name in annot.index]), "Sample names should not contain special characters"
 
 result_path = os.path.join(config["result_path"],module_name)
 
