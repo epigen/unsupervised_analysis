@@ -179,6 +179,7 @@ Here are some tips for the usage of this workflow:
 - Heatmaps require **a lot** of memory, hence options to reduce computational cost are provided and the memory allocation is solved dynamically based on retries. If an out-of-memory exception occurs the flag `--retries X` can be used to trigger automatic resubmission X times upon failure with X times the memory.
 - Clustification performance scales with available cores, i.e., more cores faster internal parallelization of Random Forest training & testing.
 - Cluster indices are extremely compute-intense and scale linearly with every additional clustering result and specified metadata (can be skipped).
+- Usage as a module and a selection of the results can be found on the [MrBiomics Wiki on "Module Usage in Projects".](https://github.com/epigen/MrBiomics/wiki/Module-Usage-in-Projects)
 
 # ⚙️ Configuration
 Detailed specifications can be found here [./config/README.md](./config/README.md)
@@ -193,6 +194,7 @@ We provide a minimal example of the analysis of the [UCI ML hand-written digits 
     - metadata (consisting of the ground truth label "target"): digits_labels.csv
 - results will be generated in the configured subfolder `./test/results/`
 - performance: on an HPC it took less than 7 minutes to complete a full run (with up to 32GB of memory per task)
+- a subset of the results can 
 
 # 🧬 single-cell RNA sequencing (scRNA-seq) data analysis
 Unsupervised analyses, dimensionality reduction, and cluster analysis are cornerstones of scRNA-seq data analyses.
