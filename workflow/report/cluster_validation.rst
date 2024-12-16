@@ -1,0 +1,1 @@
+Hierarchically clustered heatmap of {{snakemake.wildcards["type"]}} cluster indices for analysis {{snakemake.wildcards["sample"]}}.
