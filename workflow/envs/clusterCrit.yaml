@@ -1,6 +1,6 @@
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - r-clustercrit=1.2.8
   - r-data.table=1.15.4

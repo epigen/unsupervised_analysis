@@ -2,7 +2,7 @@ channels:
   - conda-forge
   - plotly
   - anaconda
-  - defaults
+  - nodefaults
 dependencies:
   - plotly=5.10
   - plotly_express=0.4.1

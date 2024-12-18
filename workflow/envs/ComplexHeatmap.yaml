@@ -2,7 +2,7 @@ channels:
   - conda-forge
   - bioconda
   - r
-  - defaults
+  - nodefaults
 dependencies:
   - bioconductor-complexheatmap=2.10.0
   - r-rcolorbrewer=1.1_3
