@@ -92,6 +92,7 @@ metadata_of_interest: ["target"]
 coord_fixed: 0
 
 # 2D/3D visualization with ggplot2 and plotly
+# for more than 200 datapoints it is recommended to reduce size to 0.1
 scatterplot2d:
     size: 1
     alpha: 1
