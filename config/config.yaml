@@ -41,7 +41,7 @@ umap:
 heatmap:
     metrics: ['correlation','cosine']
     hclust_methods: ['complete']
-    n_observations: 1000 # random sampled proportion float (0-1] or absolute number as integer
+    n_observations: 1 # random sampled proportion float (0-1] or absolute number as integer
     n_features: 0.5 # highly variable features proportion float (0-1] or absolute number as integer
     
 ##### LEIDEN #####
