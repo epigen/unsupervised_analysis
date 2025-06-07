@@ -95,13 +95,22 @@ for (col in sort(colnames(metadata))){
         tmp_plot <- ggplot(tmp_data, aes_string(x=colnames(tmp_data)[1], y=colnames(tmp_data)[2])) +
         geom_point(aes_string(color=col), size=size, stroke=0, alpha=alpha, shape=shape) + 
         {if(coord_fixed_flag) coord_fixed()} +
-        scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab") +
         xlab(axes[1]) +    
         ylab(axes[2]) +
         ggtitle(col) +
         theme_linedraw() + 
         theme(plot.title = element_text(size = 10), legend.title = element_blank())
         
+        # if the data is ranging from negative to positive values, use a diverging color scale
+        if (min(tmp_data[[col]], na.rm = TRUE) < 0 & max(tmp_data[[col]], na.rm = TRUE) > 0){
+            tmp_plot <- tmp_plot +
+            scale_color_gradient2(midpoint=0, low="royalblue4", mid="grey80", high="firebrick2", space ="Lab")
+        }else{
+            # otherwise use a sequential color scale (mostly because then fixing the midpoint to 0 shifts the scale so
+            # that if you have a range from e.g., 12-14, the values only range in the high red part of the scale)
+            tmp_plot <- tmp_plot +
+            scale_color_viridis_c(option = "magma", direction = -1)
+        }
     }
     
     # save plot
