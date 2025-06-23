@@ -194,9 +194,16 @@ We provide a minimal example of the analysis of the [UCI ML hand-written digits 
     - metadata (consisting of the ground truth label "target"): digits_labels.csv
 - results will be generated in the configured subfolder `./test/results/`
 - performance: on an HPC it took less than 7 minutes to complete a full run (with up to 32GB of memory per task)
-- a subset of the results can 
 
-# 🧬 single-cell RNA sequencing (scRNA-seq) data analysis
+## 🧬 Bioinformatics examples
+Explore detailed bioinformatics use cases showcasing module usage in our comprehensive end-to-end [MrBiomics Recipes](https://github.com/epigen/MrBiomics?tab=readme-ov-file#-recipes), including data, configuration, annotation and results:
+- [ATAC-seq Analysis Recipe](https://github.com/epigen/MrBiomics/wiki/ATAC%E2%80%90seq-Analysis-Recipe)
+- [RNA-seq Analysis Recipe](https://github.com/epigen/MrBiomics/wiki/RNA%E2%80%90seq-Analysis-Recipe)
+- [Integrative Analysis Recipe](https://github.com/epigen/MrBiomics/wiki/Integrative-Analysis-Recipe)
+- [scRNA-seq Analysis Recipe](https://github.com/epigen/MrBiomics/wiki/scRNA%E2%80%90seq-Analysis-Recipe)
+- [scCRISPR-seq Analysis Recipe](https://github.com/epigen/MrBiomics/wiki/scCRISPR%E2%80%90seq-Analysis-Recipe)
+
+# 🧬 Single-cell RNA sequencing (scRNA-seq) data analysis
 Unsupervised analyses, dimensionality reduction, and cluster analysis are cornerstones of scRNA-seq data analyses.
 A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory and 8 cores for clustification).
 Below are configurations of the two most commonly used frameworks, [scanpy](https://scanpy.readthedocs.io/en/stable/index.html) (Python) and [Seurat](https://satijalab.org/seurat/) (R), and the original package's defaults as comparison and to facilitate reproducibility:
