@@ -5,6 +5,7 @@ import os
 import pickle
 import numpy as np
 # Leiden algorithm
+import umap
 import leidenalg as la
 from igraph import Graph
 from scipy.sparse import csr_matrix
