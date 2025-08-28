@@ -60,3 +60,4 @@ data
 .test/report.html
 
 snakejob_conductor.sh
+settings.json
