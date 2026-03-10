@@ -38,7 +38,7 @@ rule plot_dimred_features:
                       }
                      ),
     resources:
-        mem_mb=config.get("mem", "32000"),
+        mem_mb=config.get("mem", 32000),
     threads: config.get("threads", 1)
     conda:
         "../envs/ggplot.yaml"
@@ -71,7 +71,7 @@ rule plot_dimred_metadata:
                       }
                      ),
     resources:
-        mem_mb=config.get("mem", "32000"),
+        mem_mb=config.get("mem", 32000),
     threads: config.get("threads", 1)
     conda:
         "../envs/ggplot.yaml"
@@ -162,7 +162,7 @@ rule plot_umap_diagnostics:
                                   "content": "diagnostics",
                       }),
     resources:
-        mem_mb=config.get("mem", "32000"),
+        mem_mb=config.get("mem", 32000),
     threads: config.get("threads", 1)
     conda:
         "../envs/umap_leiden.yaml"
@@ -272,7 +272,7 @@ rule plot_dimred_clustering:
                       }
                      ),
     resources:
-        mem_mb=config.get("mem", "32000"),
+        mem_mb=config.get("mem", 32000),
     threads: config.get("threads", 1)
     conda:
         "../envs/ggplot.yaml"

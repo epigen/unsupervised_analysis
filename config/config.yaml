@@ -2,7 +2,7 @@
 
 ##### RESOURCES #####
 # memory in MB
-mem: '32000'
+mem: 32000
 threads: 2
 
 ##### GENERAL #####
