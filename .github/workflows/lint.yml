@@ -42,4 +42,4 @@ jobs:
           packages: styler
 
       - name: Check R style
-        run: Rscript -e 'changed <- styler::style_dir(".", dry = "on"); if (length(changed) > 0) quit(status = 1)'
+        run: Rscript -e 'changed <- styler::style_dir(".", dry = "on"); if (any(changed$changed)) quit(status = 1)'
