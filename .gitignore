@@ -63,3 +63,4 @@ snakejob_conductor.sh
 settings.json
 
 !.github/
+!.prettierrc.yml
