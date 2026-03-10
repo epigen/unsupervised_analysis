@@ -2,10 +2,8 @@
 
 #### libraries
 # general
-import os
 import pickle
-import pandas as pd
-import matplotlib.pyplot as plt
+
 # dimensionality reduction
 import umap
 import umap.plot
@@ -19,10 +17,12 @@ object_path = snakemake.input["umap_object"]
 plot_connectivity_path = snakemake.output["connectivity_plot"]
 
 ### load data
-with open(object_path, 'rb') as f:
+with open(object_path, "rb") as f:
     umap_obj = pickle.load(f)
-    
+
 ### generate & save UMAP connectivity plot
 
 # umap.plot.connectivity(umap_obj, show_points=True)
-umap.plot.connectivity(umap_obj, edge_bundling='hammer').figure.savefig(plot_connectivity_path) 
+umap.plot.connectivity(umap_obj, edge_bundling="hammer").figure.savefig(
+    plot_connectivity_path
+)

@@ -16,5 +16,5 @@ dependencies:
   - dask=2024.2.1
   - scikit-image=0.24.0
   - pip:
-    - umap-learn==0.5.6
-    - umap-learn[plot]
+      - umap-learn==0.5.6
+      - umap-learn[plot]

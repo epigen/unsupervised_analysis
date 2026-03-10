@@ -5,7 +5,6 @@ import os
 import numpy as np
 import pandas as pd
 from pymcdm.methods import TOPSIS
-from pymcdm.helpers import rrankdata
 
 #### configurations
 
@@ -28,7 +27,7 @@ indices = indices.dropna()
 # perform TOPSIS
 
 # give all scores equal weights as they are supposed to be complementary
-weights = np.full(indices.shape[1], 1.0/indices.shape[1])
+weights = np.full(indices.shape[1], 1.0 / indices.shape[1])
 # set 1 for benefit (max) and -1 for cost (min) functions (hard coded for internal indices in order)
 types = np.array([1, 1, 1, -1, -1, -1])
 # create object with defaults
