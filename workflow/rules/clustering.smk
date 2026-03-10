@@ -86,7 +86,7 @@ rule aggregate_clustering_results:
             )  # .squeeze("columns")
             agg_clust.append(clust_tmp)
 
-        # convert list to dataframe
+            # convert list to dataframe
         agg_clust_df = pd.concat(agg_clust, axis=1)
 
         # Write the DataFrame to a CSV file
@@ -116,7 +116,7 @@ rule aggregate_all_clustering_results:
         for filename in input:
             agg_clust.append(pd.read_csv(filename, header=0, index_col=0))
 
-        # convert the dictionary to a DataFrame
+            # convert the dictionary to a DataFrame
         agg_clust_df = pd.concat(agg_clust, axis=1)
 
         # Write the DataFrame to a CSV file
