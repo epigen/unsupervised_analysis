@@ -1,0 +1,27 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+description: Schema for each row in the workflow annotation CSV file.
+type: object
+additionalProperties: false
+properties:
+  name:
+    type: string
+    minLength: 1
+    pattern: "^[A-Za-z0-9_]+$"
+    description: Unique dataset identifier used as the sample name in the workflow.
+  data:
+    type: string
+    minLength: 1
+    description: Path to the input data CSV file.
+  metadata:
+    type: string
+    minLength: 1
+    description: Path to the metadata CSV file.
+  samples_by_features:
+    type: integer
+    enum: [0, 1]
+    description: Whether rows are samples and columns are features.
+required:
+  - name
+  - data
+  - metadata
+  - samples_by_features

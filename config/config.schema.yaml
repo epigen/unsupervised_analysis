@@ -1,0 +1,260 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+type: object
+description: Configuration schema for the unsupervised_analysis workflow.
+additionalProperties: false
+properties:
+  mem:
+    type: integer
+    minimum: 1
+    default: 32000
+    description: Memory limit in MB used by workflow rules.
+  threads:
+    type: integer
+    minimum: 1
+    default: 2
+    description: Default thread count used by workflow rules.
+  annotation:
+    type: string
+    minLength: 1
+    description: Path to the sample annotation CSV file.
+  result_path:
+    type: string
+    minLength: 1
+    description: Base output directory for workflow results.
+  project_name:
+    type: string
+    minLength: 1
+    description: Short project identifier used in reports and exported config copies.
+  pca:
+    type: object
+    additionalProperties: false
+    properties:
+      n_components:
+        anyOf:
+          - type: integer
+            minimum: 1
+          - type: number
+            exclusiveMinimum: 0
+            maximum: 1
+          - const: "mle"
+        description: Number of components, explained variance fraction, or "mle".
+      svd_solver:
+        type: string
+        enum:
+          - auto
+          - full
+          - covariance_eigh
+          - arpack
+          - randomized
+    required:
+      - n_components
+      - svd_solver
+  umap:
+    type: object
+    additionalProperties: false
+    properties:
+      metrics:
+        type: array
+        items:
+          type: string
+          minLength: 1
+        minItems: 1
+      n_neighbors:
+        type: array
+        items:
+          type: integer
+          minimum: 2
+        minItems: 1
+      min_dist:
+        type: array
+        items:
+          type: number
+          minimum: 0
+        minItems: 1
+      n_components:
+        type: array
+        items:
+          type: integer
+          minimum: 2
+        minItems: 1
+      densmap:
+        type: integer
+        enum: [0, 1]
+      connectivity:
+        type: integer
+        enum: [0, 1]
+      diagnostics:
+        type: integer
+        enum: [0, 1]
+    required:
+      - metrics
+      - n_neighbors
+      - min_dist
+      - n_components
+      - densmap
+      - connectivity
+      - diagnostics
+  heatmap:
+    type: object
+    additionalProperties: false
+    properties:
+      metrics:
+        type: array
+        items:
+          type: string
+          minLength: 1
+      hclust_methods:
+        type: array
+        items:
+          type: string
+          minLength: 1
+      n_observations:
+        anyOf:
+          - type: integer
+            minimum: 1
+          - type: number
+            exclusiveMinimum: 0
+            maximum: 1
+      n_features:
+        anyOf:
+          - type: integer
+            minimum: 1
+          - type: number
+            exclusiveMinimum: 0
+            maximum: 1
+    required:
+      - metrics
+      - hclust_methods
+      - n_observations
+      - n_features
+  leiden:
+    type: object
+    additionalProperties: false
+    properties:
+      metrics:
+        type: array
+        items:
+          type: string
+          minLength: 1
+      n_neighbors:
+        type: array
+        items:
+          type: integer
+          minimum: 2
+      partition_types:
+        type: array
+        items:
+          type: string
+          minLength: 1
+        minItems: 1
+      resolutions:
+        type: array
+        items:
+          type: number
+          exclusiveMinimum: 0
+        minItems: 1
+      n_iterations:
+        type: integer
+        minimum: -1
+        not:
+          const: 0
+    required:
+      - metrics
+      - n_neighbors
+      - partition_types
+      - resolutions
+      - n_iterations
+  clustification:
+    type: object
+    additionalProperties: false
+    properties:
+      method:
+        type: string
+        enum:
+          - ""
+          - Leiden
+    required:
+      - method
+  clustree:
+    type: object
+    additionalProperties: false
+    properties:
+      count_filter:
+        type: integer
+        minimum: 0
+      prop_filter:
+        type: number
+        minimum: 0
+        maximum: 1
+      layout:
+        type: string
+        enum:
+          - tree
+          - sugiyama
+      categorical_label_option:
+        type: string
+        enum:
+          - pure
+          - majority
+      numerical_aggregation_option:
+        type: string
+        enum:
+          - mean
+          - median
+          - max
+          - min
+    required:
+      - count_filter
+      - prop_filter
+      - layout
+      - categorical_label_option
+      - numerical_aggregation_option
+  sample_proportion:
+    type: number
+    minimum: 0
+    maximum: 1
+    description: Set to 0 to skip internal cluster validation.
+  metadata_of_interest:
+    type: array
+    items:
+      type: string
+      minLength: 1
+    default: []
+  coord_fixed:
+    type: integer
+    enum: [0, 1]
+  scatterplot2d:
+    type: object
+    additionalProperties: false
+    properties:
+      size:
+        type: number
+        exclusiveMinimum: 0
+      alpha:
+        type: number
+        minimum: 0
+        maximum: 1
+    required:
+      - size
+      - alpha
+  features_to_plot:
+    type: array
+    items:
+      type: string
+      minLength: 1
+    default: []
+required:
+  - annotation
+  - result_path
+  - project_name
+  - pca
+  - umap
+  - heatmap
+  - leiden
+  - clustification
+  - clustree
+  - sample_proportion
+  - metadata_of_interest
+  - coord_fixed
+  - scatterplot2d
+  - features_to_plot
