@@ -163,19 +163,6 @@ def get_heatmap_paths(wildcards):
 ########## CLUSTERING ##########
 
 
-# get paths for clustification
-def get_clustification_paths(wildcards):
-    return [
-        annot.loc[wildcards.sample, "data"],
-        os.path.join(
-            result_path,
-            wildcards.sample,
-            "{}".format(config["clustification"]["method"]),
-            "{}_clusterings.csv".format(config["clustification"]["method"]),
-        ),
-    ]
-
-
 # get all clustering results of one method to be aggregated into {method}/{method}_clusterings.csv
 def get_clustering_paths(wildcards):
     path_list = [annot.loc[wildcards.sample, "metadata"]]

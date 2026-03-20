@@ -79,9 +79,6 @@ Interactive visualizations in self-contained HTML files of all 2D and 3D project
 **Leiden Clustering**
 We applied the Leiden algorithm (ver) [ref] to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors). The adjacency matrix of the KNN graph was converted to a weighted undirected graph using igraph (ver) [ref]. The Leiden algorithm was then applied to this graph, using the specified partition type [partition_types], resolution [resolutions], and number of iterations [n_iterations]. All clustering results were visualized as described above as 2D and interactive 2D and 3D plots for all available embeddings/projections.
 
-**Clustification Approach (beta)**
-We developed/employed an iterative clustering approach, termed Clustification, that merges clusters based on misclassification. The method was initialized with the clustering result that had the highest resolution (i.e., the most clusters). We then performed iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged. This involved a stratified 5-fold cross-validation and a Random Forest classifier with default parameters (e.g., 100 trees). The predicted labels were retained for each iteration. Clusters were merged based on a normalized confusion matrix built using the predicted labels. This matrix was made symmetric and upper triangular, resulting in a similarity graph, such that each edge weight ranges from 0 to 1, where 0 means that the classifier was able to distinguish all observations between the two respective clusters. The stopping criterion was set such that if the maximum edge weight was less than 2.5% (i.e., 0.025 – less than 5% of observations are misclassified between any two clusters), the process would stop and return the current cluster labels. Otherwise, the two clusters connected by the maximum edge weight were merged. This process was repeated until the stopping criterion was met.
-
 **Clustree Analysis & Visualization**
 We performed cluster analysis and visualization using the Clustree package (ver) [ref] with the parameters [count_filter], [prop_filter], and [layout]. The default analysis produced a standard Clustree visualization, ordered by the number of clusters and annotated accordingly. For the custom analysis, we extended the default behavior by adding [metadata_of_interest] as additional "clusterings". Metadata and features, specified in the configuration, were highlighted on top of the clusterings using aggregation functions. For numerical data, we used the [numerical_aggregation_option] function, and for categorical data, we used the [categorical_label_option] function.
 
@@ -137,20 +134,6 @@ The workflow perfroms the following analyses on each dataset provided in the ann
   - Leiden algorithm
     - Applied to the UMAP KNN graphs specified by the respective parameters (metric, n_neighbors).
     - All algorithm specific parameters are supported: [partition_types], [resolutions], and [n_iterations].
-  - Clustification: an ML-based clustering approach that iteratively merges clusters based on misclassification (beta) 0. User: Specify a clustering method [method].
-    1. Chose the clustering with the most clusters as starting point (i.e., overclustered).
-    2. Iterative classification using the cluster labels, to determine if the classifier can distinguish between clusters or if they should be merged.
-       - Stratified 5-fold CV
-       - RF with 100 trees (i.e., defaults)
-       - Retain predicted labels
-    3. Merging of clusters.
-       - Build a normalized confusion matrix using the predicted labels.
-       - Make it symmetric and upper triangle, resulting in a similarity graph.
-       - Edge weight ranges from 0 to 1, where 0 means that the classifier was able to distinguish all observations between the two respective clusters.
-       - Check stopping criterion: if maximum edge weight < 2.5% (i.e., 0.025 – less than 5% of observations are misclassified between any two clusters).
-         - -> STOP and return current cluster labels
-       - Merge the two clusters connected by the maximum edge weight.
-    4. Back to 2. using the new labels.
 - Clustree analysis and visualization
   - The following clustree specific parameters are supported: [count_filter], [prop_filter], and [layout].
   - default: produces the standard clustree visualization, ordered by number of clusters and annotated.
@@ -182,7 +165,6 @@ Here are some tips for the usage of this workflow:
 
 - Start with minimal parameter combinations and without UMAP diagnostics and connectivity plots (they are computational expensive and slow).
 - Heatmaps require **a lot** of memory, hence options to reduce computational cost are provided and the memory allocation is solved dynamically based on retries. If an out-of-memory exception occurs the flag `--retries X` can be used to trigger automatic resubmission X times upon failure with X times the memory.
-- Clustification performance scales with available cores, i.e., more cores faster internal parallelization of Random Forest training & testing.
 - Cluster indices are extremely compute-intense and scale linearly with every additional clustering result and specified metadata (can be skipped).
 - Usage as a module and a selection of the results can be found on the [MrBiomics Wiki on "Module Usage in Projects".](https://github.com/epigen/MrBiomics/wiki/Module-Usage-in-Projects)
 
@@ -216,7 +198,7 @@ Explore detailed bioinformatics use cases showcasing module usage in our compreh
 # 🧬 Single-cell RNA sequencing (scRNA-seq) data analysis
 
 Unsupervised analyses, dimensionality reduction, and cluster analysis are cornerstones of scRNA-seq data analyses.
-A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory and 8 cores for clustification).
+A full run on a [published](https://www.nature.com/articles/s41588-020-0636-z) scRNA-seq [cancer dataset](https://www.weizmann.ac.il/sites/3CA/colorectal) with 21,657 cells and 18,245 genes took 2.5 hours to complete (without heatmaps, with 32GB memory).
 Below are configurations of the two most commonly used frameworks, [scanpy](https://scanpy.readthedocs.io/en/stable/index.html) (Python) and [Seurat](https://satijalab.org/seurat/) (R), and the original package's defaults as comparison and to facilitate reproducibility:
 
 UMAP for dimensionality reduction

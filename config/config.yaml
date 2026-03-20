@@ -56,12 +56,6 @@ leiden:
   resolutions: [0.5, 1, 1.5, 2, 4] # only used for relevant partition_types
   n_iterations: 2 # default: 2; -1 until convergence
 
-##### clustification #####
-# ML-based clustering approach that iteratively merges clusters based on misclassification.
-# Doesn't support externally provided clusterings.
-clustification:
-  method: "" # starting clustering result method, options: "Leiden"
-
 ##### clustree #####
 # Cluster analysis and visualization using clustree: https://lazappi.github.io/clustree/index.html
 # Clustree specific parameters (count_filter, prop_filter, layout): https://lazappi.github.io/clustree/reference/clustree.html
@@ -103,4 +97,3 @@ scatterplot2d:
 # use keyword ['ALL'] to plot all features. WARNING: Only useful for relatively low dimensional data, a plot is generated for each feature and method.
 # if not used leave empty []
 features_to_plot: ["ALL"] #['pixel_0_0','pixel_0_1','pixel_0_2','pixel_0_3']
-

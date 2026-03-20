@@ -32,31 +32,6 @@ rule leiden_cluster:
         "../scripts/leiden_cluster.py"
 
 
-# perform clustification based on initial clustering
-rule clustification:
-    input:
-        get_clustification_paths,
-    output:
-        clustering=os.path.join(
-            config["result_path"],
-            "unsupervised_analysis",
-            "{sample}",
-            "clustification",
-            "clustification_clusterings.csv",
-        ),
-    resources:
-        mem_mb=config.get("mem", "16000"),
-    threads: 8  #config.get("threads", 1)
-    conda:
-        "../envs/umap_leiden.yaml"
-    log:
-        os.path.join("logs", "rules", "clustification_{sample}_clusterings.log"),
-    params:
-        samples_by_features=get_data_orientation,
-    script:
-        "../scripts/clustification.py"
-
-
 # aggregate clustering results per method
 rule aggregate_clustering_results:
     input:
