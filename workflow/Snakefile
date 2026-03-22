@@ -43,7 +43,7 @@ annot = annot.set_index("name", drop=True)
 
 result_path = os.path.join(config["result_path"], module_name)
 
-# Clustering: Leiden, clustification
+# Clustering: Leiden
 cluster_methods = []
 clustree_content = []
 clustree_metadata_content = []
@@ -56,13 +56,6 @@ if len(config["leiden"]["metrics"]) > 0 and all(
     ]
 ):
     cluster_methods.append("Leiden")
-
-## clustification
-if (
-    len(config["clustification"]["method"]) != ""
-    and config["clustification"]["method"] in cluster_methods
-):
-    cluster_methods.append("clustification")
 
 # Cluster validation
 indices_external = []
@@ -110,7 +103,6 @@ if len(cluster_methods) > 0:
         clustree_content.append("custom")
 
 
-ruleorder: clustification > aggregate_clustering_results
 ruleorder: clustree_analysis > clustree_analysis_metadata
 
 
