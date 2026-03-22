@@ -11,4 +11,4 @@ You need one configuration file to configure the analyses and one annotation fil
 
 Set workflow-specific `resources` or command line arguments (CLI) in the workflow profile `workflow/profiles/default.config.yaml`, which supersedes global Snakemake profiles.
 
-Provided JSON Schemas for the [workflow config](./config.schema.yaml) and [annotation](./annotation.schema.yaml) files are used by Snakemake for validation before execution.
+Provided JSON Schemas for the [workflow config](../workflow/schemas/config.schema.yaml) and [annotation](../workflow/schemas/annotation.schema.yaml) files are used by Snakemake for validation before execution.

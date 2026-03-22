@@ -21,18 +21,12 @@ report: os.path.join("report", "workflow.rst")
 
 ##### load config and sample annotation sheets #####
 configfile: os.path.join("config", "config.yaml")
-
-
-# `configfile` is resolved by Snakemake, but `validate()` gets a normal filesystem path.
-# Resolves the schema directory from the workflow location so validation works
-# no matter from which directory Snakemake is launched.
-schema_dir = os.path.abspath(os.path.join(workflow.basedir, os.pardir, "config"))
-validate(config, os.path.join(schema_dir, "config.schema.yaml"))
+validate(config, os.path.join("schemas", "config.schema.yaml"))
 
 
 # load annotations
 annot = pd.read_csv(config["annotation"])
-validate(annot, os.path.join(schema_dir, "annotation.schema.yaml"))
+validate(annot, os.path.join("schemas", "annotation.schema.yaml"))
 
 if not annot["name"].is_unique:
     duplicated = annot.loc[annot["name"].duplicated(), "name"].tolist()
