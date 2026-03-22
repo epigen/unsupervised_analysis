@@ -164,17 +164,6 @@ properties:
       - partition_types
       - resolutions
       - n_iterations
-  clustification:
-    type: object
-    additionalProperties: false
-    properties:
-      method:
-        type: string
-        enum:
-          - ""
-          - Leiden
-    required:
-      - method
   clustree:
     type: object
     additionalProperties: false
@@ -251,7 +240,6 @@ required:
   - umap
   - heatmap
   - leiden
-  - clustification
   - clustree
   - sample_proportion
   - metadata_of_interest
