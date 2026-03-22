@@ -19,7 +19,7 @@ properties:
   samples_by_features:
     type: integer
     enum: [0, 1]
-    description: Whether rows are samples and columns are features.
+    description: "Data orientation flag. Use 1 when the matrix is samples x features, for example rows=cells and columns=genes. Use 0 when the matrix is features x samples, for example rows=genes and columns=cells."
 required:
   - name
   - data
