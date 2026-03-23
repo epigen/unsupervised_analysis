@@ -10,3 +10,5 @@ You need one configuration file to configure the analyses and one annotation fil
   - samples_by_features: Boolean indicator if the data matrix is observations/samples (rows) x features (columns): 0==no, 1==yes.
 
 Set workflow-specific `resources` or command line arguments (CLI) in the workflow profile `workflow/profiles/default.config.yaml`, which supersedes global Snakemake profiles.
+
+Provided JSON Schemas for the [workflow config](../workflow/schemas/config.schema.yaml) and [annotation](../workflow/schemas/annotation.schema.yaml) files are used by Snakemake for validation before execution.
