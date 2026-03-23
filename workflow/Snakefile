@@ -19,10 +19,8 @@ module_name = "unsupervised_analysis"
 report: os.path.join("report", "workflow.rst")
 
 
-##### load config and sample annotation sheets #####
+##### load and validate config and sample annotation sheets #####
 configfile: os.path.join("config", "config.yaml")
-
-
 validate(config, os.path.join("schemas", "config.schema.yaml"))
 
 
