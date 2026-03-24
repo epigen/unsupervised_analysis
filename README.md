@@ -24,6 +24,7 @@ A general purpose [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) wor
 
 - [Stephan Reichl](https://github.com/sreichl)
 - [Raphael Bednarsky](https://github.com/bednarsky)
+- [Andreas Hofer](https://github.com/hoferand)
 - [Christoph Bock](https://github.com/chrbock)
 
 # 💿 Software
