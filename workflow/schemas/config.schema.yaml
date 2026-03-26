@@ -58,25 +58,25 @@ properties:
         items:
           type: string
           minLength: 1
-        minItems: 1
+        minItems: 0
       n_neighbors:
         type: array
         items:
           type: integer
           minimum: 2
-        minItems: 1
+        minItems: 0
       min_dist:
         type: array
         items:
           type: number
           minimum: 0
-        minItems: 1
+        minItems: 0
       n_components:
         type: array
         items:
           type: integer
           minimum: 2
-        minItems: 1
+        minItems: 0
       densmap:
         type: integer
         enum: [0, 1]
