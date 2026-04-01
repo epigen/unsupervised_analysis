@@ -65,7 +65,7 @@ jobs:
           snakefile: workflow/Snakefile
           snakemake-version: 8.25.3
           args: >-
-            --cores 1
+            --cores all
             --sdm conda
             --conda-cleanup-pkgs cache
             --show-failed-logs
