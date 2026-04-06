@@ -6,7 +6,7 @@ mem: 32000
 threads: 2
 
 ##### GENERAL #####
-annotation: test/config/digits_unsupervised_analysis_annotation.csv
+annotation: config/annotation.csv
 result_path: test/results/
 project_name: digits
 
@@ -28,7 +28,7 @@ umap:
   metrics: ["euclidean"]
   n_neighbors: [15]
   min_dist: [0.1]
-  n_components: [2]
+  n_components: [2, 3]
   densmap: 1
   connectivity: 1
   diagnostics: 1
@@ -49,7 +49,7 @@ heatmap:
 # Leiden algorithm specific parameters (partition_types, resolutions, n_iterations) -> https://leidenalg.readthedocs.io/en/stable/index.html
 # To skip Leiden clustering, leave the "metrics" parameter empty i.e., []
 leiden:
-  metrics: [] # has to be a subset of above's UMAP parameters
+  metrics: ["euclidean"] # has to be a subset of above's UMAP parameters
   n_neighbors: [15] # has to be a subset of above's UMAP parameters
   partition_types:
     ["RBConfigurationVertexPartition", "ModularityVertexPartition"]
