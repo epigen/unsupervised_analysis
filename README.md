@@ -179,7 +179,7 @@ We provide a minimal example of the analysis of the [UCI ML hand-written digits 
 
 - config
   - configuration: config/config.yaml
-  - sample annotation: test/config/digits_unsupervised_analysis_annotation.csv
+  - sample annotation: config/annotation.csv
 - data
   - dataset (1797 observations, 64 features): digits_data.csv
   - metadata (consisting of the ground truth label "target"): digits_labels.csv
