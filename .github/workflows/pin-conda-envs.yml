@@ -2,6 +2,7 @@ name: Pin Conda Environments
 
 on:
   workflow_dispatch:
+  pull_request:
 
 concurrency:
   group: pin-conda-envs-${{ github.workflow }}-${{ github.ref }}
