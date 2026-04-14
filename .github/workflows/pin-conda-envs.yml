@@ -60,12 +60,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.BRANCH_NAME }}
 
-      - name: Sync branch to latest remote state
-        run: |
-          git fetch origin "${BRANCH_NAME}"
-          git switch "${BRANCH_NAME}"
-          git merge --ff-only "origin/${BRANCH_NAME}"
-
       - name: Pin conda environments
         uses: snakemake/snakedeploy-github-action@v1
         with:
