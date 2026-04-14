@@ -33,6 +33,7 @@ jobs:
         with:
           commit_message: "update linux-64 conda pins"
           file_pattern: workflow/envs/*.linux-64.pin.txt
+          push_options: '--force'
 
   pin-osx-64:
     name: Pin conda envs (osx-64)
