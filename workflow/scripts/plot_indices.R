@@ -26,6 +26,11 @@ for (idx in indices) {
   #     scores <- read.csv(file.path(index_paths[[idx]]), row.names = 1)
   scores <- data.frame(fread(file.path(index_paths[[idx]]), header = TRUE), row.names = 1)
 
+  if (ncol(scores) == 0) {
+    warning(paste("Skipping", idx, "plot because the index table has no score columns."))
+    next
+  }
+
   # scale internal indices, add seperator and reorder columns (max/sep/min)
   if (length(indices) == 1) {
     scores <- as.data.frame(scale(scores))

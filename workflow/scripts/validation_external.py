@@ -45,6 +45,12 @@ for variable in metadata.columns:
         # subset for categorical data
 categorical_metadata = metadata.loc[:, meta_cat]
 
+if categorical_metadata.shape[1] == 0:
+    print(
+        "No categorical metadata columns found; external cluster validation "
+        "outputs will contain no score columns."
+    )
+
 # Ensure that the clustering results and categorical metadata have the same indices
 # fix metadata indices if they do not agree with data as they come from outside the workflow (e.g., R)
 if not (set(clustering_results.index) == set(categorical_metadata.index)):
