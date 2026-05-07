@@ -84,10 +84,12 @@ for (col in colnames(metadata)) {
 metadata <- metadata[, !(colnames(metadata) %in% na_cols), drop = FALSE]
 # add categorical metadata to clustering results with prefix "metadata_"
 metadata_cat <- metadata[, sapply(metadata, function(x) !is.numeric(x)), drop = FALSE]
-# Convert all categorical columns to integer
-metadata_cat[colnames(metadata_cat)] <- lapply(metadata_cat[colnames(metadata_cat)], function(x) as.integer(factor(x)))
-colnames(metadata_cat) <- paste0("metadata_", colnames(metadata_cat))
-clusterings <- cbind(clusterings, metadata_cat)
+if (ncol(metadata_cat) > 0) {
+  # Convert all categorical columns to integer
+  metadata_cat[colnames(metadata_cat)] <- lapply(metadata_cat[colnames(metadata_cat)], function(x) as.integer(factor(x)))
+  colnames(metadata_cat) <- paste0("metadata_", colnames(metadata_cat))
+  clusterings <- cbind(clusterings, metadata_cat)
+}
 
 ### determine internal indices using clusterCrit
 indices_df <- data.frame(matrix(ncol = 1, nrow = ncol(clusterings), dimnames = list(colnames(clusterings), internal_index)))
