@@ -26,7 +26,7 @@ configfile: os.path.join("config", "config.yaml")
 validate(config, os.path.join("schemas", "config.schema.yaml"))
 
 
-containerized: "docker://ghcr.io/epigen/unsupervised_analysis:latest"
+containerized: "docker://ghcr.io/epigen/unsupervised_analysis:v4.0.1"
 
 
 # load annotations
