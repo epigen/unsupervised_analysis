@@ -7,7 +7,7 @@ threads: 2
 
 ##### GENERAL #####
 annotation: config/annotation.csv
-result_path: test/results/
+result_path: .test/results/
 project_name: digits
 
 ##### PCA #####
