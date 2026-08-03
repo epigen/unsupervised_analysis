@@ -70,8 +70,8 @@ clustree:
 ##### cluster validation ####
 # Cluster validation using internal cluster indices is computationally very expensive.
 # To reduce complexity and increase performance a proportion of samples can be used for the internal cluster evaluation.
-# Internal cluster validation can be skipped with 0.
-sample_proportion: 1 # float [0-1], >500 samples should be included.
+# Internal cluster validation analyses can be skipped with 0.
+sample_proportion: 1 # float [0-1], if downsampling is used, retain >500 samples
 
 ##### categorical metadata column used in the following analyses:
 # - PCA pairs plot (first entry only)
@@ -96,4 +96,4 @@ scatterplot2d:
 # motivated by bioinformatics highlighting expression levels of marker genes (eg: ['PTPRC','STAT1','IRF8'])
 # use keyword ['ALL'] to plot all features. WARNING: Only useful for relatively low dimensional data, a plot is generated for each feature and method.
 # if not used leave empty []
-features_to_plot: ["ALL"] #['pixel_0_0','pixel_0_1','pixel_0_2','pixel_0_3']
+features_to_plot: []

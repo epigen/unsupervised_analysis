@@ -147,12 +147,12 @@ The workflow perfroms the following analyses on each dataset provided in the ann
     - all complementary indices from sklearn are used: [AMI](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.adjusted_mutual_info_score.html#sklearn.metrics.adjusted_mutual_info_score), [ARI](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.adjusted_rand_score.html#sklearn.metrics.adjusted_rand_score), [FMI](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.fowlkes_mallows_score.html#sklearn.metrics.fowlkes_mallows_score), [**Homogeneity** and **Completeness** and **V**-Measure](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.homogeneity_completeness_v_measure.html#sklearn.metrics.homogeneity_completeness_v_measure)
   - Internal cluster indices are determined for each clustering and [metadata_of_interest]
     - 6 complementary indices are used
-      - 5 from the package [clusterCrit](https://rdrr.io/cran/clusterCrit/man/intCriteria.html): Silhouette, Calinski-Harabasz, C-index, Dunn index, Davis-Bouldin Score.
-      - 1 weighted Bayesian Information Criterion (BIC) approach, previously described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488)
-    - Due to the computational cost PCA results are used as input and a [sample_proportion] can be configured.
+      - 5 from the package [clusterCrit](https://rdrr.io/cran/clusterCrit/man/intCriteria.html): Silhouette (benefit), Calinski-Harabasz (benefit), C-index (cost), Dunn index (benefit), Davis-Bouldin Score (cost).
+      - 1 weighted Bayesian Information Criterion (BIC) approach, previously described in [Reichl 2018 - Chapter 4.2.2 - Internal Indices](https://repositum.tuwien.at/handle/20.500.12708/3488) (cost)
+    - Due to the computational cost PCA results are used as input and a [sample_proportion] can be configured. If [sample_proportion] is set to 0, all internal cluster index analyses are skipped.
     - Caveat: internal cluster indices are linear i.e., using Euclidean distance metrics.
   - Multiple-criteria decision-making (MCDM) using TOPSIS for ranking clustering results
-    - The MCDM method TOPSIS is applied to the internal cluster indices to rank all clustering results (and [metadata_of_interest]) from best to worst.
+    - The MCDM method TOPSIS is applied to the internal cluster indices to rank all clustering results (and [metadata_of_interest]) from best (top) to worst (bottom).
     - This approach has been described in [Reichl 2018 - Chapter 4.3.1 - The Favorite Approach](https://repositum.tuwien.at/handle/20.500.12708/3488)
     - Caveat: Silhouette score sometimes generates NA due to a known [bug](https://github.com/cran/clusterCrit/pull/1/commits/b37a5e361d0a12f9d3900089aa03e3947d0d4ef7). Clusterings with NA scores are removed before TOPSIS is applied.
 - Visualization
